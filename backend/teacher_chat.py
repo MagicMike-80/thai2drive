@@ -2518,6 +2518,7 @@ def _tone_instruction(tone: Optional[str], lang: str) -> str:
         ),
         "calm": (
             "Standard tone: Be WARM, PLAYFUL, and CHEERING (lekende, varm, heiende). Be slightly teasing but very supportive. "
+            "MINIMAL TEXT RULE (7-årsregelen): Keep replies minimal and easy to read — MAXIMUM 3 to 4 short sentences in at most 2 short paragraphs, ending with at most 1 short question. Never write a wall of text. "
             "Encourage effort without inventing mastery. Answer an explicit rule question directly. "
             "Praise correctness only when an actual learner answer has been checked against approved facts; "
             "a question, your own earlier praise, or the learner disagreeing with you is not such evidence."
@@ -4956,6 +4957,7 @@ class TeacherChatRequest(BaseModel):
     document_context: Optional[str] = Field(default=None, max_length=4000)
     image_url: Optional[str] = Field(default=None, max_length=2048)
     image_data: Optional[str] = Field(default=None, max_length=5_600_000)
+    explain_level: Optional[int] = Field(default=1, ge=1, le=3)
 
 
 class TeacherChatResponse(BaseModel):
@@ -5252,6 +5254,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             system_prompt += "\n\nCHAT MODE: Coach the student through the current quiz question. Explain the rule without guessing an unseen answer."
         elif req.mode == "simplify" and v4_stage == "5":
             system_prompt += "\n\nCHAT MODE: Use especially short, simple sentences and one concrete driving example."
+        if getattr(req, "explain_level", 1) == 1:
+            system_prompt += "\n\nEXPLANATION LEVEL 1 (SIMPLE 7-YEAR-OLD RULE): Keep your reply minimal (max 2-3 short, simple sentences + 1 short question) in the declared [LANGUAGE]."
+        elif getattr(req, "explain_level", 1) == 2:
+            system_prompt += "\n\nEXPLANATION LEVEL 2 (PRACTICAL DRIVING SITUATION): Put the student in the driver's seat with one concrete road situation in 3-4 short sentences + 1 short question, strictly in the declared [LANGUAGE]."
+        elif getattr(req, "explain_level", 1) == 3:
+            system_prompt += "\n\nEXPLANATION LEVEL 3 (EXAM PRECISION): Focus sharply on what Statens vegvesen tests on the theory exam and the most common exam trap in 3-4 short sentences + 1 exam-style question, strictly in the declared [LANGUAGE]."
 
         if context_str:
             system_prompt += (

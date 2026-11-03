@@ -4607,6 +4607,60 @@ a { color:inherit; text-decoration:none; }
   box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
 }
 
+/* ═══ ETAPPE 1: MICHAEL 3-NIVÅVELGER, SAKTE-TTS & APP-HUB + SIKKERHETSKONTROLL ═══ */
+.teacher-level-bar {
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:8px; padding:8px 14px; background:rgba(11,18,38,.92);
+  border-bottom:1px solid rgba(0,229,255,.18);
+}
+.teacher-lvl-group { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.teacher-lvl-lbl { font-size:.74rem; font-weight:700; color:var(--muted); margin-right:2px; }
+.teacher-lvl-btn, .teacher-slow-btn, .teacher-hub-btn {
+  background:rgba(15,23,42,.85); border:1px solid rgba(96,165,250,.32);
+  color:#E2E8F0; border-radius:999px; padding:4px 10px; font-size:.75rem;
+  font-weight:700; cursor:pointer; transition:all .15s ease; display:inline-flex; align-items:center; gap:4px;
+}
+.teacher-lvl-btn:hover, .teacher-slow-btn:hover, .teacher-hub-btn:hover {
+  border-color:#00E5FF; color:#FFFFFF; box-shadow:0 0 10px rgba(0,229,255,.25);
+}
+.teacher-lvl-btn.active {
+  background:rgba(37,99,235,.28); border-color:#00E5FF; color:#00E5FF;
+  box-shadow:0 0 12px rgba(0,229,255,.28);
+}
+.teacher-slow-btn.active {
+  background:rgba(255,153,51,.18); border-color:#FF9933; color:#FF9933;
+  box-shadow:0 0 12px rgba(255,153,51,.25);
+}
+.teacher-hub-strip {
+  display:flex; gap:6px; overflow-x:auto; padding:6px 14px;
+  background:rgba(7,13,28,.85); border-bottom:1px solid rgba(255,255,255,.06);
+  scrollbar-width:none;
+}
+.teacher-hub-strip::-webkit-scrollbar { display:none; }
+.ms-safety-cat {
+  background:rgba(15,23,42,.92); border:1px solid rgba(0,229,255,.24);
+  border-radius:14px; padding:14px; margin-bottom:12px;
+}
+.ms-safety-head {
+  display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;
+}
+.ms-safety-title { font-size:.98rem; font-weight:800; color:#F8FAFC; }
+.ms-safety-tts {
+  background:rgba(37,99,235,.22); border:1px solid rgba(0,229,255,.4);
+  color:#00E5FF; border-radius:8px; padding:4px 9px; font-size:.76rem; font-weight:700; cursor:pointer;
+}
+.ms-safety-list { margin:0 0 10px 0; padding-left:18px; color:#CBD5E1; font-size:.86rem; line-height:1.55; }
+.ms-safety-list li { margin-bottom:4px; }
+.ms-safety-why {
+  background:rgba(255,153,51,.10); border-left:3px solid #FF9933;
+  padding:8px 10px; border-radius:6px; font-size:.82rem; color:#F8FAFC; margin-bottom:10px;
+}
+.ms-safety-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+.ms-safety-ask {
+  background:linear-gradient(135deg, rgba(37,99,235,.32), rgba(236,72,153,.28));
+  border:1px solid rgba(0,229,255,.45); color:#FFFFFF; border-radius:9px;
+  padding:6px 11px; font-size:.78rem; font-weight:700; cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -4823,6 +4877,13 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
+        <button class="home-main-choice" type="button" onclick="openSafetyCheck()" data-label-key="home_safety_btn">
+          <span class="home-main-choice-icon" aria-hidden="true">🔧</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_safety_btn">Sikkerhetskontroll (Klasse B)</span>
+            <span class="home-main-choice-sub" data-key="home_safety_sub">Lys, bremser, dekk, varsellamper og vognkort</span>
+          </span>
+        </button>
       <div class="home-stats">
         <div class="home-stat">
           <div class="home-stat-num" id="homeStatAnswered">–</div>
@@ -5321,6 +5382,29 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Uploaded Document Badge -->
         <div class="teacher-doc-badge" id="teacherDocBadge">
+        <!-- Etappe 1: 3-nivå forklaringsvelger + Sakte-TTS + Michael App-Hub -->
+        <div class="teacher-level-bar" id="teacherLevelBar">
+          <div class="teacher-lvl-group" role="group" aria-label="Explanation level">
+            <span class="teacher-lvl-lbl" data-key="lvl_label">Forklaring:</span>
+            <button type="button" class="teacher-lvl-btn active" data-lvl="1" onclick="setTeacherExplainLevel(1)"><span data-key="lvl_1">1. Enkel (7-år)</span></button>
+            <button type="button" class="teacher-lvl-btn" data-lvl="2" onclick="setTeacherExplainLevel(2)"><span data-key="lvl_2">2. Praktisk bil</span></button>
+            <button type="button" class="teacher-lvl-btn" data-lvl="3" onclick="setTeacherExplainLevel(3)"><span data-key="lvl_3">3. Eksamen</span></button>
+          </div>
+          <button type="button" class="teacher-slow-btn" id="teacherSlowTtsBtn" onclick="toggleSlowTts()">🐢 <span id="teacherSlowTtsLbl" data-key="slow_tts_lbl">0.75x sakte</span></button>
+        </div>
+        <div class="teacher-hub-strip" id="teacherHubStrip">
+          <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('202_0')">🪧 <span data-key="hub_sign_202">Skilt 202</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('204_0')">🛑 <span data-key="hub_sign_204">Skilt 204</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('208_0')">🔶 <span data-key="hub_sign_208">Skilt 208</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('311_0')">🚸 <span data-key="hub_sign_311">Skilt 311</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="openSafetyCheck()">🔧 <span data-key="hub_safety">Sikkerhetskontroll</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="openSituationFlashcard()">🚦 <span data-key="hub_situation">Trafikksituasjon</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="showTab('signs')">🪧 <span data-key="hub_all_signs">Skiltkatalog</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="showTab('studybook')">📖 <span data-key="hub_studybook">Studiebok</span></button>
+          <button type="button" class="teacher-hub-btn" onclick="showTab('library')">🎬 <span data-key="hub_videos">Video & Podkast</span></button>
+        </div>
+
+        <!-- Message list -->
           <span class="teacher-doc-icon">📄</span>
           <span class="teacher-doc-name" id="teacherDocName"></span>
           <button type="button" class="teacher-doc-close" id="teacherDocClose" onclick="_teacherClearDoc()" aria-label="Fjern dokument" data-label-key="teacher_doc_remove">✕</button>
@@ -5349,6 +5433,7 @@ a { color:inherit; text-decoration:none; }
         <button class="tsp-btn" onclick="teacherSidebarAction('rules')">📏 <span data-tsp="rules"></span></button>
         <button class="tsp-btn" onclick="teacherSidebarAction('position')">🚗 <span data-tsp="position"></span></button>
         <button class="tsp-btn" onclick="teacherSidebarAction('dictionary')">🇳🇴 <span data-tsp="dictionary"></span></button>
+        <button class="tsp-btn" onclick="closeTeacherSidebar();openSafetyCheck()">🔧 <span data-tsp="safety"></span></button>
       </div><!-- /teacher-side-panel -->
 
     </div><!-- /screenTeacher -->
@@ -5525,7 +5610,8 @@ var isMistakeMode     = false; // active answerable quiz sourced from user_mista
 var _aiPanelTimer     = null; // delayed AI panel — cleared on nextQ to prevent cross-question bleed
 var _reviewQuestions  = []; // wrong questions to review
 var _reviewIdx        = 0;  // current review position
-var ttsRate = 1;
+var ttsRate = parseFloat(_ls.get('t2d_rate') || '1') || 1;
+var _teacherExplainLevel = parseInt(_ls.get('t2d_explain_lvl') || '1', 10) || 1;
 var ttsVolume = parseFloat(_ls.get('t2d_vol') || '1');
 var ttsPlaying = false;
 var currentCat = null;
@@ -5773,6 +5859,23 @@ var UI = {
   tsp_rules:{th:'กฎและระยะหยุดรถ', no:'Regler / stopplengde', en:'Rules / stopping distance'},
   tsp_position:{th:'ตำแหน่งรถบนถนน', no:'Plassering', en:'Road positioning'},
   tsp_dictionary:{th:'พจนานุกรมคำศัพท์จราจรนอร์เวย์', no:'Norsk trafikkordbok', en:'Norwegian traffic dictionary'},
+  tsp_safety:    {th:'การตรวจเช็ครถก่อนขับ (คลาส B)', no:'Sikkerhetskontroll (Klasse B)', en:'Safety check (Class B)'},
+  home_safety_btn:{th:'การตรวจเช็ครถก่อนขับ (คลาส B)', no:'Sikkerhetskontroll (Klasse B)', en:'Safety check (Class B)'},
+  home_safety_sub:{th:'ไฟรถ เบรก ยาง ไฟเตือน และเอกสารรถ', no:'Lys, bremser, dekk, varsellamper og vognkort', en:'Lights, brakes, tyres, warning lights and registration'},
+  lvl_label:     {th:'ระดับคำอธิบาย:', no:'Forklaring:', en:'Explanation:'},
+  lvl_1:         {th:'1. เข้าใจง่าย', no:'1. Enkel (7-år)', en:'1. Simple'},
+  lvl_2:         {th:'2. สถานการณ์จริง', no:'2. Praktisk bil', en:'2. Practical'},
+  lvl_3:         {th:'3. แนวข้อสอบ', no:'3. Eksamen', en:'3. Exam prep'},
+  slow_tts_lbl:  {th:'0.75x ช้าชัด', no:'0.75x sakte', en:'0.75x slow'},
+  hub_sign_202:  {th:'ป้าย 202 ให้ทาง', no:'Skilt 202 Vikeplikt', en:'Sign 202 Give way'},
+  hub_sign_204:  {th:'ป้าย 204 หยุด', no:'Skilt 204 Stopp', en:'Sign 204 Stop'},
+  hub_sign_208:  {th:'ป้าย 208 ทางเอก', no:'Skilt 208 Forkjørsvei', en:'Sign 208 Priority road'},
+  hub_sign_311:  {th:'ป้าย 311 ทางม้าลาย', no:'Skilt 311 Gangfelt', en:'Sign 311 Zebra crossing'},
+  hub_safety:    {th:'ตรวจเช็ครถ', no:'Sikkerhetskontroll', en:'Safety check'},
+  hub_situation: {th:'ภาพสถานการณ์', no:'Trafikksituasjon', en:'Traffic situation'},
+  hub_all_signs: {th:'ป้ายจราจรทั้งหมด', no:'Skiltkatalog', en:'Sign catalogue'},
+  hub_studybook: {th:'หนังสือเรียน', no:'Studiebok', en:'Study book'},
+  hub_videos:    {th:'วิดีโอและพอดแคสต์', no:'Video & Podkast', en:'Video & Podcast'},
   tsp_sign:    {th:'อธิบายป้ายจราจร',  no:'Forklar et skilt',    en:'Explain a sign'},
   tsp_vikeplikt:{th:'ช่วยเรื่องการให้ทาง', no:'Hjelp med vikeplikt', en:'Help with right-of-way'},
   tsp_rule:    {th:'อธิบายกฎจราจร',   no:'Forklar en trafikkregel', en:'Explain a traffic rule'},
@@ -6243,6 +6346,7 @@ function applyUILang() {
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tContactBtn = document.getElementById('contactHumanBtn');
   if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
+  if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
   var tMicBtn = document.getElementById('teacherMicBtn');
@@ -6277,7 +6381,7 @@ function applyUILang() {
   // Side panel labels
   var tspTitle = document.getElementById('tspTitle');
   if (tspTitle) tspTitle.textContent = t('tsp_title');
-  var tspMap = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary' };
+  var tspMap = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary', safety:'tsp_safety' };
   document.querySelectorAll('[data-tsp]').forEach(function(el) {
     var key = tspMap[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
@@ -7146,6 +7250,7 @@ function playFlashcardNarration(button) {
   });
   if (_flashcardSfxContext && _flashcardSfxContext.state === 'running') _flashcardSfxContext.suspend().catch(function() {});
   _flashcardNarrationAudio.src = ttsStreamUrl(spokenText, appLang);
+  _flashcardNarrationAudio.playbackRate = ttsRate || 1.0;
   button.textContent = t('fc_audio_playing');
   _flashcardNarrationAudio.load();
   _flashcardNarrationAudio.play().catch(function() { _flashcardNarrationAudio.pause(); flashcardAfterNarration('fc_audio_error'); });
@@ -11334,6 +11439,9 @@ function updateTtsBtn(playing) {
   btn.classList.toggle('playing', playing);
 }
 function setRate(r, el) {
+  _ls.set('t2d_rate', String(r));
+  if (_flashcardNarrationAudio) _flashcardNarrationAudio.playbackRate = r;
+  if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   ttsRate = r;
   if (_backendAudio) _backendAudio.playbackRate = r;
   if (_teacherAudio) _teacherAudio.playbackRate = r;
@@ -11876,7 +11984,8 @@ function askMichaelAboutThis(mode) {
 // ═══ Michael-skolen: konge/tjener-chip, HAV-lys, hint-trapp, kultur, ord for dagen, blikkrutine ═══
 var _MS = {
   th: {
-    open: 'ห้องเรียนไมเคิล', close: 'ปิด', tabs: ['ไทยกับนอร์เวย์', 'คำศัพท์ประจำวัน', 'ฝึกสายตา'],
+    open: 'ห้องเรียนไมเคิล', close: 'ปิด', tabs: ['ไทยกับนอร์เวย์', 'คำศัพท์ประจำวัน', 'ฝึกสายตา', 'ตรวจเช็ครถ (คลาส B)'],
+    listen: '🔊 ฟังเสียง', askMichael: '💬 ถามไมเคิลเรื่องนี้', whyLbl: 'ทำไมจึงสำคัญ:', checkQ: 'คำถามวันสอบขับจริง:',
     inTh: 'ในประเทศไทย', inNo: 'ในนอร์เวย์', tryIt: 'ลองตอบดู', right: 'ถูกต้อง', wrong: 'ยังไม่ใช่',
     word: 'คำศัพท์ประจำวัน', next: 'คำถัดไป', termLbl: 'คำนอร์เวย์ที่ต้องรู้',
     gazeIntro: 'สายตาต้องไม่หยุดนิ่ง ทำตามลำดับนี้ซ้ำเรื่อย ๆ', start: 'เริ่ม', stop: 'หยุด', round: 'รอบ',
@@ -11886,7 +11995,8 @@ var _MS = {
     aiBadge: 'เอไอ', aiTitle: 'ไมเคิลเป็นครูที่เป็นปัญญาประดิษฐ์ (เอไอ)'
   },
   no: {
-    open: 'Michael-skolen', close: 'Lukk', tabs: ['Thailand mot Norge', 'Ord for dagen', 'Blikkrutine'],
+    open: 'Michael-skolen', close: 'Lukk', tabs: ['Thailand mot Norge', 'Ord for dagen', 'Blikkrutine', 'Sikkerhetskontroll (Kl. B)'],
+    listen: '🔊 Lytt', askMichael: '💬 Spør Michael om dette', whyLbl: 'Hvorfor det er viktig:', checkQ: 'Sensorspørsmål på oppkjøring:',
     inTh: 'I Thailand', inNo: 'I Norge', tryIt: 'Prøv selv', right: 'Riktig', wrong: 'Ikke helt',
     word: 'Ord for dagen', next: 'Neste ord', termLbl: 'Fagord',
     gazeIntro: 'Blikket skal aldri stå stille. Gå gjennom rutinen om og om igjen.', start: 'Start', stop: 'Stopp', round: 'Runde',
@@ -11896,7 +12006,8 @@ var _MS = {
     aiBadge: 'AI', aiTitle: 'Michael er en AI-lærer'
   },
   en: {
-    open: "Michael's School", close: 'Close', tabs: ['Thailand vs Norway', 'Word of the day', 'Gaze routine'],
+    open: "Michael's School", close: 'Close', tabs: ['Thailand vs Norway', 'Word of the day', 'Gaze routine', 'Safety Check (Class B)'],
+    listen: '🔊 Listen', askMichael: '💬 Ask Michael about this', whyLbl: 'Why it matters:', checkQ: 'Examiner check question:',
     inTh: 'In Thailand', inNo: 'In Norway', tryIt: 'Try it', right: 'Correct', wrong: 'Not quite',
     word: 'Word of the day', next: 'Next word', termLbl: 'Norwegian term',
     gazeIntro: 'Your eyes must never stand still. Run through this routine again and again.', start: 'Start', stop: 'Stop', round: 'Round',
@@ -12086,7 +12197,7 @@ var _MS_GAZE = {
 var _msTab = 0, _msWordIdx = -1, _msGazeTimer = null, _msGazeStep = 0, _msGazeRound = 0;
 var _msHint = { qId: null, count: 0, sid: null };
 
-function _msL() { return _MS[appLang] || _MS.no; }
+function _msL() { return _MS[appLang] || {}; }
 function _msSyncLabel() {
   var L = _msL();
   var e = document.getElementById('msOpenLbl'); if (e) e.textContent = L.open;
@@ -12175,12 +12286,13 @@ function _msRender() {
   }).join('');
   if (_msTab === 0) body.innerHTML = _msCultureHtml();
   else if (_msTab === 1) body.innerHTML = _msWordHtml();
-  else body.innerHTML = _msGazeHtml();
+  else if (_msTab === 2) body.innerHTML = _msGazeHtml();
+  else body.innerHTML = _msSafetyHtml();
 }
 
 function _msCultureHtml() {
   var L = _msL();
-  var cards = _MS_CULTURE[appLang] || _MS_CULTURE.no;
+  var cards = _MS_CULTURE[appLang] || [];
   return cards.map(function(c, ci) {
     var opts = c.o.map(function(o, oi) {
       return '<button type="button" class="ms-opt" onclick="_msAnswer(this,' + ci + ',' + oi + ')">' + escH(o) + '</button>';
@@ -12193,7 +12305,7 @@ function _msCultureHtml() {
 }
 
 function _msAnswer(btn, ci, oi) {
-  var cards = _MS_CULTURE[appLang] || _MS_CULTURE.no;
+  var cards = _MS_CULTURE[appLang] || [];
   var ok = cards[ci].c === oi;
   var wrap = btn.parentElement;
   var all = wrap.querySelectorAll('.ms-opt');
@@ -12208,7 +12320,7 @@ function _msAnswer(btn, ci, oi) {
 
 function _msWordHtml() {
   var L = _msL();
-  var words = _MS_WORDS[appLang] || _MS_WORDS.no;
+  var words = _MS_WORDS[appLang] || [];
   if (_msWordIdx < 0) {
     var d = new Date();
     var doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
@@ -12222,14 +12334,14 @@ function _msWordHtml() {
 }
 
 function _msNextWord() {
-  var words = _MS_WORDS[appLang] || _MS_WORDS.no;
+  var words = _MS_WORDS[appLang] || [];
   _msWordIdx = (_msWordIdx + 1) % words.length;
   _msRender();
 }
 
 function _msGazeHtml() {
   var L = _msL();
-  var steps = _MS_GAZE[appLang] || _MS_GAZE.no;
+  var steps = _MS_GAZE[appLang] || [];
   return '<div class="ms-card"><div class="ms-q">' + escH(L.gazeIntro) + '</div>'
     + '<div class="ms-gaze" id="msGaze">' + steps.map(function(s, i) {
         return '<div class="ms-gaze-step" data-i="' + i + '"><b>' + (i + 1) + '</b> ' + escH(s) + '</div>';
@@ -12240,7 +12352,7 @@ function _msGazeHtml() {
 
 function _msGazeToggle() {
   if (_msGazeTimer) { _msGazeStop(); return; }
-  var steps = _MS_GAZE[appLang] || _MS_GAZE.no;
+  var steps = _MS_GAZE[appLang] || [];
   _msGazeStep = 0; _msGazeRound = 1;
   var btn = document.getElementById('msGazeBtn');
   if (btn) btn.textContent = _msL().stop;
@@ -12274,6 +12386,303 @@ function resetTeacherForLanguage() {
   _teacherQuizSessionId = null;
   _teacherQuizConversationId = null;
   _teacherNormalHtml = '';
+var _MS_SAFETY = {
+  th: [
+    {
+      title: '💡 1. ไฟรถและการมองเห็น',
+      items: [
+        'ไฟหน้ารถ (ไฟต่ำ) ต้องเปิดตลอดเวลาที่ขับรถในนอร์เวย์ ทั้งกลางวันและกลางคืน',
+        'ไฟสูงใช้นอกเขตชุมชนเมื่อมืด และต้องหรี่เป็นไฟต่ำทันทีเมื่อมีรถสวนมาหรือขับตามหลังรถคันอื่นใกล้ ๆ',
+        'ไฟฉุกเฉินใช้เตือนอันตรายเมื่อรถเสียหรือเกิดเหตุฉุกเฉิน และตรวจสอบที่ปัดน้ำฝนกับน้ำฉีดกระจกให้พร้อมใช้'
+      ],
+      why: 'ถ้าไฟหน้าดับข้างหนึ่ง รถที่สวนมาอาจคิดว่าเป็นรถจักรยานยนต์และกะระยะผิด',
+      q: 'ในนอร์เวย์ คุณต้องเปิดไฟหน้ารถ (ไฟต่ำ) เมื่อใด?',
+      o: ['เปิดตลอดเวลาที่ขับรถ ไม่ว่าสภาพอากาศจะเป็นอย่างไร', 'เปิดเฉพาะตอนกลางคืนหรือในอุโมงค์', 'เปิดเฉพาะเมื่อฝนตกหรือหิมะตก'],
+      c: 0,
+      ask: 'ช่วยอธิบายการตรวจเช็คไฟรถและที่ปัดน้ำฝนในวันสอบขับรถหน่อยครับ'
+    },
+    {
+      title: '🛑 2. ระบบเบรกและพวงมาลัย',
+      items: [
+        'ตรวจหม้อลมเบรก: เหยียบแป้นเบรกย้ำ ๆ ขณะดับเครื่อง แป้นจะแข็ง แล้วเหยียบค้างไว้พร้อมสตาร์ทเครื่อง แป้นเบรกต้องจมลงเล็กน้อย',
+        'ถ้าระบบเบรกวงจรใดวงจรหนึ่งเสีย ไฟเตือนสีแดงจะสว่างขึ้น และระยะเบรกจะยาวขึ้นมาก',
+        'พวงมาลัยพาวเวอร์: เมื่อสตาร์ทเครื่องแล้ว พวงมาลัยต้องหมุนได้เบาและคืนตัวได้เองเมื่อออกตัวช้า ๆ'
+      ],
+      why: 'ถ้าแป้นเบรกจมลงเล็กน้อยตอนสตาร์ทเครื่อง แปลว่าหม้อลมเบรกทำงานปกติและช่วยให้เหยียบเบรกได้เบาแรง',
+      q: 'คุณจะทดสอบหม้อลมเบรกอย่างไรก่อนออกรถ?',
+      o: ['เหยียบเบรกย้ำตอนดับเครื่อง แล้วเหยียบค้างไว้ขณะสตาร์ท แป้นเบรกต้องจมลงเล็กน้อย', 'ดึงเบรกมือขึ้นสุดแล้วลองเร่งเครื่อง', 'เปิดฝากระโปรงดูสีของผ้าเบรก'],
+      c: 0,
+      ask: 'ช่วยอธิบายวิธีตรวจเช็คหม้อลมเบรกและพวงมาลัยแบบเข้าใจง่ายหน่อยครับ'
+    },
+    {
+      title: '🛞 3. ยางรถยนต์และล้อ',
+      items: [
+        'ยางหน้าร้อนต้องมีดอกยางลึกอย่างน้อย 1.6 มม. ส่วนยางหน้าหนาวต้องลึกอย่างน้อย 3.0 มม.',
+        'ตรวจแรงดันลมยางตามค่าที่ระบุในคู่มือรถหรือขอบประตูรถ และดูว่าแก้มยางไม่มีรอยฉีกหรือบวม',
+        'ห้ามใส่ยางต่างชนิดปนกัน และถ้ายางสึกตรงกลางมากเกินไปแปลว่าเติมลมยางแข็งเกินไป'
+      ],
+      why: 'ดอกยางที่ตื้นเกินไปทำให้รถเหินน้ำได้ง่ายและระยะเบรกบนถนนเปียกหรือหิมะยาวขึ้นมาก',
+      q: 'ดอกยางหน้าหนาวสำหรับรถยนต์นั่งส่วนบุคคล (คลาส B) ต้องลึกอย่างน้อยกี่มิลลิเมตร?',
+      o: ['อย่างน้อย 3.0 มม.', 'อย่างน้อย 1.6 มม.', 'อย่างน้อย 5.0 มม.'],
+      c: 0,
+      ask: 'ช่วยอธิบายเรื่องความลึกดอกยางหน้าร้อนกับหน้าหนาว และแรงดันลมยางหน่อยครับ'
+    },
+    {
+      title: '⚠️ 4. ไฟเตือนบนหน้าปัดรถ',
+      items: [
+        'ไฟเตือนสีแดง (เช่น เบรก หรือแรงดันน้ำมันเครื่อง): อันตรายร้ายแรง ต้องหยุดรถในที่ปลอดภัยทันที',
+        'ไฟเตือนสีเหลืองหรือส้ม (เช่น เครื่องยนต์ หรือระบบป้องกันล้อล็อก): ขับต่อได้ด้วยความระมัดระวัง แต่ต้องนำรถไปตรวจเช็คโดยเร็ว',
+        'ไฟสีน้ำเงินบนหน้าปัด: แสดงว่าเปิดไฟสูงอยู่ (ระวังแยงตารถที่สวนมา)'
+      ],
+      why: 'สีของไฟเตือนบอกระดับความเร่งด่วน สีแดงคือต้องหยุดทันทีเพื่อความปลอดภัย',
+      q: 'ถ้าไฟเตือนระบบเบรกสีแดงสว่างขึ้นขณะขับรถ คุณต้องทำอย่างไร?',
+      o: ['หยุดรถในที่ปลอดภัยทันทีและตรวจสอบสาเหตุ', 'ขับต่อไปจนถึงบ้านแล้วค่อยเติมน้ำมันเบรก', 'เร่งความเร็วเพื่อไปให้ถึงอู่ซ่อมรถเร็ว ๆ'],
+      c: 0,
+      ask: 'ช่วยอธิบายความแตกต่างของไฟเตือนสีแดง สีเหลือง และสีน้ำเงินบนหน้าปัดรถหน่อยครับ'
+    },
+    {
+      title: '📄 5. เอกสารจดทะเบียนรถและอุปกรณ์ฉุกเฉิน',
+      items: [
+        'เอกสารจดทะเบียนรถส่วนที่ 1 ต้องเก็บไว้ในรถเสมอ (ใช้ดูน้ำหนักบรรทุกและน้ำหนักลากจูงที่อนุญาต)',
+        'เสื้อกั๊กสะท้อนแสงต้องหยิบได้จากที่นั่งคนขับ และต้องสวมทันทีเมื่อต้องลงจากรถบนถนน',
+        'ป้ายสามเหลี่ยมสะท้อนแสงต้องวางห่างจากรถอย่างน้อย 150 เมตร เพื่อเตือนรถที่ตามมาล่วงหน้า'
+      ],
+      why: 'เมื่อรถเสียข้างทาง เสื้อสะท้อนแสงและป้ายสามเหลี่ยมช่วยให้รถคันอื่นเห็นคุณตั้งแต่ไกล',
+      q: 'เสื้อกั๊กสะท้อนแสงต้องเก็บไว้ที่ไหนในรถ?',
+      o: ['ในจุดที่คนขับเอื้อมหยิบได้จากที่นั่งคนขับ', 'ในกระโปรงหลังรถใต้ยางอะไหล่เท่านั้น', 'เก็บไว้ที่บ้านและนำมาเฉพาะตอนเดินทางไกล'],
+      c: 0,
+      ask: 'ช่วยอธิบายเรื่องเอกสารรถส่วนที่ 1 เสื้อสะท้อนแสง และป้ายสามเหลี่ยมฉุกเฉินหน่อยครับ'
+    }
+  ],
+  no: [
+    {
+      title: '💡 1. Lys og sikt',
+      items: [
+        'Kjørelys / nærlys er påbudt hele døgnet i Norge, uansett vær.',
+        'Fjernlys brukes utenfor tettbygd strøk i mørket. Blend ned i god tid for møtende trafikk og når du ligger bak en annen bil.',
+        'Nødblink brukes for å varsle fare ved stans. Sjekk at vindusviskere og spylervæske fungerer før kjøring.'
+      ],
+      why: 'Hvis ett frontlys er mørkt, kan møtende tro at du er en motorsykkel og feilberegne bredden på bilen din.',
+      q: 'Når er det påbudt å bruke kjørelys / nærlys på bil i Norge?',
+      o: ['Hele tiden når du kjører, uansett vær og tid på døgnet', 'Kun når det er mørkt eller i tunnel', 'Kun ved regn, tåke eller snø'],
+      c: 0,
+      ask: 'Kan du forklare sikkerhetskontrollen for lys og sikt enkelt for meg?'
+    },
+    {
+      title: '🛑 2. Bremser og styring',
+      items: [
+        'Sjekk bremsekraftforsterker: Pump bremsepedalen 4–5 ganger med motoren av til den blir hard. Hold trykket og start motoren — pedalen skal synke litt inn.',
+        'Hvis en av de to bremsekretsene ryker, lyser rød varsellampe og bremselengden blir mye lengre.',
+        'Servostyring: Når motoren startes, skal rattet bli merkbart lettere å svinge, og styringen skal være selvopprettende i lav fart.'
+      ],
+      why: 'At pedalen synker litt når motoren starter, beviser at bremsekraftforsterkeren hjelper deg å bremse med full kraft.',
+      q: 'Hvordan sjekker du at bremsekraftforsterkeren virker?',
+      o: ['Pumper pedalen hard med motoren av, holder den inne og starter motoren — pedalen skal synke litt', 'Drar til håndbremsen og gasser på', 'Ser om bremselysene lyser bak bilen'],
+      c: 0,
+      ask: 'Kan du forklare hvordan jeg sjekker bremsekraftforsterker og styring på oppkjøringen?'
+    },
+    {
+      title: '🛞 3. Dekk og hjul',
+      items: [
+        'Sommerdekk skal ha minst 1,6 mm mønsterdybde. Vinterdekk skal ha minst 3,0 mm mønsterdybde.',
+        'Riktig lufttrykk finner du i bilens instruksjonsbok eller på merkelappen i dørkarmen. Sjekk at dekkene ikke har kutt eller kordbrudd ( kuler i siden ).',
+        'Slitasje midt på dekket tyder på for høyt lufttrykk; slitasje på begge ytterkantene tyder på for lavt lufttrykk.'
+      ],
+      why: 'For lite mønsterdybde gir dårlig veigrep og øker faren for vannplaning kraftig.',
+      q: 'Hva er kravet til minste mønsterdybde på vinterdekk for personbil (Klasse B)?',
+      o: ['Minst 3,0 mm', 'Minst 1,6 mm', 'Minst 5,0 mm'],
+      c: 0,
+      ask: 'Kan du forklare kravene til dekk, mønsterdybde og lufttrykk på oppkjøringen?'
+    },
+    {
+      title: '⚠️ 4. Varsellamper i dashbordet',
+      items: [
+        'Rød varsellampe (f.eks. bremser eller oljetrykk): Alvorlig feil — stans bilen på et trygt sted med en gang.',
+        'Gul / oransje varsellampe (f.eks. motor eller ABS): Feil som må sjekkes på verksted, men du kan kjøre forsiktig videre.',
+        'Blå kontrollampe: Viser at fjernlyset står på (husk å blende ned for møtende).'
+      ],
+      why: 'Fargen forteller deg hvor mye det haster: rødt betyr stopp straks, gult betyr sjekk snart.',
+      q: 'Hva må du gjøre hvis en rød varsellampe for bremsene tennes mens du kjører?',
+      o: ['Stanse bilen på et trygt sted med en gang', 'Kjøre videre til neste bensinstasjon i vanlig fart', 'Ignorere lampen hvis bilen fortsatt kan bremse'],
+      c: 0,
+      ask: 'Kan du forklare forskjellen på røde, gule og blå lamper i dashbordet?'
+    },
+    {
+      title: '📄 5. Vognkort Del 1 & sikkerhetsutstyr',
+      items: [
+        'Vognkort Del 1 skal alltid ligge i bilen (viser blant annet tillatt totalvekt, nyttelast og tilhengervekt).',
+        'Refleksvest skal være tilgjengelig fra førersetet, slik at du kan ta den på før du går ut av bilen.',
+        'Varseltrekant skal plasseres minst 150 meter bak bilen ved nødstans slik at andre rekker å bremse.'
+      ],
+      why: 'Riktig bruk av refleksvest og varseltrekant redder liv når du må stanse langs en mørk vei.',
+      q: 'Hvor i bilen skal refleksvesten oppbevares?',
+      o: ['Slik at føreren kan nå den fra førersetet', 'Under reservehjulet i bagasjerommet', 'Kun hjemme i garasjen'],
+      c: 0,
+      ask: 'Kan du forklare hva jeg må vite om Vognkort Del 1, refleksvest og varseltrekant?'
+    }
+  ],
+  en: [
+    {
+      title: '💡 1. Lights and visibility',
+      items: [
+        'Daytime running lights / dipped headlights are mandatory at all times when driving in Norway, day and night.',
+        'Main beam is used outside built-up areas in the dark. Dip your lights in good time for oncoming traffic and when driving behind another vehicle.',
+        'Hazard warning lights warn others of danger during an emergency stop. Check that wipers and washer fluid work before setting off.'
+      ],
+      why: 'If one headlight is out, oncoming drivers may mistake your car for a motorcycle and misjudge your width.',
+      q: 'When are dipped headlights / daytime running lights mandatory in Norway?',
+      o: ['At all times while driving, regardless of weather or time of day', 'Only at night or inside tunnels', 'Only in rain, fog or snow'],
+      c: 0,
+      ask: 'Can you explain the safety check for lights and visibility in a simple way?'
+    },
+    {
+      title: '🛑 2. Brakes and steering',
+      items: [
+        'Brake booster check: Pump the brake pedal 4–5 times with the engine off until firm. Hold pressure and start the engine — the pedal should sink slightly.',
+        'If one of the dual brake circuits fails, the red brake warning light comes on and braking distance increases significantly.',
+        'Power steering: Once the engine starts, the steering wheel should turn noticeably easier and self-centre at low speed.'
+      ],
+      why: 'The pedal sinking slightly when the engine starts proves the brake booster is assisting your braking force.',
+      q: 'How do you check that the brake servo (booster) is working?',
+      o: ['Pump the pedal firm with the engine off, hold it down and start the engine — the pedal should sink slightly', 'Pull the handbrake and press the accelerator', 'Check if the rear brake lights come on'],
+      c: 0,
+      ask: 'Can you explain how to check the brake booster and steering for the driving test?'
+    },
+    {
+      title: '🛞 3. Tyres and wheels',
+      items: [
+        'Summer tyres must have at least 1.6 mm tread depth. Winter tyres must have at least 3.0 mm tread depth.',
+        'Correct tyre pressure is listed in the owner manual or door pillar sticker. Check sidewalls for cuts or bulges.',
+        'Wear in the centre of the tread indicates over-inflation; wear on both outer edges indicates under-inflation.'
+      ],
+      why: 'Insufficient tread depth reduces grip and greatly increases the risk of aquaplaning.',
+      q: 'What is the minimum legal tread depth for winter tyres on a Class B car?',
+      o: ['At least 3.0 mm', 'At least 1.6 mm', 'At least 5.0 mm'],
+      c: 0,
+      ask: 'Can you explain the rules for summer and winter tyre tread depth and tyre pressure?'
+    },
+    {
+      title: '⚠️ 4. Dashboard warning lights',
+      items: [
+        'Red warning light (e.g. brakes or oil pressure): Serious fault — stop the car in a safe place immediately.',
+        'Amber / yellow warning light (e.g. engine or ABS): Fault that needs checking soon, but you may drive on carefully.',
+        'Blue indicator light: Shows that main beam (high beam) headlights are on.'
+      ],
+      why: 'The colour tells you the urgency: red means stop immediately, amber means check soon.',
+      q: 'What must you do if a red brake warning light comes on while driving?',
+      o: ['Stop the car in a safe place immediately', 'Keep driving at normal speed until you get home', 'Ignore it if the brakes still feel normal'],
+      c: 0,
+      ask: 'Can you explain the difference between red, amber and blue dashboard lights?'
+    },
+    {
+      title: '📄 5. Registration document Part 1 & emergency gear',
+      items: [
+        'Vehicle registration document Part 1 (Vognkort Del 1) must always be kept in the car (shows permitted total weight, payload and trailer weight).',
+        'A reflective vest must be reachable from the driver seat so you can put it on before stepping out onto the road.',
+        'Place the warning triangle at least 150 metres behind the car during an emergency stop.'
+      ],
+      why: 'A reflective vest and warning triangle make you visible from far away when stopped by the roadside.',
+      q: 'Where in the car must the reflective vest be kept?',
+      o: ['Within reach of the driver from the driver seat', 'Under the spare wheel in the boot only', 'At home in the garage'],
+      c: 0,
+      ask: 'Can you explain what I need to know about Registration Part 1, the reflective vest and the warning triangle?'
+    }
+  ]
+};
+
+function _msSafetyHtml() {
+  var L = _msL();
+  var cats = _MS_SAFETY[appLang] || [];
+  return cats.map(function(cat, ci) {
+    var listHtml = (cat.items || []).map(function(item) { return '<li>' + escH(item) + '</li>'; }).join('');
+    var optsHtml = (cat.o || []).map(function(opt, oi) {
+      return '<button type="button" class="ms-opt" onclick="_msSafetyAnswer(this,' + ci + ',' + oi + ')">' + escH(opt) + '</button>';
+    }).join('');
+    var ttsPayload = cat.title + '. ' + (cat.items || []).join(' ') + ' ' + cat.why;
+    return '<div class="ms-safety-cat">'
+      + '<div class="ms-safety-head">'
+      + '<div class="ms-safety-title">' + escH(cat.title) + '</div>'
+      + '<button type="button" class="ms-safety-tts" data-tts="' + escH(ttsPayload) + '" onclick="speakText(this.getAttribute(\'data-tts\'))">' + escH(L.listen || '🔊') + '</button>'
+      + '</div>'
+      + '<ul class="ms-safety-list">' + listHtml + '</ul>'
+      + '<div class="ms-safety-why"><b>' + escH(L.whyLbl || '') + '</b> ' + escH(cat.why) + '</div>'
+      + '<div class="ms-q">' + escH(L.checkQ || '') + ' ' + escH(cat.q) + '</div>'
+      + '<div class="ms-opts">' + optsHtml + '</div>'
+      + '<div class="ms-safety-actions">'
+      + '<button type="button" class="ms-safety-ask" data-ask="' + escH(cat.ask) + '" onclick="_msSafetyAsk(this.getAttribute(\'data-ask\'))">' + escH(L.askMichael || '') + '</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function _msSafetyAnswer(btn, ci, oi) {
+  var cats = _MS_SAFETY[appLang] || [];
+  if (!cats[ci]) return;
+  var ok = cats[ci].c === oi;
+  var wrap = btn.parentElement;
+  var all = wrap.querySelectorAll('.ms-opt');
+  for (var i = 0; i < all.length; i++) { all[i].disabled = true; }
+  btn.classList.add(ok ? 'ok' : 'bad');
+  if (!ok && all[cats[ci].c]) all[cats[ci].c].classList.add('ok');
+  var msg = document.createElement('div');
+  msg.className = 'ms-result ' + (ok ? 'ok' : 'bad');
+  msg.textContent = (ok ? _msL().right : _msL().wrong);
+  wrap.appendChild(msg);
+}
+
+function _msSafetyAsk(promptText) {
+  if (!promptText) return;
+  closeMichaelSchool();
+  showTab('teacher');
+  teacherSend(promptText, promptText);
+}
+
+function openSafetyCheck() {
+  showTab('teacher');
+  _msSyncLabel();
+  var ov = document.getElementById('msOverlay');
+  if (!ov) return;
+  ov.classList.add('open');
+  _msTab = 3;
+  _msRender();
+}
+
+function setTeacherExplainLevel(lvl) {
+  var n = parseInt(lvl, 10) || 1;
+  if (n < 1 || n > 3) n = 1;
+  _teacherExplainLevel = n;
+  _ls.set('t2d_explain_lvl', String(n));
+  _syncTeacherToolbar();
+}
+
+function toggleSlowTts() {
+  var nextRate = (Math.abs((ttsRate || 1) - 0.75) < 0.05) ? 1 : 0.75;
+  setRate(nextRate);
+}
+
+function _syncTeacherToolbar() {
+  document.querySelectorAll('.teacher-lvl-btn').forEach(function(b) {
+    b.classList.toggle('active', parseInt(b.getAttribute('data-lvl'), 10) === (_teacherExplainLevel || 1));
+  });
+  var slowBtn = document.getElementById('teacherSlowTtsBtn');
+  if (slowBtn) {
+    slowBtn.classList.toggle('active', Math.abs((ttsRate || 1) - 0.75) < 0.05);
+  }
+}
+
+function discussSignWithMichael(signId) {
+  var cleanId = String(signId || '').replace('_0', '');
+  var prompts = {
+    th: 'ช่วยแสดงและอธิบายป้าย ' + cleanId + ' สั้นๆ แบบเข้าใจง่ายหน่อยครับ',
+    no: 'Kan du ta frem og forklare skilt ' + cleanId + ' kort og enkelt?',
+    en: 'Can you bring up and explain sign ' + cleanId + ' briefly and simply?'
+  };
+  var p = prompts[appLang] || '';
+  if (!p) return;
+  showTab('teacher');
+  teacherSend(p, p);
+}
+
   _teacherQuizHtml = '';
   _teacherNormalHasUserMsg = false;
   _teacherQuizHasUserMsg = false;
@@ -12442,6 +12851,7 @@ async function loadTeacher() {
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tContactBtn = document.getElementById('contactHumanBtn');
   if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
+  if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
 
@@ -12470,7 +12880,7 @@ async function loadTeacher() {
     }
   }
 
-  var tspMap2 = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary' };
+  var tspMap2 = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary', safety:'tsp_safety' };
   document.querySelectorAll('[data-tsp]').forEach(function(el) {
     var key = tspMap2[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
@@ -13324,6 +13734,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
       message: msg,
       language: appLang,
       device_id: _teacherDeviceId(),
+      explain_level: _teacherExplainLevel || 1,
       user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
     };
     if (customMode || isWeakTopic) {
@@ -13363,7 +13774,11 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
     var assistantBubble = _teacherAppendBubble('assistant', visibleText);
     await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
-    _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
+    var renderedSignIds = _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
+    var extraSignIds = (data.sign_ids || []).filter(function(id) { return renderedSignIds.indexOf(id) === -1; });
+    if (extraSignIds.length) {
+      await _teacherAppendSignCards(extraSignIds, assistantBubble);
+    }
     // Keep the chat calm: backend suggestions are intentionally not rendered.
     _teacherScrollToAnswerStart(assistantBubble);
     if (_teacherUploadedImage) _teacherClearDoc();
