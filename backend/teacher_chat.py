@@ -1025,6 +1025,110 @@ _MASTER_DOCS = (
 )
 
 
+_RULEBANK_S7_KEYS = (
+    "vikeplikt_grunnregel", "hoyreregel", "venstresving",
+    "myke_trafikanter_svinging", "utkjoring_eiendom",
+    "bussregelen", "smal_vei",
+)
+
+
+def _load_rulebank() -> dict:
+    """Load only a complete approved bank, with all three language columns."""
+    empty = {"regler": {}, "forbudte_pastander": {}}
+    try:
+        data = json.loads((Path(__file__).resolve().parent / "regelbank.json").read_text(encoding="utf-8"))
+        if not isinstance(data, dict) or not isinstance(data.get("regler"), dict):
+            return empty
+        if not isinstance(data.get("forbudte_pastander"), dict):
+            return empty
+        for key in _RULEBANK_S7_KEYS:
+            rule = data["regler"].get(key)
+            facts = rule.get("fakta") if isinstance(rule, dict) else None
+            if not isinstance(facts, dict) or any(
+                not isinstance(facts.get(lang), str) or not facts[lang].strip()
+                for lang in ("no", "th", "en")
+            ):
+                return empty
+        for lang in ("no", "th", "en"):
+            patterns = data["forbudte_pastander"].get(lang)
+            if not isinstance(patterns, list) or any(not isinstance(p, str) for p in patterns):
+                return empty
+        return data
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, KeyError):
+        logger.warning("Approved rule bank unavailable or invalid")
+        return empty
+
+
+_RULEBANK = _load_rulebank()
+
+
+def _rulebank_prompt(lang: str) -> str:
+    """Add approved facts from only the selected language to the model prompt."""
+    if lang not in ("no", "th", "en"):
+        return ""
+    facts = []
+    for rule in _RULEBANK.get("regler", {}).values():
+        if isinstance(rule, dict) and isinstance(rule.get("fakta"), dict):
+            fact = rule["fakta"].get(lang)
+            if isinstance(fact, str) and fact.strip():
+                facts.append(fact)
+    return "\n\n<approved_rulebank>\n" + "\n".join(facts) + "\n</approved_rulebank>" if facts else ""
+
+
+def _rulebank_violations(reply_text: str, lang: str) -> list[str]:
+    if lang not in ("no", "th", "en") or not reply_text:
+        return []
+    violations = []
+    for pattern in _RULEBANK.get("forbudte_pastander", {}).get(lang, []):
+        try:
+            # Legacy JSON entries contain doubled regex backslashes.
+            if re.search(pattern.replace("\\\\", "\\"), reply_text, flags=re.IGNORECASE):
+                violations.append(pattern)
+        except re.error:
+            logger.warning("Invalid approved rule-bank pattern for %s", lang)
+    return violations
+
+
+def _rulebank_safe_reply(user_msg: str, lang: str) -> str:
+    if lang not in ("no", "th", "en"):
+        return ""
+    message = (user_msg or "").casefold()
+    rules = _RULEBANK.get("regler", {})
+    for key in ("venstresving", "fartsgrense_tettbygd", *rules):
+        rule = rules.get(key)
+        if not isinstance(rule, dict):
+            continue
+        if key == user_msg or any(
+            isinstance(trigger, str) and trigger.casefold() in message
+            for trigger in rule.get("triggere", [])
+        ):
+            return rule.get("fakta", {}).get(lang, "")
+    return ""
+
+
+async def _guard_rule_claims(reply_text: str, messages: list[dict], user_msg: str, lang: str) -> str:
+    """Retry one unsupported claim, then return the approved fact for its topic."""
+    if not _rulebank_violations(reply_text, lang):
+        return reply_text
+    safe_reply = _rulebank_safe_reply(user_msg, lang)
+    if not safe_reply:
+        return _fallback_reply(lang)
+    retry_messages = list(messages)
+    retry_messages.append({"role": "assistant", "content": reply_text})
+    retry_messages.append({
+        "role": "system",
+        "content": _rulebank_prompt(lang) + "\nCorrect the unsupported claim using the approved fact. Reply only in the selected language.",
+    })
+    try:
+        response = await _completion_with_fallback(retry_messages)
+        corrected = (response.choices[0].message.content or "").strip()
+        if corrected and not _rulebank_violations(corrected, lang):
+            return corrected
+    except Exception as exc:
+        logger.warning("Rule-bank correction failed: %s", type(exc).__name__)
+    return safe_reply
+
+
 def _master_document_context() -> str:
     """Read the versioned teaching sources, excluding disputed claims and old format rules."""
     excluded = ("§7 nr. 4", "§7 nr.4", "nordens strengeste", "faste mal", "overskrifter")
@@ -1056,6 +1160,14 @@ def _master_document_context() -> str:
             for line in selected_lines
         ]
         blocks.append(f"<master_document name=\"{name}\">\n" + "\n".join(safe_lines) + "\n</master_document>")
+    bus_rule = _RULEBANK.get("regler", {}).get("bussregelen", {})
+    if isinstance(bus_rule, dict):
+        source = bus_rule.get("kilde", "")
+        if isinstance(source, str) and source:
+            blocks.append(
+                '<approved_rulebank_reference name="Bussregelen" source="'
+                + source.replace("§ 7", "§7") + '" />'
+            )
     return "\n\n".join(blocks)
 
 
@@ -1185,6 +1297,7 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None, *, guided: bo
         + _HISTORY_ACCOUNTABILITY_PROMPT
         + _YIELD_VS_STOP_PROMPT[l]
         + core
+        + _rulebank_prompt(l)
         + rag_instructions
         + multimedia_instructions
         + memory_instructions
@@ -3169,7 +3282,7 @@ TRAFFIC_CONCEPTS = {
         "canonical": "vikeplikt",
         "category": "vikeplikt",
         "aliases": [
-            "vikeplikt", "vikeplikten", "vikeplikter", "vikeplit", "høyreregel", "høyreregelen",
+            "vikeplikt", "vikeplikten", "vikeplikter", "vikeplit", "høyreregel", "høyreregelen", "kongen og tjeneren",
             "hoyreregel", "hoyreregelen", "right-of-way", "right of way", "give way", "yield",
             "การให้ทาง", "ให้ทาง", "กฎมือขวา"
         ],
@@ -5531,6 +5644,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         else:
             resp = await _completion_with_fallback(messages, require_vision=True) if is_vision else await _completion_with_fallback(messages)
             reply_text = (resp.choices[0].message.content or "").strip()
+        if reply_text:
+            reply_text = await _guard_rule_claims(reply_text, messages, user_msg, lang)
         if not reply_text:
             error_str = "LiteLLM: empty response"
             reply_text = _fallback_reply(lang)

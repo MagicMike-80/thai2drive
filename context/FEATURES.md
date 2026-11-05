@@ -44,6 +44,8 @@ Michael trenger bare si hva han ønsker — resten skjer av seg selv.
   - Fargene må flyte/bevege seg rundt hele omkretsen (perimeteren) av knappene/kantene, ikke være statiske eller låst til ett sted (slik som på 3D-karusellens sidekort eller toppen).
 
 ## 🟡 PLANLAGT
+- 🟡 **Regelbank-sensor for AI-lærer Michael (web først, mobil etter godkjenning)**
+  - Godkjente fakta brukes i prompt og svarvakt for NO/TH/EN. Venter på Railway-verifisering.
 - 🟡 **Stopplengdevisualisering som egen side (web først, mobil etter godkjenning)**
   - Flytt desktop-inngangen fra overlay til `/traffic-math`, og behold fart, veiforhold, reaksjonslengde, bremselengde, stopplengde og følgeavstand.
 
