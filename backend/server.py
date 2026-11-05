@@ -5893,6 +5893,7 @@ class AdminMediaCreate(BaseModel):
     media_id: str
     type: str = "video"  # video, podcast, image, audio, sign
     category: str = "generelt"
+    learning_area_id: Optional[str] = None
     tags: List[str] = []
     media_url: str
     thumbnail_url: Optional[str] = ""
@@ -5906,6 +5907,7 @@ class AdminMediaCreate(BaseModel):
 class AdminMediaUpdate(BaseModel):
     type: Optional[str] = None
     category: Optional[str] = None
+    learning_area_id: Optional[str] = None
     tags: Optional[List[str]] = None
     media_url: Optional[str] = None
     thumbnail_url: Optional[str] = None
@@ -6081,6 +6083,7 @@ async def admin_create_media(
         "media_id": clean_id,
         "type": data.type.strip().lower(),
         "category": data.category.strip().lower(),
+        "learning_area_id": data.learning_area_id,
         "tags": [t.strip().lower() for t in data.tags if t.strip()],
         "media_url": data.media_url.strip(),
         "thumbnail_url": (data.thumbnail_url or data.media_url).strip(),
@@ -6116,6 +6119,8 @@ async def admin_update_media(
         update_fields["type"] = data.type.strip().lower()
     if data.category is not None:
         update_fields["category"] = data.category.strip().lower()
+    if data.learning_area_id is not None:
+        update_fields["learning_area_id"] = data.learning_area_id.strip()
     if data.tags is not None:
         update_fields["tags"] = [t.strip().lower() for t in data.tags if t.strip()]
     if data.media_url is not None:

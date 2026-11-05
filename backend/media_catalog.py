@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import re
+import json
 import unicodedata
+from pathlib import Path
 from typing import Any, Iterable, Optional
 from urllib.parse import urlsplit
 
@@ -20,6 +22,9 @@ CATEGORIES = (
 )
 CATEGORY_ORDER = {category: index for index, category in enumerate(CATEGORIES)}
 TYPE_ORDER = {media_type: index for index, media_type in enumerate(MEDIA_TYPES)}
+LEARNING_AREAS_PATH = Path(__file__).with_name("learning_areas.json")
+LEARNING_AREAS = json.loads(LEARNING_AREAS_PATH.read_text(encoding="utf-8"))["areas"]
+LEARNING_AREA_IDS = tuple(area["id"] for area in LEARNING_AREAS)
 
 
 class MediaCatalogValidationError(ValueError):
@@ -69,6 +74,11 @@ def validate_catalog_document(document: dict[str, Any]) -> dict[str, Any]:
     media_id = _required_text(document.get("media_id"), "media_id")
     media_type = _required_text(document.get("type"), "type")
     category = _required_text(document.get("category"), "category")
+    learning_area_id = document.get("learning_area_id")
+    if learning_area_id is not None:
+        learning_area_id = _required_text(learning_area_id, "learning_area_id")
+        if learning_area_id not in LEARNING_AREA_IDS:
+            raise MediaCatalogValidationError("unsupported learning_area_id")
     content_language = _required_text(
         document.get("content_language"), "content_language"
     )
@@ -121,6 +131,7 @@ def validate_catalog_document(document: dict[str, Any]) -> dict[str, Any]:
         "media_id": media_id,
         "type": media_type,
         "category": category,
+        "learning_area_id": learning_area_id,
         "tags": tags,
         "media_url": media_url,
         "thumbnail_url": thumbnail_url,
@@ -173,6 +184,8 @@ def serialize_catalog_document(document: dict[str, Any], language: str) -> Optio
         "description": localized["description"],
         "caption": localized["description"],
     }
+    if item.get("learning_area_id"):
+        payload["learning_area_id"] = item["learning_area_id"]
     source_id = str(document.get("source_id", "")).strip()
     if item["type"] == "sign" and source_id:
         payload["sign_id"] = source_id
@@ -189,14 +202,24 @@ def catalog_sort_key(item: dict[str, Any]) -> tuple[Any, ...]:
 
 
 def rank_catalog_media(
-    documents: Iterable[dict[str, Any]], query: str, language: str, limit: int = 1
+    documents: Iterable[dict[str, Any]],
+    query: str,
+    language: str,
+    limit: int = 1,
+    learning_area_id: Optional[str] = None,
 ) -> list[dict[str, Any]]:
     """Rank whole approved tag phrases deterministically; never fuzzy match."""
-    if language not in SUPPORTED_LANGUAGES or limit <= 0:
+    if (
+        language not in SUPPORTED_LANGUAGES
+        or limit <= 0
+        or (learning_area_id is not None and learning_area_id not in LEARNING_AREA_IDS)
+    ):
         return []
     normalized_query = f" {normalize_catalog_text(query)} "
     ranked: list[tuple[Any, ...]] = []
     for document in documents:
+        if learning_area_id is not None and document.get("learning_area_id") != learning_area_id:
+            continue
         payload = serialize_catalog_document(document, language)
         if not payload:
             continue

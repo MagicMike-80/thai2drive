@@ -1,7 +1,11 @@
 import asyncio
+import json
+import re
 import unittest
+from pathlib import Path
 
 from backend.media_catalog import (
+    LEARNING_AREA_IDS,
     LAW_MAPPING,
     MediaCatalogValidationError,
     expand_law_synonyms,
@@ -130,6 +134,50 @@ class MediaCatalogTests(unittest.TestCase):
         )
         self.assertEqual([item["media_id"] for item in ranked], ["best"])
         self.assertEqual(rank_catalog_media([unrelated], "stoppelengde", "no"), [])
+
+    def test_learning_area_id_is_validated_and_filters_media_exactly(self):
+        area_item = _item("area", learning_area_id="speed_distance")
+        other_area_item = _item("other", learning_area_id="right_of_way")
+        no_area_item = _item("unassigned")
+        self.assertEqual(len(LEARNING_AREA_IDS), 7)
+        normalized = validate_catalog_document(area_item)
+        self.assertEqual(normalized["learning_area_id"], "speed_distance")
+        self.assertEqual(
+            [item["media_id"] for item in rank_catalog_media(
+                [other_area_item, no_area_item, area_item],
+                "stoppelengde",
+                "no",
+                learning_area_id="speed_distance",
+            )],
+            ["area"],
+        )
+        with self.assertRaises(MediaCatalogValidationError):
+            validate_catalog_document(_item("bad_area", learning_area_id="random"))
+
+    def test_canonical_learning_area_ids_match_the_teacher_side_panel(self):
+        root = Path(__file__).resolve().parents[2]
+        schema = json.loads((root / "backend" / "learning_areas.json").read_text(encoding="utf-8"))
+        panel = (root / "backend" / "webapp.py").read_text(encoding="utf-8")
+        panel_ids = set(re.findall(r'data-area="([a-z_]+)"', panel))
+        self.assertEqual(set(LEARNING_AREA_IDS), panel_ids)
+        self.assertEqual(
+            {area["label_key"] for area in schema["areas"]},
+            {"tsp_" + area_id for area_id in LEARNING_AREA_IDS},
+        )
+
+    def test_public_media_serialization_drops_answer_key_fields(self):
+        item = _item(
+            learning_area_id="speed_distance",
+            correct_answer="A",
+            explanation="PRIVATE-ANSWER",
+            distractors=["B", "C"],
+            answer_visible=True,
+        )
+        public = serialize_catalog_document(item, "no")
+        self.assertEqual(public["learning_area_id"], "speed_distance")
+        for private_field in ("correct_answer", "explanation", "distractors", "answer_visible"):
+            self.assertNotIn(private_field, public)
+        self.assertNotIn("PRIVATE-ANSWER", str(public))
 
     def test_inactive_incomplete_and_language_mismatch_are_hidden(self):
         inactive = _item("inactive", is_active=False)

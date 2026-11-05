@@ -3977,16 +3977,27 @@ async def _get_relevant_catalog_media(
     language: str,
     extra_context: str = "",
     media_type: str = "",
+    learning_area_id: Optional[str] = None,
 ) -> list[dict]:
     """Fail-soft lookup of at most one curated, language-compatible resource."""
     if language not in SUPPORTED_LANGUAGES:
         return []
+    if learning_area_id is not None:
+        try:
+            from media_catalog import LEARNING_AREA_IDS
+        except ImportError:
+            from backend.media_catalog import LEARNING_AREA_IDS
+        if learning_area_id not in LEARNING_AREA_IDS:
+            return []
     try:
-        documents = await _db["media_catalog"].find({
+        query = {
             "is_active": True,
             "approved_for_michael": True,
             "content_language": {"$in": [language, "neutral"]},
-        }).to_list(length=200)
+        }
+        if learning_area_id is not None:
+            query["learning_area_id"] = learning_area_id
+        documents = await _db["media_catalog"].find(query).to_list(length=200)
         if media_type:
             documents = [document for document in documents if document.get("type") == media_type]
         law_tags = expand_law_synonyms(f"{user_msg} {extra_context}")
@@ -3998,6 +4009,7 @@ async def _get_relevant_catalog_media(
             f"{user_msg} {extra_context} {' '.join(law_tags)} {visual_tags}",
             language,
             limit=1,
+            learning_area_id=learning_area_id,
         )
     except Exception as exc:
         logger.warning("Media catalog lookup skipped: %s", type(exc).__name__)
@@ -5342,6 +5354,11 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         # Only explicit sign requests may reserve the limited response media slots.
         # RAG context can mention several related signs; preloading those cards can
         # otherwise crowd out the lesson image/video the learner actually requested.
+        selected_learning_area_id = (
+            req.mode[len("learning_area_"):]
+            if req.mode and req.mode.startswith("learning_area_")
+            else None
+        )
         exact_sign_media = await _get_exact_sign_media(explicit_sign_ids, lang) if allow_answer else []
         approved_media = await _get_relevant_michael_materials(
             topic_query,
@@ -5351,6 +5368,11 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             extra_context=quiz_context_str,
             media_type=requested_video_type,
         ) if allow_answer else []
+        if selected_learning_area_id:
+            # A learner-selected area must not be supplemented by unclassified
+            # legacy media; only the area-tagged catalog can supply visuals.
+            exact_sign_media = []
+            approved_media = []
         exact_sign_ids_in_media = {item.get("sign_id") for item in exact_sign_media}
         media = exact_sign_media + [
             item for item in approved_media
@@ -5363,12 +5385,16 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 requested_language,
                 extra_context=quiz_context_str,
                 media_type=requested_video_type,
+                learning_area_id=selected_learning_area_id,
             )
-            if not catalog_media and not approved_media and resolved_concept and resolved_concept.get("media"):
+            if (not selected_learning_area_id and not catalog_media
+                    and not approved_media and resolved_concept and resolved_concept.get("media")):
                 catalog_media = list(resolved_concept["media"])
-        elif allow_answer and not explicit_sign_ids and not approved_media and resolved_concept and resolved_concept.get("media"):
+        elif (allow_answer and not selected_learning_area_id and not explicit_sign_ids
+              and not approved_media and resolved_concept and resolved_concept.get("media")):
             catalog_media = list(resolved_concept["media"])
-        if allow_answer and not explicit_sign_ids and _user_requested_image(topic_query):
+        if (allow_answer and not selected_learning_area_id and not explicit_sign_ids
+                and _user_requested_image(topic_query)):
             topics = _situation_topics(topic_query)
             visual_topic = "roundabout" if "roundabout" in topics else "yield" if "yield" in topics else ""
             visual_card = _visualization_media_card(visual_topic, lang)

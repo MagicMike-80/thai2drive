@@ -37,6 +37,7 @@ CURATED_FIELDS = (
     "media_id",
     "type",
     "category",
+    "learning_area_id",
     "tags",
     "media_url",
     "thumbnail_url",
@@ -114,7 +115,11 @@ def verify_manifest_urls(
 
 
 def _curated(document: dict[str, Any]) -> dict[str, Any]:
-    return {field: document[field] for field in CURATED_FIELDS}
+    return {
+        field: document[field]
+        for field in CURATED_FIELDS
+        if field in document and (field != "learning_area_id" or document[field] is not None)
+    }
 
 
 async def seed_collection(collection: Any, documents: list[dict[str, Any]], now: datetime) -> dict[str, int]:
@@ -127,13 +132,14 @@ async def seed_collection(collection: Any, documents: list[dict[str, Any]], now:
     counts = {"matched": 0, "modified": 0, "upserted": 0, "unchanged": 0}
     for item in documents:
         previous = existing.get(item["media_id"])
+        curated = _curated(item)
         if previous is not None:
             counts["matched"] += 1
-            if all(previous.get(field) == item[field] for field in CURATED_FIELDS):
+            if all(previous.get(field) == value for field, value in curated.items()):
                 counts["unchanged"] += 1
                 continue
         update = {
-            "$set": {**_curated(item), "updated_at": now},
+            "$set": {**curated, "updated_at": now},
             "$setOnInsert": {"created_at": now},
         }
         result = await collection.update_one(

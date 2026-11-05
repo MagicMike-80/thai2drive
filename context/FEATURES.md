@@ -13,6 +13,12 @@ Michael trenger bare si hva han ønsker — resten skjer av seg selv.
 ---
 
 ## ✅ LEVERT
+- ✅ **Mobil-UI Patch 1–3 og responsiv Michael-chat (web først, mobil etter godkjenning)**
+  - Live i commit `6917314`: NO/TH/EN ved 320–1440 px uten sidebredde over skjermen; synlige trykkflater minst 44 × 44 px; siste melding og inndatafelt synlige ved mobiltastatur.
+- ✅ **Regelbank-sensor og Batch 04 quizbilder**
+  - Regelbank-sensoren er aktiv på main. 44 godkjente bilder er koblet til validerte quizspørsmål; 49 av 49 quiz- og sikkerhetsbilder svarte som WebP live i commit `6917314`.
+- ✅ **Etappe 1: Michaels forklaringsnivåer, sikkerhetskontroll og fagord i quiz (web først, mobil etter godkjenning)**
+  - Thai nivå 1 er ren thai, nivå 2 viser norske fagord i parentes, nivå 3 bruker norsk bokmål. Fem sikkerhetsbilder har lightbox; norske quizfagord åpner thai-forklaring, norsk lyd og «Spør Michael». Live i commit `6917314`.
 - ✅ **Skarpt Michael-portrett i webappens ikoner (web først, mobil etter godkjenning)**
   - Det runde portrettet vises i Michael-kortet, bunnmenyen og øvrige webvisninger. Live på Railway i commit `96b2fb0`.
 - ✅ Kompakt knapp-layout (ExpandableButtonGroup)
@@ -63,3 +69,5 @@ Når Michael sier "jeg ønsker", "kan vi få", "legg til", eller beskriver noe h
 3. Web-app-først-regelen gjelder alltid for UI-features
 4. Når noe er ferdig og live: flytt det til ✅ LEVERT
 5. Hemmeligheter lagres aldri her
+- ⏳ **Bildebibliotek: pilot 12 ferdiggjennomgang (web først, mobil etter godkjenning)**
+  - Kontrollvisning med avgrenset Pilot 12-filter, visuell beskrivelse, kandidatspørsmål, privat fasitstatus og konkret Michaels godkjenningspunkt. Bruksrett må dokumenteres før publisering.

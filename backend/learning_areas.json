@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "source": "backend/webapp.py teacherSidePanel data-area values",
+  "areas": [
+    {"id": "right_of_way", "label_key": "tsp_right_of_way", "label_no": "Vikeplikt og kryss"},
+    {"id": "positioning_lane", "label_key": "tsp_positioning_lane", "label_no": "Plassering og feltskifte"},
+    {"id": "interaction", "label_key": "tsp_interaction", "label_no": "Samhandling"},
+    {"id": "speed_distance", "label_key": "tsp_speed_distance", "label_no": "Fart og avstand"},
+    {"id": "road_conditions", "label_key": "tsp_road_conditions", "label_no": "Vei og forhold"},
+    {"id": "signs_markings", "label_key": "tsp_signs_markings", "label_no": "Skilt og oppmerking"},
+    {"id": "other_topics", "label_key": "tsp_other_topics", "label_no": "Andre læringstemaer"}
+  ]
+}

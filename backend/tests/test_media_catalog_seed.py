@@ -100,6 +100,23 @@ class MediaCatalogSeedTests(unittest.TestCase):
         self.assertEqual(second, {"matched": 10, "modified": 0, "upserted": 0, "unchanged": 10})
         self.assertEqual(collection.writes, [])
 
+    def test_seed_without_area_preserves_existing_learning_area(self):
+        documents = self._documents()
+        collection = _Collection()
+        now = datetime(2026, 8, 31, tzinfo=timezone.utc)
+        collection.docs[documents[0]["media_id"]] = {
+            **documents[0],
+            "learning_area_id": "speed_distance",
+        }
+
+        asyncio.run(seed_collection(collection, documents, now))
+
+        self.assertEqual(
+            collection.docs[documents[0]["media_id"]]["learning_area_id"],
+            "speed_distance",
+        )
+        self.assertNotIn("learning_area_id", collection.writes[0][1]["$set"])
+
 
 if __name__ == "__main__":
     unittest.main()
