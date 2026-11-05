@@ -167,14 +167,67 @@ class MichaelMobileUiContractTests(unittest.TestCase):
             self.assertIn("no:", value)
             self.assertIn("en:", value)
 
-    def test_teacher_mode_bottom_nav_keeps_stable_full_carousel(self):
-        self.assertIn("#app.teacher-mode #bottomNav .bn-tab { display:flex; }", WEBAPP)
-        self.assertIn("flex-wrap: nowrap !important", WEBAPP)
-        self.assertIn("#bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }", WEBAPP)
+    def test_bottom_nav_has_accessible_compact_menu_without_carousel(self):
+        self.assertIn('aria-controls="bottomNavMorePanel" aria-expanded="false"', WEBAPP)
+        self.assertIn("function bindBottomNavNavigation()", WEBAPP)
+        self.assertIn("window.matchMedia('(max-width:999px)')", WEBAPP)
+        self.assertNotIn("function bindBottomNavCarousel()", WEBAPP)
+        self.assertNotIn("nav.addEventListener('wheel'", WEBAPP)
         self.assertIn("function _buildNorwegianTermToggle(sign)", WEBAPP)
         self.assertIn("if (appLang !== 'th') return null;", WEBAPP)
         self.assertIn("teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์'", WEBAPP)
         self.assertIn("min-height:34px", WEBAPP)
+
+    def test_learning_areas_side_panel_structure_and_translations(self):
+        # 1. 7 Primary Learning Areas in exact sequence
+        expected_seq = [
+            "right_of_way",
+            "positioning_lane",
+            "interaction",
+            "speed_distance",
+            "road_conditions",
+            "signs_markings",
+            "other_topics",
+        ]
+        panel_start = WEBAPP.find('id="teacherSidePanel"')
+        self.assertNotEqual(panel_start, -1)
+        panel_end = WEBAPP.find("</div><!-- /teacher-side-panel -->", panel_start)
+        self.assertNotEqual(panel_end, -1)
+        panel_html = WEBAPP[panel_start:panel_end]
+
+        found_areas = re.findall(r'data-area="([a-z_]+)"', panel_html)
+        self.assertEqual(found_areas, expected_seq)
+
+        # 2. Internal subtopics are NOT visible in panel HTML
+        forbidden = [
+            "Høyreregel", "forkjørsvei", "venstresving", "utkjøring",
+            "Flere felt", "enveiskjøring", "rundkjøring",
+            "Fotgjengere", "syklister", "motorsykler",
+            "Reaksjon", "bremsing", "stans",
+            "Landevei", "motorvei", "tunnel",
+            "Eksempler på situasjoner vi må dekke"
+        ]
+        for term in forbidden:
+            self.assertNotIn(term.lower(), panel_html.lower())
+
+        # 3. Preserved utility functions exist in panel
+        for util in ("strengths", "signs", "rules", "position", "dictionary", "safety"):
+            self.assertIn(f'data-tsp="{util}"', panel_html)
+
+        # 4. Translations present in NO, TH, EN
+        for area in expected_seq:
+            key = f"tsp_{area}"
+            match = re.search(rf"{key}:\s*\{{([^}}]+)\}}", WEBAPP)
+            self.assertIsNotNone(match, f"Missing key {key}")
+            val = match.group(1)
+            self.assertIn("no:", val)
+            self.assertIn("th:", val)
+            self.assertIn("en:", val)
+
+        # 5. JS selection function and active styling
+        self.assertIn("function selectLearningArea(areaId)", WEBAPP)
+        self.assertIn(".tsp-btn.active", WEBAPP)
+        self.assertIn(".tsp-section-title", WEBAPP)
 
 
 if __name__ == "__main__":

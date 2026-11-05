@@ -2976,6 +2976,8 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
     """Append a narrowly scoped, verified § 7(2) clarification without discarding the answer."""
     is_left_turn = _is_section_7_2_left_turn_query(user_msg)
     is_citation = _is_section_7_2_citation_query(user_msg)
+    if is_left_turn and (reply_text or "").strip().casefold() in {"", "bad", "n/a", "unknown"}:
+        return _RULEBANK["regler"]["venstresving"]["fakta"].get(lang, "")
 
     # Fang opp eventuelle farlige feilpåstander fra LLM-en
     reply_lower = (reply_text or "").casefold()
@@ -5167,6 +5169,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Pydantic's Literal["no", "th", "en"] already rejects anything else with a 422.
     requested_language = req.language
     lang = requested_language
+    # The three Thai study levels are available only in the Thai conversation.
+    # Norwegian and English conversations always follow their selected UI language.
+    explain_level = (getattr(req, "explain_level", 1) or 1) if lang == "th" else 0
     vision_image = _validate_vision_image(
         getattr(req, "image_url", None), getattr(req, "image_data", None)
     )
@@ -5421,12 +5426,34 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             system_prompt += "\n\nCHAT MODE: Coach the student through the current quiz question. Explain the rule without guessing an unseen answer."
         elif req.mode == "simplify" and v4_stage == "5":
             system_prompt += "\n\nCHAT MODE: Use especially short, simple sentences and one concrete driving example."
-        if getattr(req, "explain_level", 1) == 1:
-            system_prompt += "\n\nEXPLANATION LEVEL 1 (SIMPLE 7-YEAR-OLD RULE): Keep your reply minimal (max 2-3 short, simple sentences + 1 short question) in the declared [LANGUAGE]."
-        elif getattr(req, "explain_level", 1) == 2:
-            system_prompt += "\n\nEXPLANATION LEVEL 2 (PRACTICAL DRIVING SITUATION): Put the student in the driver's seat with one concrete road situation in 3-4 short sentences + 1 short question, strictly in the declared [LANGUAGE]."
-        elif getattr(req, "explain_level", 1) == 3:
-            system_prompt += "\n\nEXPLANATION LEVEL 3 (EXAM PRECISION): Focus sharply on what Statens vegvesen tests on the theory exam and the most common exam trap in 3-4 short sentences + 1 exam-style question, strictly in the declared [LANGUAGE]."
+        elif req.mode and req.mode.startswith("learning_area_"):
+            area_code = req.mode.replace("learning_area_", "")
+            system_prompt += (
+                f"\n\nTOPIC FOCUS ({area_code}): The learner selected this specific curriculum area from the menu. "
+                "Introduce this core theme warmly as Michael in the chosen language. "
+                "Explain the primary rule simply (7-year-old rule), give one relatable driving example, and guide the student with one question."
+            )
+        if explain_level == 1:
+            system_prompt += (
+                "\n\nEXPLANATION LEVEL 1 (ENKEL THAI / 100% REN THAI): "
+                "Explain in 100% simple, clear everyday Thai (7-year-old rule). "
+                "Strictly do NOT use heavy legal terms, and NEVER insert Norwegian or English words, and zero Latin letters. "
+                "Keep the reply minimal: maximum 3-4 short sentences + 1 simple question in Thai."
+            )
+        elif explain_level == 2:
+            system_prompt += (
+                "\n\nEXPLANATION LEVEL 2 (THAI MED NORSKE FAGORD I PARENTES): "
+                "Explain clearly in Thai, but ALWAYS insert the official Norwegian traffic term in parentheses immediately when introducing or mentioning a rule, sign, or concept. "
+                "Format: thai-forklaring (norsk fagord), for example เว้นระยะห่าง (følgeavstand), การให้ทาง (vikeplikt), ทางเอก (forkjørsvei), ทางม้าลาย (gangfelt). "
+                "Zero English words. Maximum 3-4 short sentences + 1 question."
+            )
+        elif explain_level == 3:
+            system_prompt += (
+                "\n\nEXPLANATION LEVEL 3 (REN NORSK BOKMÅL - EKSAMENSRETTET): "
+                "CRITICAL OVERRIDE: Write the entire explanation in clean, simple Norwegian Bokmål to prepare the student for the official theory exam at Statens vegvesen! "
+                "Do NOT write in Thai. Focus sharply on official Norwegian exam terminology and the most common exam trap. "
+                "Maximum 3-4 short sentences in Norwegian + 1 Norwegian follow-up question."
+            )
 
         if context_str:
             system_prompt += (
@@ -5550,6 +5577,22 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         system_prompt += _master_output_contract(lang, guided=guided_chat)
         if lang == "th" and (is_quiz_help or req.mode in ("quiz_coach", "simplify")):
             system_prompt += _thai_quiz_purity_block()
+        if explain_level == 3:
+            system_prompt += (
+                "\n\n━━━ LEVEL 3 OVERRIDE: REN NORSK BOKMÅL (HIGHEST PRIORITY) ━━━\n"
+                "The student explicitly selected Level 3 (Ren norsk bokmål) to practice for the official theory exam.\n"
+                "Write your entire response in Norwegian Bokmål ONLY. Do NOT use Thai or English.\n"
+                "This overrides any [LANGUAGE] or Thai-only instruction.\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            )
+        elif explain_level == 1:
+            system_prompt += (
+                "\n\n━━━ LEVEL 1 OVERRIDE: 100% REN THAI (HIGHEST PRIORITY) ━━━\n"
+                "The student explicitly selected Level 1 (Enkel thai).\n"
+                "Write your entire response in simple Thai only, with ZERO Norwegian words, ZERO English words, and ZERO Latin letters.\n"
+                "Do NOT put Norwegian terms in parentheses.\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            )
         if guided_chat:
             system_prompt += _v4_stage_instruction(v4_stage, lang)
         if focus_weak_topic:
@@ -5724,7 +5767,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     if source_reply:
         reply_text = source_reply
     reply_text = _ground_missing_visual_file_reply(user_msg, reply_text, media, lang)
-    reply_text = await _guard_selected_language(reply_text, messages, lang)
+    reply_lang = "no" if explain_level == 3 else lang
+    reply_text = await _guard_selected_language(
+        reply_text, messages, reply_lang, allow_parenthetical_latin=(explain_level == 2)
+    )
     if not guided_chat:
         reply_text = _guard_unreported_success(reply_text, prior, user_msg, student_memory, lang)
     reply_text = _ground_exam_key_availability(user_msg, reply_text, lang)
@@ -5762,6 +5808,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     media = [item for item in media if _material_relevant(item, topic_query, explicit_sign_ids)]
     media = [item for item in media if all(_reply_matches_language_script(item.get(field, ""), lang) for field in ("title", "caption"))]
     reply_text = _guard_unattached_image_claim(reply_text, media, lang)
+    if explain_level:
+        reply_text = await _guard_selected_language(
+            reply_text, messages, reply_lang, allow_parenthetical_latin=(explain_level == 2)
+        )
 
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.
@@ -5851,9 +5901,12 @@ def _contains_thai_script(text: str) -> bool:
     return bool(re.search(r"[\u0e00-\u0e7f]", text or ""))
 
 
-def _reply_matches_language_script(text: str, lang: str) -> bool:
+def _reply_matches_language_script(text: str, lang: str, allow_parenthetical_latin: bool = False) -> bool:
     if lang == "th":
-        return _contains_thai_script(text) and all(not char.isalpha() or "\u0e00" <= char <= "\u0e7f" for char in (text or ""))
+        cleaned = text or ""
+        if allow_parenthetical_latin:
+            cleaned = re.sub(r"\([a-zA-ZæøåÆØÅ\s\-\.,/0-9]+\)", "", cleaned)
+        return _contains_thai_script(cleaned) and all(not char.isalpha() or "\u0e00" <= char <= "\u0e7f" for char in cleaned)
     if _contains_thai_script(text):
         return False
     words = set(re.findall(r"[a-zæøå]+", (text or "").casefold()))
@@ -5864,13 +5917,13 @@ def _reply_matches_language_script(text: str, lang: str) -> bool:
     return len(norwegian) < 2 if lang == "en" else len(english) < 2
 
 
-async def _guard_selected_language(reply: str, messages: list, lang: str) -> str:
+async def _guard_selected_language(reply: str, messages: list, lang: str, allow_parenthetical_latin: bool = False) -> str:
     """Retry one mixed-script answer, then return a fallback in the selected language."""
     if lang not in SUPPORTED_LANGUAGES:
         return _fallback_reply("no")
     # Media captions contain all three languages internally; only prose is visible.
     reply = re.sub(r"\[(?:image|video|podcast|audio):[^\]]*\]", "", reply or "", flags=re.I).strip()
-    if _reply_matches_language_script(reply, lang):
+    if _reply_matches_language_script(reply, lang, allow_parenthetical_latin=allow_parenthetical_latin):
         return reply
 
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}[lang]
@@ -5894,7 +5947,7 @@ async def _guard_selected_language(reply: str, messages: list, lang: str) -> str
     try:
         response = await _completion_with_fallback(retry_messages)
         candidate = re.sub(r"\[(?:image|video|podcast|audio):[^\]]*\]", "", response.choices[0].message.content or "", flags=re.I).strip()
-        if _reply_matches_language_script(candidate, lang):
+        if _reply_matches_language_script(candidate, lang, allow_parenthetical_latin=allow_parenthetical_latin):
             return candidate
     except Exception:
         logger.exception("Selected-language retry failed")

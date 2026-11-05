@@ -193,7 +193,7 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
 <html lang="th" data-theme="dark" translate="no" class="notranslate">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <meta name="google" content="notranslate">
 <meta id="metaDescription" name="description" content="ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive">
 <link rel="icon" href="/api/assets/favicon.ico" sizes="any">
@@ -266,14 +266,13 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* ══════════════════════════════════════════
-   DESKTOP PHONE FRAME
-   On viewports wider than 500 px the app
-   is centred as a 390 px iPhone silhouette.
-   On narrow screens (real phones) it fills
-   the whole viewport as before.
+   RESPONSIVE WEB FRAME
+   Fill smaller viewports and cap the desktop frame at 1040 px.
+   Quiz and teacher modes keep their existing width overrides.
 ══════════════════════════════════════════ */
 @media (min-width:500px) {
   html, body {
+    width:100%;
     background:#010B18;
     background-image:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(22,40,95,.50) 0%,rgba(12,22,58,.25) 45%,#010B18 75%);
     display:flex; align-items:flex-start; justify-content:center;
@@ -281,7 +280,7 @@ a { color:inherit; text-decoration:none; }
     /* No padding — app must fill top to bottom */
   }
   #app {
-    width:390px; /* fixed phone width — quiz-mode overrides to 1080 */
+    width:min(1040px, 100%);
     flex-shrink:0;
     /* Full viewport height, no gaps */
     height:100vh; height:-webkit-fill-available;
@@ -306,8 +305,14 @@ a { color:inherit; text-decoration:none; }
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   display:flex; align-items:center;
-  padding:0 16px; gap:12px; z-index:50;
+  padding:0 10px; gap:8px; z-index:50;
 }
+#topBar .top-controls { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+#topBar .lang-btn, #topSettingsBtn { min-width:44px; min-height:44px; }
+#topBar .lang-btn { transform:none; }
+#topBar button.lang-btn { animation:none; }
+@media (max-width:420px) { #topBar .top-logo > span { display:none; } }
+@media (max-width:699px) { #topStreak { display:none !important; } }
 
 [data-theme="light"] #topBar { background:rgba(241,245,249,.95); }
 .top-logo {
@@ -335,11 +340,11 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column;
 }
 
-/* BOTTOM NAV — Floating Neon Capsule Carousel («En lang knapp som går som en karusell») */
+/* BOTTOM NAV — primary destinations plus a compact, non-scrolling menu */
 #bottomNav {
-  height: 62px;
+  min-height: 76px;
   flex-shrink: 0;
-  margin: 6px 12px 14px;
+  margin: 6px 12px calc(14px + env(safe-area-inset-bottom, 0px));
   border-radius: 30px;
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(11, 18, 38, 0.94), rgba(11, 18, 38, 0.94)) padding-box,
@@ -348,30 +353,32 @@ a { color:inherit; text-decoration:none; }
   backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(0, 245, 255, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.12);
   display: none; flex-direction: row;
-  flex-wrap: nowrap !important;
-  align-items: center; z-index: 50;
-  overflow-x: auto; overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-snap-type: none;
-  padding: 0 8px;
-  gap: 8px;
+  align-items: stretch; z-index: 50; position:relative;
+  padding: 8px;
+  gap: 6px;
 }
-#bottomNav.js-scrolling,
-.js-scrolling {
-  scroll-snap-type: none !important;
+#bottomNavMorePanel[hidden], #bottomNavMoreBtn[hidden] { display:none !important; }
+#bottomNavMorePanel {
+  position:absolute; right:0; bottom:calc(100% + 8px);
+  width:min(360px, 100%); max-height:65vh;
+  max-height:min(480px, calc(100dvh - 160px));
+  display:flex; flex-direction:column; gap:6px; overflow-y:auto; overflow-x:hidden;
+  padding:12px; border:1px solid rgba(0,245,255,.35); border-radius:18px;
+  background:var(--bg2); box-shadow:0 12px 36px rgba(0,0,0,.55);
 }
-#bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }
+#bottomNavMorePanel .bn-tab { flex:none; flex-direction:row; justify-content:flex-start; min-height:48px; height:auto; padding:10px 12px; }
+#bottomNavMorePanel .bn-label { font-size:1rem; text-align:left; }
+#bottomNav .bn-tab:focus-visible, #topBar button:focus-visible { outline:2px solid #00F5FF; outline-offset:2px; }
+@media (max-width:999px) { #bottomNav > #bnCats { flex-grow:1.45; } }
 [data-theme="light"] #bottomNav {
   background: linear-gradient(rgba(241, 245, 249, 0.95), rgba(241, 245, 249, 0.95)) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(255, 153, 51, 0.2);
 }
 .bn-tab {
-  flex: 0 0 auto;
-  min-width: 86px;
-  height: 48px;
+  flex: 1 1 0;
+  min-width: 44px;
+  min-height: 58px;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -384,11 +391,11 @@ a { color:inherit; text-decoration:none; }
   font-size: 0.70rem;
   font-weight: 700;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 4px 10px;
+  padding: 4px;
   letter-spacing: 0.2px;
   border-radius: 24px;
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 2px 6px rgba(0,0,0,0.35);
-  white-space: nowrap;
+  white-space: normal;
 }
 .bn-tab:hover {
   border-color: rgba(0, 245, 255, 0.45);
@@ -427,10 +434,10 @@ a { color:inherit; text-decoration:none; }
   display: block;
 }
 .bn-label {
-  font-size: 0.68rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  line-height: 1.1;
-  white-space: nowrap;
+  line-height: 1.2;
+  white-space: normal; overflow-wrap:anywhere; text-align:center;
 }
 .bn-tab.active {
   color: #00F5FF;
@@ -660,7 +667,7 @@ a { color:inherit; text-decoration:none; }
 }
 .home-title { font-size:1.85rem; font-weight:900; letter-spacing:-.5px; margin-top:2px; }
 .home-title span { color:var(--orange); }
-.home-sub { font-size:.78rem; color:var(--muted); font-weight:500; letter-spacing:.2px; }
+.home-sub { font-size:1rem; line-height:1.5; color:var(--muted); font-weight:500; letter-spacing:.2px; }
 
 .streak-badge {
   display:inline-flex; align-items:center; gap:7px;
@@ -669,7 +676,7 @@ a { color:inherit; text-decoration:none; }
 }
 .streak-fire { font-size:1rem; }
 .streak-num { font-size:1.1rem; font-weight:900; color:var(--orange); }
-.streak-lbl { font-size:.78rem; color:var(--muted); font-weight:600; }
+.streak-lbl { font-size:.875rem; line-height:1.4; color:var(--muted); font-weight:600; }
 
 .home-cta {
   width:100%; padding:16px;
@@ -697,7 +704,7 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 12px rgba(255,153,51,.3);
 }
 
-.home-main-label { font-size:.72rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+.home-main-label { font-size:.875rem; line-height:1.4; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
 .home-main-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .home-main-choice {
   min-height:92px; padding:13px; border-radius:16px; cursor:pointer; text-align:left;
@@ -712,12 +719,12 @@ a { color:inherit; text-decoration:none; }
   border:2px solid rgba(0,245,255,.65); box-shadow:0 0 14px rgba(214,0,255,.28);
 }
 .home-main-choice-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
-.home-main-choice-title { font-size:.86rem; font-weight:900; line-height:1.25; }
-.home-main-choice-sub { font-size:.7rem; color:var(--muted); line-height:1.35; }
+.home-main-choice-title { font-size:1rem; font-weight:900; line-height:1.4; }
+.home-main-choice-sub { font-size:1rem; color:var(--muted); line-height:1.5; }
 .target-practice-menu { display:none; grid-column:1/-1; grid-template-columns:1fr 1fr; gap:8px; }
 .target-practice-menu.open { display:grid; }
-.target-practice-option { padding:11px 9px; border-radius:12px; border:1px solid rgba(255,153,51,.28); background:rgba(255,153,51,.08); color:var(--text); font-size:.78rem; font-weight:800; cursor:pointer; }
-@media (max-width:420px) { .home-main-actions { grid-template-columns:1fr; } .target-practice-menu { grid-column:1; } }
+.target-practice-option { min-height:44px; padding:11px 9px; border-radius:12px; border:1px solid rgba(255,153,51,.28); background:rgba(255,153,51,.08); color:var(--text); font-size:.875rem; font-weight:800; cursor:pointer; }
+@media (max-width:600px) { .home-main-actions { grid-template-columns:1fr; } .target-practice-menu { grid-column:1; } }
 .flashcard-demo-backdrop { position:fixed; inset:0; z-index:15000; display:flex; align-items:center; justify-content:center; padding:18px; overflow-y:auto; background:rgba(3,8,20,.86); backdrop-filter:blur(8px); }
 .flashcard-demo-backdrop[hidden] { display:none !important; }
 .flashcard-demo-panel { position:relative; width:min(100%,680px); max-height:92vh; overflow:auto; padding:22px; border:1px solid rgba(0,245,255,.32); border-radius:20px; color:var(--text); background:linear-gradient(145deg,#111f3d,#0b1226); box-shadow:0 18px 70px rgba(0,0,0,.55),0 0 28px rgba(0,245,255,.12); }
@@ -924,7 +931,7 @@ a { color:inherit; text-decoration:none; }
 .home-stat:last-child { border-right:none; }
 .home-stat-num { font-size:1.55rem; font-weight:900; color:var(--orange); line-height:1; }
 .home-stat-lbl {
-  font-size:.62rem; color:var(--muted); font-weight:700;
+  font-size:.875rem; line-height:1.4; color:var(--muted); font-weight:700;
   margin-top:5px; letter-spacing:.4px; text-transform:uppercase;
 }
 
@@ -1536,6 +1543,23 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column; gap:12px;
 }
 .glossary-term-item { display:flex; flex-direction:column; gap:4px; }
+.q-fagord-inline { display:inline-block; background:rgba(0,245,255,.12); border:none; border-bottom:2px dashed #00F5FF; color:#00F5FF; font-weight:700; padding:1px 5px; border-radius:4px; cursor:pointer; font-size:inherit; font-family:inherit; transition:all .15s; vertical-align:baseline; }
+.q-fagord-inline:hover { background:rgba(0,245,255,.24); transform:translateY(-1px); }
+.fagord-chips-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:10px 0 4px 0; }
+.fagord-row-label { font-size:.82rem; font-weight:700; color:#94A3B8; }
+.fagord-chip { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:rgba(0,245,255,.08); border:1px solid rgba(0,245,255,.35); border-radius:20px; cursor:pointer; transition:all .18s; color:#F8FAFC; font-size:.82rem; }
+.fagord-chip:hover { background:rgba(0,245,255,.18); border-color:#00F5FF; transform:translateY(-1px); }
+.fagord-chip-no { font-weight:700; color:#00F5FF; }
+.fagord-chip-th { color:#CBD5E1; }
+.fagord-modal-overlay { position:fixed; inset:0; z-index:10000; background:rgba(2,6,23,.82); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:16px; }
+.fagord-modal { width:min(440px, 100%); background:#0B1322; border:1px solid rgba(0,245,255,.45); box-shadow:0 12px 36px rgba(0,245,255,.2); border-radius:18px; padding:20px; position:relative; }
+.fagord-modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.fagord-modal-title { font-size:1.15rem; font-weight:900; color:#00F5FF; display:flex; align-items:center; gap:8px; }
+.fagord-modal-tts { background:none; border:none; cursor:pointer; font-size:1.2rem; }
+.fagord-modal-close { background:rgba(255,255,255,.08); border:none; color:#CBD5E1; font-size:1.1rem; width:32px; height:32px; border-radius:50%; cursor:pointer; }
+.fagord-modal-th { font-size:1rem; font-weight:700; color:#F8FAFC; margin-bottom:8px; }
+.fagord-modal-def { font-size:.9rem; line-height:1.6; color:#94A3B8; background:rgba(255,255,255,.03); padding:12px; border-radius:10px; margin-bottom:16px; border-left:3px solid #00F5FF; }
+.fagord-modal-ask { width:100%; padding:12px; background:linear-gradient(135deg, #FF6A2B, #FF9933); color:#fff; border:none; border-radius:12px; font-weight:800; cursor:pointer; }
 .glossary-term-heading { font-size:.88rem; font-weight:800; color:#00F5FF; }
 .glossary-term-def { font-size:.84rem; line-height:1.6; color:var(--text); }
 .ans-btn {
@@ -3771,20 +3795,42 @@ a { color:inherit; text-decoration:none; }
 .teacher-side-panel {
   display:flex; flex-direction:column; gap:8px;
   position:absolute; z-index:12; top:72px; bottom:0; left:0;
-  width:min(300px,84%); padding:18px 14px; overflow-y:auto;
+  width:min(320px,86%); padding:18px 14px 28px; overflow-y:auto;
   background:#071326; border-right:1px solid rgba(96,165,250,.28);
   box-shadow:18px 0 44px rgba(0,0,0,.45);
   transform:translateX(-105%); visibility:hidden; pointer-events:none;
   transition:transform .22s ease,visibility .22s;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
+.teacher-side-panel::-webkit-scrollbar { width:6px; }
+.teacher-side-panel::-webkit-scrollbar-track { background:rgba(0,0,0,0.15); }
+.teacher-side-panel::-webkit-scrollbar-thumb { background:rgba(96,165,250,0.3); border-radius:4px; }
 .teacher-side-panel.open {
   transform:translateX(0); visibility:visible; pointer-events:auto;
 }
 .teacher-side-panel .tsp-btn { color:#F8FAFC !important; }
 .teacher-side-panel .tsp-btn {
-  min-height:58px; padding:14px 16px; border-radius:14px;
-  font-size:1rem; font-weight:850; line-height:1.3; text-align:left;
+  min-height:52px; padding:12px 14px; border-radius:14px;
+  font-size:0.95rem; font-weight:800; line-height:1.3; text-align:left;
 }
+.tsp-section-title {
+  font-size:.65rem; font-weight:800; letter-spacing:.10em;
+  text-transform:uppercase; color:#94A3B8;
+  margin-top:14px; margin-bottom:4px; padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.tsp-btn.active {
+  border-color:#00F5FF !important;
+  box-shadow:0 0 16px rgba(0,245,255,0.6), inset 0 0 14px rgba(0,245,255,0.22) !important;
+  background:linear-gradient(rgba(14,30,56,0.98), rgba(14,30,56,0.98)) padding-box,
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+}
+.tsp-btn-util {
+  min-height:46px !important; padding:10px 14px !important;
+  font-size:0.88rem !important; opacity:0.92;
+}
+.tsp-btn-util:hover { opacity:1; }
 .teacher-sidebar-backdrop {
   display:block; position:absolute; z-index:11; inset:72px 0 0;
   border:0; padding:0; background:rgba(2,8,23,.66);
@@ -4070,8 +4116,7 @@ a { color:inherit; text-decoration:none; }
   color:#EF4444; background:rgba(239,68,68,0.18);
 }
 
-/* Teacher mode bottomNav keeps full carousel navigation */
-#app.teacher-mode #bottomNav .bn-tab { display:flex; }
+/* Teacher mode uses the same responsive navigation as the other screens. */
 #app.teacher-mode #bnTeacher .bn-icon img {
   outline:3px solid #3B82F6; outline-offset:2px; box-shadow:none;
 }
@@ -4603,12 +4648,6 @@ a { color:inherit; text-decoration:none; }
   box-shadow: 0 0 14px rgba(0, 245, 255, 0.22);
   transition: transform 0.15s, border-color 0.15s;
 }
-.quiz-coach-trigger-btn:hover {
-  transform: translateY(-1px);
-  border-color: #00F5FF !important;
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
-}
-
 /* ═══ ETAPPE 1: MICHAEL 3-NIVÅVELGER, SAKTE-TTS & APP-HUB + SIKKERHETSKONTROLL ═══ */
 .teacher-level-bar {
   display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
@@ -4619,7 +4658,7 @@ a { color:inherit; text-decoration:none; }
 .teacher-lvl-lbl { font-size:.74rem; font-weight:700; color:var(--muted); margin-right:2px; }
 .teacher-lvl-btn, .teacher-slow-btn, .teacher-hub-btn {
   background:rgba(15,23,42,.85); border:1px solid rgba(96,165,250,.32);
-  color:#E2E8F0; border-radius:999px; padding:4px 10px; font-size:.75rem;
+  color:#E2E8F0; border-radius:999px; padding:8px 10px; min-height:44px; font-size:.75rem;
   font-weight:700; cursor:pointer; transition:all .15s ease; display:inline-flex; align-items:center; gap:4px;
 }
 .teacher-lvl-btn:hover, .teacher-slow-btn:hover, .teacher-hub-btn:hover {
@@ -4639,6 +4678,95 @@ a { color:inherit; text-decoration:none; }
   scrollbar-width:none;
 }
 .teacher-hub-strip::-webkit-scrollbar { display:none; }
+#screenTeacher .ms-open-btn,
+#screenTeacher .teacher-mic-btn,
+#screenTeacher .tm-bubble-tts { min-width:44px; min-height:44px; }
+.teacher-hub-menu { flex-shrink:0; min-width:0; }
+.teacher-conversation { display:contents; }
+.teacher-hub-menu > summary { display:none; }
+#app.teacher-mode { height:var(--teacher-viewport-height, 100dvh); }
+@media (min-width:768px) and (max-width:1100px) {
+  #screenTeacher .teacher-level-bar { width:100%; min-width:0; }
+  #screenTeacher .teacher-lvl-group { flex:1 1 100%; min-width:0; }
+  #screenTeacher .teacher-hub-strip { flex-wrap:wrap; overflow-x:hidden; }
+}
+@media (max-width:767px) {
+  #screenTeacher button { min-width:44px; min-height:44px; }
+  #screenTeacher .teacher-header {
+    display:grid; grid-template-columns:44px minmax(0,1fr) 44px;
+    gap:8px; height:auto; max-height:none; min-height:72px; padding:8px 10px;
+  }
+  #screenTeacher .teacher-avatar { display:none; }
+  #screenTeacher .teacher-sidebar-toggle,
+  #screenTeacher .teacher-header .ms-open-btn { width:44px; height:44px; padding:0; }
+  #screenTeacher .teacher-header .ms-open-btn span { display:none; }
+  #screenTeacher .teacher-header-info { overflow:visible; }
+  #screenTeacher .teacher-name { white-space:normal; overflow:visible; line-height:1.3; }
+  #screenTeacher .teacher-meta-line { font-size:.875rem; line-height:1.4; }
+  #screenTeacher .teacher-online-badge { font-size:.6875rem; letter-spacing:0; }
+  #screenTeacher .teacher-side-panel { top:0; }
+  #screenTeacher .teacher-sidebar-backdrop { inset:0; }
+  #screenTeacher .teacher-level-bar {
+    display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6px;
+    padding:8px 10px; flex-shrink:0;
+  }
+  #screenTeacher .teacher-lvl-lbl { font-size:.875rem; align-self:center; }
+  #screenTeacher .teacher-lvl-group {
+    display:grid; grid-column:1 / -1; grid-row:2;
+    grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; min-width:0;
+  }
+  #screenTeacher .teacher-slow-btn { grid-column:2; grid-row:1; }
+  #screenTeacher .teacher-lvl-btn,
+  #screenTeacher .teacher-slow-btn,
+  #screenTeacher .teacher-hub-btn {
+    padding:6px; font-size:.875rem; line-height:1.35;
+    justify-content:center; text-align:center; white-space:normal; overflow-wrap:anywhere;
+  }
+  #screenTeacher .teacher-hub-btn span { min-width:0; }
+  #screenTeacher .teacher-hub-menu { position:relative; margin:4px 10px; z-index:8; }
+  #screenTeacher .teacher-hub-menu > summary {
+    display:flex; align-items:center; justify-content:space-between;
+    min-width:44px; min-height:44px; padding:8px 12px; list-style:none; cursor:pointer;
+    font-size:.875rem; color:var(--text); background:#071326;
+    border:1px solid rgba(96,165,250,.32); border-radius:12px;
+  }
+  #screenTeacher .teacher-hub-menu > summary::after { content:'⌄'; }
+  #screenTeacher .teacher-hub-menu > summary::-webkit-details-marker { display:none; }
+  #screenTeacher .teacher-hub-strip {
+    position:absolute; top:calc(100% + 4px); left:0; width:100%;
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px;
+    max-height:40vh; max-height:min(320px,var(--teacher-hub-height,40dvh)); overflow-y:auto; overflow-x:hidden;
+    padding:8px; border:1px solid rgba(96,165,250,.32); border-radius:12px; background:#071326;
+  }
+  #screenTeacher .teacher-messages { padding:12px 10px; }
+  #screenTeacher .tm-bubble.assistant { padding:16px; max-width:100%; }
+  #screenTeacher .teacher-inputbar { padding:8px 10px; }
+  #screenTeacher .teacher-composer { min-width:0; min-height:60px; gap:4px; padding:4px; }
+  #screenTeacher .teacher-input { min-width:0; min-height:48px; padding:10px 6px; }
+  #screenTeacher .teacher-mic-btn { width:44px; height:44px; }
+  #screenTeacher .tm-bubble-tts { display:inline-flex; align-items:center; justify-content:center; }
+  #screenTeacher .tm-media-card { width:100%; max-width:100%; min-width:0; }
+  #screenTeacher .tm-media-copy { min-width:0; overflow-wrap:anywhere; }
+  #screenTeacher .tm-media-podcast { width:100%; min-width:0; }
+  #screenTeacher .tm-media-podcast audio { min-width:0; max-width:100%; min-height:54px; }
+}
+@media (max-width:767px) and (max-height:600px) {
+  #screenTeacher .teacher-meta-wrap { display:none; }
+  #screenTeacher .teacher-header { min-height:64px; }
+  #screenTeacher:has(#teacherInput:focus) .teacher-level-bar,
+  #screenTeacher:has(#teacherInput:focus) .teacher-hub-menu { display:none; }
+}
+@media (max-width:767px) and (max-height:500px) {
+  #screenTeacher .teacher-conversation {
+    display:flex; flex-direction:column; flex:1; min-height:0;
+    overflow-y:auto; overflow-x:hidden;
+  }
+  #screenTeacher .teacher-messages { flex:none; min-height:44px; overflow:visible; }
+  #screenTeacher:has(#teacherInput:focus) .teacher-conversation { display:contents; }
+  #screenTeacher:has(#teacherInput:focus) .teacher-messages {
+    flex:1; min-height:44px; overflow-y:auto;
+  }
+}
 .ms-safety-cat {
   background:rgba(15,23,42,.92); border:1px solid rgba(0,229,255,.24);
   border-radius:14px; padding:14px; margin-bottom:12px;
@@ -4663,6 +4791,84 @@ a { color:inherit; text-decoration:none; }
   border:1px solid rgba(0,229,255,.45); color:#FFFFFF; border-radius:9px;
   padding:6px 11px; font-size:.78rem; font-weight:700; cursor:pointer;
 }
+.ms-safety-visual {
+  width:100%; margin:8px 0 12px 0; border-radius:12px; overflow:hidden;
+  background:#0B1226; border:1px solid rgba(0,229,255,.28);
+}
+.ms-safety-img {
+  width:100%; max-height:190px; object-fit:cover; display:block; cursor:zoom-in;
+  transition:transform .2s ease, filter .2s ease;
+}
+.ms-safety-img:hover { transform:scale(1.02); filter:brightness(1.08); }
+
+/* Klikkbare norske fagord i quiz */
+.q-term-inline {
+  display:inline-flex; align-items:center; min-height:44px; background:rgba(0,229,255,.14); color:#00E5FF;
+  border:none; border-bottom:1.5px dashed #00E5FF; border-radius:4px;
+  padding:0 4px; font-weight:700; cursor:pointer; transition:all .15s ease;
+}
+.q-term-inline:hover { background:rgba(0,229,255,.28); color:#FFFFFF; box-shadow:0 0 8px rgba(0,229,255,.35); }
+.q-terms-wrap { margin-top:10px; width:100%; }
+.q-terms-bar {
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:8px 12px;
+  background:rgba(15,23,42,.75); border:1px solid rgba(0,229,255,.25); border-radius:12px;
+}
+.q-terms-title { font-size:.78rem; font-weight:800; color:#94A3B8; display:inline-flex; align-items:center; gap:4px; }
+.q-term-chip {
+  display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:4px 10px;
+  background:rgba(37,99,235,.20); border:1px solid rgba(0,229,255,.38);
+  border-radius:999px; color:#00E5FF; font-size:.80rem; font-weight:700;
+  cursor:pointer; transition:all .15s ease;
+}
+.q-term-chip:hover {
+  background:rgba(37,99,235,.35); border-color:#00E5FF; color:#FFFFFF;
+  transform:translateY(-1px); box-shadow:0 0 10px rgba(0,229,255,.3);
+}
+.q-term-chip-th { font-size:.74rem; color:#CBD5E1; font-weight:400; }
+.q-term-overlay {
+  position:fixed; inset:0; z-index:9200; background:rgba(5,8,20,.85);
+  backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; padding:16px;
+}
+.q-term-overlay.open { display:flex; }
+.q-term-panel {
+  width:100%; max-width:480px; background:#0D1428;
+  border:1.5px solid rgba(0,229,255,.4); border-radius:16px; padding:18px 20px;
+  color:#E2E8F0; box-shadow:0 12px 36px rgba(0,0,0,.8), 0 0 24px rgba(0,229,255,.18);
+}
+.q-term-head {
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.08); padding-bottom:10px; margin-bottom:12px;
+}
+.q-term-head-title { font-size:1.05rem; font-weight:900; color:#00E5FF; }
+.q-term-close {
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+  color:#FFF; width:44px; height:44px; border-radius:50%; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+}
+.q-term-close:hover { background:rgba(239,68,68,.8); }
+.q-term-th-term { font-size:.95rem; font-weight:800; color:#F8FAFC; margin-bottom:8px; }
+.q-term-def {
+  font-size:.88rem; line-height:1.6; color:#CBD5E1; background:rgba(15,23,42,.6);
+  padding:12px; border-radius:10px; border-left:3px solid #FF9933; margin-bottom:16px;
+}
+.q-term-actions { display:flex; gap:10px; justify-content:flex-end; }
+.q-term-tts-btn, .q-term-ask-btn {
+  min-height:44px; padding:8px 14px; border-radius:10px; font-size:.82rem; font-weight:700;
+  cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all .15s ease;
+}
+.q-term-tts-btn { background:rgba(37,99,235,.25); border:1px solid rgba(0,229,255,.4); color:#00E5FF; }
+.q-term-tts-btn:hover { background:rgba(37,99,235,.45); color:#FFF; border-color:#00E5FF; box-shadow:0 0 10px rgba(0,229,255,.3); }
+.q-term-ask-btn {
+  background:linear-gradient(135deg, rgba(37,99,235,.4), rgba(236,72,153,.35));
+  border:1px solid rgba(236,72,153,.5); color:#FFFFFF;
+}
+.q-term-ask-btn:hover { transform:translateY(-1px); box-shadow:0 0 12px rgba(236,72,153,.4); }
+.quiz-coach-trigger-btn:hover {
+  transform: translateY(-1px);
+  border-color: #00F5FF !important;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+}
+
 </style>
 </head>
 <body>
@@ -4680,7 +4886,7 @@ a { color:inherit; text-decoration:none; }
     </div>
     <div class="top-spacer"></div>
     <div id="topStreak">🔥 <span id="topStreakNum">0</span> <span data-key="streak">dagers rekke</span></div>
-    <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
+    <div class="top-controls">
       <button class="lang-btn active" id="topLangTH" onclick="setLang('th')" data-label-key="lang_label_th" title="" aria-label="" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
@@ -4690,7 +4896,7 @@ a { color:inherit; text-decoration:none; }
       <button class="lang-btn" id="topLangEN" onclick="setLang('en')" data-label-key="lang_label_en" title="" aria-label="" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
-      <button id="topSettingsBtn" onclick="showTab('settings')" title="Innstillinger" data-title-key="settings_title" style="display:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
+      <button id="topSettingsBtn" data-label-key="settings_title" aria-label="" onclick="showTab('settings')" title="Innstillinger" data-title-key="settings_title" style="display:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
     </div>
   </div>
 
@@ -4873,12 +5079,6 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" data-key="flipp_flopp_home_sub">Korte trafikkspill med situasjoner</span>
           </span>
         </button>
-        <div class="target-practice-menu" id="targetPracticeMenu">
-          <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
-          <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
-        </div>
-      </div>
-
         <button class="home-main-choice" type="button" onclick="openSafetyCheck()" data-label-key="home_safety_btn">
           <span class="home-main-choice-icon" aria-hidden="true">🔧</span>
           <span class="home-main-choice-copy">
@@ -4886,6 +5086,12 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" data-key="home_safety_sub">Lys, bremser, dekk, varsellamper og vognkort</span>
           </span>
         </button>
+        <div class="target-practice-menu" id="targetPracticeMenu">
+          <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
+          <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
+        </div>
+      </div>
+
       <div class="home-stats">
         <div class="home-stat">
           <div class="home-stat-num" id="homeStatAnswered">–</div>
@@ -5350,6 +5556,7 @@ a { color:inherit; text-decoration:none; }
 
       <!-- LEFT: chat column (full width on mobile, flex:1 on desktop) -->
       <div class="teacher-chat-col">
+        <div class="teacher-conversation">
 
         <!-- Chat header -->
         <div class="teacher-header">
@@ -5365,7 +5572,7 @@ a { color:inherit; text-decoration:none; }
               <div class="teacher-ai-badge" id="teacherAiBadge" role="note">AI</div>
             </div>
           </div>
-          <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()">🎓 <span id="msOpenLbl" data-key="michael_school">Michael-skolen</span></button>
+          <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()" data-label-key="michael_school" aria-label="">🎓 <span id="msOpenLbl" data-key="michael_school">Michael-skolen</span></button>
         </div>
 
         <!-- Michael-skolen overlay -->
@@ -5378,22 +5585,18 @@ a { color:inherit; text-decoration:none; }
         </div>
 
         <!-- Message list -->
-        <div class="teacher-messages" id="teacherMessages">
-          <!-- Welcome bubble injected by JS -->
-        </div>
-
-        <!-- Uploaded Document Badge -->
-        <div class="teacher-doc-badge" id="teacherDocBadge">
         <!-- Etappe 1: 3-nivå forklaringsvelger + Sakte-TTS + Michael App-Hub -->
         <div class="teacher-level-bar" id="teacherLevelBar">
-          <div class="teacher-lvl-group" role="group" aria-label="Explanation level">
-            <span class="teacher-lvl-lbl" data-key="lvl_label">Forklaring:</span>
-            <button type="button" class="teacher-lvl-btn active" data-lvl="1" onclick="setTeacherExplainLevel(1)"><span data-key="lvl_1">1. Enkel (7-år)</span></button>
-            <button type="button" class="teacher-lvl-btn" data-lvl="2" onclick="setTeacherExplainLevel(2)"><span data-key="lvl_2">2. Praktisk bil</span></button>
-            <button type="button" class="teacher-lvl-btn" data-lvl="3" onclick="setTeacherExplainLevel(3)"><span data-key="lvl_3">3. Eksamen</span></button>
+          <span class="teacher-lvl-lbl" data-key="lvl_label">Forklaringsnivå:</span>
+          <div class="teacher-lvl-group" role="group" data-label-key="lvl_label" aria-label="">
+            <button type="button" class="teacher-lvl-btn active" data-lvl="1" onclick="setTeacherExplainLevel(1)" data-title-key="lvl_1" title="" aria-pressed="true"><span data-key="lvl_1">1. Enkel thai</span></button>
+            <button type="button" class="teacher-lvl-btn" data-lvl="2" onclick="setTeacherExplainLevel(2)" data-title-key="lvl_2" title="" aria-pressed="false"><span data-key="lvl_2">2. Thai + fagord</span></button>
+            <button type="button" class="teacher-lvl-btn" data-lvl="3" onclick="setTeacherExplainLevel(3)" data-title-key="lvl_3" title="" aria-pressed="false"><span data-key="lvl_3">3. Norsk bokmål</span></button>
           </div>
           <button type="button" class="teacher-slow-btn" id="teacherSlowTtsBtn" onclick="toggleSlowTts()">🐢 <span id="teacherSlowTtsLbl" data-key="slow_tts_lbl">0.75x sakte</span></button>
         </div>
+        <details class="teacher-hub-menu" id="teacherHubMenu" open>
+        <summary data-key="teacher_more_topics"></summary>
         <div class="teacher-hub-strip" id="teacherHubStrip">
           <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('202_0')">🪧 <span data-key="hub_sign_202">Skilt 202</span></button>
           <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('204_0')">🛑 <span data-key="hub_sign_204">Skilt 204</span></button>
@@ -5405,8 +5608,16 @@ a { color:inherit; text-decoration:none; }
           <button type="button" class="teacher-hub-btn" onclick="showTab('studybook')">📖 <span data-key="hub_studybook">Studiebok</span></button>
           <button type="button" class="teacher-hub-btn" onclick="showTab('library')">🎬 <span data-key="hub_videos">Video & Podkast</span></button>
         </div>
+        </details>
 
         <!-- Message list -->
+        <div class="teacher-messages" id="teacherMessages">
+          <!-- Welcome bubble injected by JS -->
+        </div>
+
+        <!-- Uploaded Document Badge -->
+        </div><!-- /teacher-conversation -->
+        <div class="teacher-doc-badge" id="teacherDocBadge">
           <span class="teacher-doc-icon">📄</span>
           <span class="teacher-doc-name" id="teacherDocName"></span>
           <button type="button" class="teacher-doc-close" id="teacherDocClose" onclick="_teacherClearDoc()" aria-label="Fjern dokument" data-label-key="teacher_doc_remove">✕</button>
@@ -5417,7 +5628,7 @@ a { color:inherit; text-decoration:none; }
           <div class="teacher-composer">
             <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
             <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF eller bilde" aria-label="Last opp PDF eller bilde" data-label-key="teacher_upload_doc">＋</button>
-            <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
+            <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." data-label-key="teacher_placeholder" aria-label="" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
             <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" data-label-key="teacher_voice_start" aria-label="Snakk med Michael" title="Snakk med Michael"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></button>
             <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send" data-label-key="send_aria"><span aria-hidden="true">↑</span></button>
           </div>
@@ -5430,12 +5641,23 @@ a { color:inherit; text-decoration:none; }
       <!-- Topic drawer — opened on demand on mobile and desktop -->
       <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
         <div class="tsp-title" id="tspTitle" data-key="tsp_title">Lær med Michael</div>
-        <button class="tsp-btn" onclick="teacherSidebarAction('strengths')">📊 <span data-tsp="strengths"></span></button>
-        <button class="tsp-btn" onclick="teacherSidebarAction('signs')">🪧 <span data-tsp="signs"></span></button>
-        <button class="tsp-btn" onclick="teacherSidebarAction('rules')">📏 <span data-tsp="rules"></span></button>
-        <button class="tsp-btn" onclick="teacherSidebarAction('position')">🚗 <span data-tsp="position"></span></button>
-        <button class="tsp-btn" onclick="teacherSidebarAction('dictionary')">🇳🇴 <span data-tsp="dictionary"></span></button>
-        <button class="tsp-btn" onclick="closeTeacherSidebar();openSafetyCheck()">🔧 <span data-tsp="safety"></span></button>
+        <!-- 7 Primary Learning Areas (Michael godkjent) -->
+        <button class="tsp-btn" id="tspArea_right_of_way" data-area="right_of_way" onclick="selectLearningArea('right_of_way')">🛑 <span data-tsp="right_of_way"></span></button>
+        <button class="tsp-btn" id="tspArea_positioning_lane" data-area="positioning_lane" onclick="selectLearningArea('positioning_lane')">🚗 <span data-tsp="positioning_lane"></span></button>
+        <button class="tsp-btn" id="tspArea_interaction" data-area="interaction" onclick="selectLearningArea('interaction')">🤝 <span data-tsp="interaction"></span></button>
+        <button class="tsp-btn" id="tspArea_speed_distance" data-area="speed_distance" onclick="selectLearningArea('speed_distance')">⏱️ <span data-tsp="speed_distance"></span></button>
+        <button class="tsp-btn" id="tspArea_road_conditions" data-area="road_conditions" onclick="selectLearningArea('road_conditions')">🌧️ <span data-tsp="road_conditions"></span></button>
+        <button class="tsp-btn" id="tspArea_signs_markings" data-area="signs_markings" onclick="selectLearningArea('signs_markings')">🪧 <span data-tsp="signs_markings"></span></button>
+        <button class="tsp-btn" id="tspArea_other_topics" data-area="other_topics" onclick="selectLearningArea('other_topics')">📚 <span data-tsp="other_topics"></span></button>
+
+        <!-- Preserved Utility Tools & Resources -->
+        <div class="tsp-section-title" id="tspToolsTitle" data-key="tsp_tools_title">Verktøy & Ressurser</div>
+        <button class="tsp-btn tsp-btn-util" onclick="teacherSidebarAction('strengths')">📊 <span data-tsp="strengths"></span></button>
+        <button class="tsp-btn tsp-btn-util" onclick="teacherSidebarAction('signs')">🪧 <span data-tsp="signs"></span></button>
+        <button class="tsp-btn tsp-btn-util" onclick="teacherSidebarAction('rules')">📏 <span data-tsp="rules"></span></button>
+        <button class="tsp-btn tsp-btn-util" onclick="teacherSidebarAction('position')">🚗 <span data-tsp="position"></span></button>
+        <button class="tsp-btn tsp-btn-util" onclick="teacherSidebarAction('dictionary')">🇳🇴 <span data-tsp="dictionary"></span></button>
+        <button class="tsp-btn tsp-btn-util" onclick="closeTeacherSidebar();openSafetyCheck()">🔧 <span data-tsp="safety"></span></button>
       </div><!-- /teacher-side-panel -->
 
     </div><!-- /screenTeacher -->
@@ -5443,7 +5665,7 @@ a { color:inherit; text-decoration:none; }
   </div><!-- /content -->
 
   <!-- BOTTOM NAV — 9 tabs: Hjem → Kategorier → Historikk → Michael → Videoer → Skilt → Studiebok → Bokmerker → Innstillinger -->
-  <div id="bottomNav">
+  <nav id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="bn-label" data-key="home">Hjem</span>
     </button>
@@ -5471,7 +5693,11 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="bn-label" data-key="settings">Innstillinger</span>
     </button>
-  </div>
+    <button class="bn-tab" id="bottomNavMoreBtn" type="button" onclick="toggleBottomNavMenu()" aria-controls="bottomNavMorePanel" aria-expanded="false" data-label-key="show_more" hidden>
+      <span class="bn-icon" aria-hidden="true">⋯</span><span class="bn-label" data-key="show_more"></span>
+    </button>
+    <div id="bottomNavMorePanel" hidden></div>
+  </nav>
 
 </div><!-- /app -->
 
@@ -5495,6 +5721,24 @@ a { color:inherit; text-decoration:none; }
     <button class="t2d-lightbox-close" onclick="closeLightbox(event)" data-label-key="close" aria-label="">✕</button>
     <img id="t2dLightboxImg" src="" alt="">
     <div class="t2d-lightbox-caption" id="t2dLightboxCaption"></div>
+  </div>
+</div>
+
+<!-- ═══ FAGORD MODAL (Clickable Norwegian traffic terms) ═══ -->
+<div class="q-term-overlay" id="qTermModal" onclick="if(event.target===this)closeTermDetailModal()" aria-hidden="true" role="dialog">
+  <div class="q-term-panel" role="dialog" aria-modal="true" aria-labelledby="qTermModalTitle" onclick="event.stopPropagation()">
+    <div class="q-term-head">
+      <div class="q-term-head-title"><span id="qTermModalTitle"></span></div>
+      <button type="button" class="q-term-close" onclick="closeTermDetailModal()" aria-label="" data-label-key="close_aria">✕</button>
+    </div>
+    <div class="q-term-body">
+      <div class="q-term-th-term" id="qTermModalTh"></div>
+      <div class="q-term-def" id="qTermModalDef"></div>
+      <div class="q-term-actions">
+        <button type="button" class="q-term-tts-btn" id="qTermModalTtsBtn" onclick="speakCurrentTermModal()">🔊 <span data-key="read_aloud">Lytt</span></button>
+        <button type="button" class="q-term-ask-btn" id="qTermModalAskBtn" onclick="askMichaelAboutCurrentTerm()">💬 <span data-key="ask_michael">Spør Michael</span></button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -5848,6 +6092,10 @@ var UI = {
   teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
   teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
   teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์', no:'Se norsk fagord', en:'Show Norwegian term'},
+  quiz_terms_label:{th:'คำศัพท์สำคัญ', no:'Fagord', en:'Key terms'},
+  quiz_term_explain:{th:'แตะเพื่อดูคำอธิบาย', no:'Trykk for forklaring', en:'Tap for an explanation'},
+  quiz_term_default_def:{th:'คำศัพท์สำคัญสำหรับการสอบขับรถ', no:'Viktig fagord i trafikkopplæringen', en:'An important driving theory term'},
+  quiz_term_ask_prompt:{th:'ช่วยอธิบายคำว่า {term} สั้น ๆ พร้อมตัวอย่างขับรถจริงหน่อยครับ', no:'Kan du forklare begrepet {term} kort med et praktisk eksempel fra trafikken?', en:'Can you briefly explain {term} with a practical driving example?'},
   teacher_topics_open:{th:'แสดงแถบด้านข้าง', no:'Vis sidefelt', en:'Show sidebar'},
   teacher_topics_close:{th:'ซ่อนแถบด้านข้าง', no:'Skjul sidefelt', en:'Hide sidebar'},
   teacher_voice_start:{th:'พูดกับไมเคิล', no:'Snakk med Michael', en:'Talk to Michael'},
@@ -5856,6 +6104,14 @@ var UI = {
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
   tsp_title:   {th:'เรียนกับไมเคิล', no:'Lær med Michael', en:'Learn with Michael'},
+  tsp_tools_title: {th:'เครื่องมือและแหล่งข้อมูล', no:'Verktøy & Ressurser', en:'Tools & Resources'},
+  tsp_right_of_way: {th:'การให้ทางและทางแยก', no:'Vikeplikt og kryss', en:'Right of way and intersections'},
+  tsp_positioning_lane: {th:'ตำแหน่งรถและการเปลี่ยนเลน', no:'Plassering og feltskifte', en:'Positioning and lane change'},
+  tsp_interaction: {th:'การปฏิสัมพันธ์กับผู้ร่วมทาง', no:'Samhandling', en:'Road interaction'},
+  tsp_speed_distance: {th:'ความเร็วและระยะห่าง', no:'Fart og avstand', en:'Speed and distance'},
+  tsp_road_conditions: {th:'ถนนและสภาพการขับขี่', no:'Vei og forhold', en:'Road and driving conditions'},
+  tsp_signs_markings: {th:'ป้ายจราจรและเครื่องหมายบนถนน', no:'Skilt og oppmerking', en:'Signs and road markings'},
+  tsp_other_topics: {th:'หัวข้อการเรียนรู้อื่นๆ', no:'Andre læringstemaer', en:'Other learning topics'},
   tsp_strengths:{th:'จุดอ่อนและจุดแข็งของคุณ', no:'Dine svake/sterke sider', en:'Your weak/strong areas'},
   tsp_signs:{th:'ป้ายจราจร', no:'Skilt', en:'Road signs'},
   tsp_rules:{th:'กฎและระยะหยุดรถ', no:'Regler / stopplengde', en:'Rules / stopping distance'},
@@ -5864,10 +6120,10 @@ var UI = {
   tsp_safety:    {th:'การตรวจเช็ครถก่อนขับ (คลาส B)', no:'Sikkerhetskontroll (Klasse B)', en:'Safety check (Class B)'},
   home_safety_btn:{th:'การตรวจเช็ครถก่อนขับ (คลาส B)', no:'Sikkerhetskontroll (Klasse B)', en:'Safety check (Class B)'},
   home_safety_sub:{th:'ไฟรถ เบรก ยาง ไฟเตือน และเอกสารรถ', no:'Lys, bremser, dekk, varsellamper og vognkort', en:'Lights, brakes, tyres, warning lights and registration'},
-  lvl_label:     {th:'ระดับคำอธิบาย:', no:'Forklaring:', en:'Explanation:'},
-  lvl_1:         {th:'1. เข้าใจง่าย', no:'1. Enkel (7-år)', en:'1. Simple'},
-  lvl_2:         {th:'2. สถานการณ์จริง', no:'2. Praktisk bil', en:'2. Practical'},
-  lvl_3:         {th:'3. แนวข้อสอบ', no:'3. Eksamen', en:'3. Exam prep'},
+  lvl_label:     {th:'ระดับคำอธิบาย:', no:'Forklaringsnivå:', en:'Explanation level:'},
+  lvl_1:         {th:'1. ไทยเข้าใจง่าย', no:'1. Enkel thai', en:'1. Simple Thai'},
+  lvl_2:         {th:'2. ไทย + คำศัพท์นอร์เวย์', no:'2. Thai + norske fagord', en:'2. Thai + Norwegian terms'},
+  lvl_3:         {th:'3. ภาษานอร์เวย์ (Bokmål)', no:'3. Norsk bokmål', en:'3. Norwegian Bokmål'},
   slow_tts_lbl:  {th:'0.75x ช้าชัด', no:'0.75x sakte', en:'0.75x slow'},
   hub_sign_202:  {th:'ป้าย 202 ให้ทาง', no:'Skilt 202 Vikeplikt', en:'Sign 202 Give way'},
   hub_sign_204:  {th:'ป้าย 204 หยุด', no:'Skilt 204 Stopp', en:'Sign 204 Stop'},
@@ -6383,7 +6639,7 @@ function applyUILang() {
   // Side panel labels
   var tspTitle = document.getElementById('tspTitle');
   if (tspTitle) tspTitle.textContent = t('tsp_title');
-  var tspMap = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary', safety:'tsp_safety' };
+  var tspMap = { right_of_way:'tsp_right_of_way', positioning_lane:'tsp_positioning_lane', interaction:'tsp_interaction', speed_distance:'tsp_speed_distance', road_conditions:'tsp_road_conditions', signs_markings:'tsp_signs_markings', other_topics:'tsp_other_topics', strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary', safety:'tsp_safety' };
   document.querySelectorAll('[data-tsp]').forEach(function(el) {
     var key = tspMap[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
@@ -6628,7 +6884,10 @@ var PREMIUM_PRICING = {
   // Init top bar + innloggingsskjermens språkknapper
   ['TH','NO','EN'].forEach(function(l) {
     var topBtn = document.getElementById('topLang' + l);
-    if (topBtn) topBtn.classList.toggle('active', appLang === l.toLowerCase());
+    if (topBtn) {
+      topBtn.classList.toggle('active', appLang === l.toLowerCase());
+      topBtn.setAttribute('aria-pressed', String(appLang === l.toLowerCase()));
+    }
     var authBtn = document.getElementById('authLang' + l);
     if (authBtn) authBtn.classList.toggle('active', appLang === l.toLowerCase());
   });
@@ -6654,6 +6913,7 @@ var PREMIUM_PRICING = {
 //  SCREEN & TAB MANAGEMENT
 // ════════════════════════════════════════════
 function showScreen(id) {
+  closeBottomNavMenu();
   if (id !== 'screenStopping' && document.getElementById('screenStopping') && document.getElementById('screenStopping').classList.contains('active')) { deactivateStopping(); clearStoppingUrl(); }
   if (id !== 'screenQuiz') closeMichaelQuizCoach();
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
@@ -6685,65 +6945,70 @@ function enterApp() {
 }
 
 
-function bindBottomNavCarousel() {
+function closeBottomNavMenu() {
+  var panel = document.getElementById('bottomNavMorePanel');
+  var button = document.getElementById('bottomNavMoreBtn');
+  if (!panel || !button) return;
+  if (panel.contains(document.activeElement)) button.focus();
+  panel.hidden = true;
+  button.setAttribute('aria-expanded', 'false');
+}
+
+function toggleBottomNavMenu() {
+  var panel = document.getElementById('bottomNavMorePanel');
+  var button = document.getElementById('bottomNavMoreBtn');
+  if (!panel || !button || button.hidden) return;
+  if (!panel.hidden) { closeBottomNavMenu(); return; }
+  panel.hidden = false;
+  button.setAttribute('aria-expanded', 'true');
+  var first = panel.querySelector('button');
+  if (first) first.focus();
+}
+
+function bindBottomNavNavigation() {
   var nav = document.getElementById('bottomNav');
-  if (!nav || nav._boundCarousel) return;
-  nav._boundCarousel = true;
-
-  nav.addEventListener('wheel', function(e) {
-    if (e.deltaY !== 0) {
-      e.preventDefault();
-      var maxScroll = nav.scrollWidth - nav.clientWidth;
-      if (maxScroll > 10) {
-        if (nav.scrollLeft + e.deltaY > maxScroll + 5 && e.deltaY > 0) {
-          nav.scrollTo({ left: 0, behavior: 'smooth' });
-        } else if (nav.scrollLeft + e.deltaY < -5 && e.deltaY < 0) {
-          nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
-        } else {
-          nav.scrollLeft += e.deltaY;
-        }
+  var panel = document.getElementById('bottomNavMorePanel');
+  var more = document.getElementById('bottomNavMoreBtn');
+  if (!nav || !panel || !more) return;
+  if (!nav._boundNavigation) {
+    nav._boundNavigation = true;
+    var compact = window.matchMedia('(max-width:999px)');
+    var ids = ['bnHome','bnCats','bnHistory','bnTeacher','bnLibrary','bnSigns','bnStudybook','bnBookmarks','bnSettings'];
+    function arrange() {
+      var focused = document.activeElement;
+      var menuFocused = focused === more || panel.contains(focused);
+      closeBottomNavMenu();
+      ids.forEach(function(id) {
+        var destination = document.getElementById(id);
+        if (!destination) return;
+        var secondary = ['bnHome','bnCats','bnTeacher'].indexOf(id) === -1;
+        if (compact.matches && secondary) panel.appendChild(destination);
+        else nav.insertBefore(destination, more);
+      });
+      more.hidden = !compact.matches;
+      more.classList.toggle('active', !!panel.querySelector('.bn-tab.active'));
+      if (compact.matches && panel.contains(focused)) more.focus();
+      else if (!compact.matches && menuFocused) {
+        var target = focused === more ? nav.querySelector('.bn-tab.active') : focused;
+        if (target) target.focus();
       }
     }
-  }, { passive: false });
-
-  var isDown = false;
-  var startX = 0;
-  var scrollLeft = 0;
-
-  nav.addEventListener('mousedown', function(e) {
-    isDown = true;
-    startX = e.pageX - nav.offsetLeft;
-    scrollLeft = nav.scrollLeft;
-    nav.style.cursor = 'grabbing';
-    nav.style.userSelect = 'none';
+    arrange();
+    compact.addEventListener('change', arrange);
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target)) closeBottomNavMenu();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !panel.hidden) { e.preventDefault(); closeBottomNavMenu(); }
+    });
+    nav.addEventListener('focusout', function(e) {
+      if (!nav.contains(e.relatedTarget)) closeBottomNavMenu();
+    });
+  }
+  nav.querySelectorAll('.bn-tab:not(#bottomNavMoreBtn)').forEach(function(button) {
+    button.setAttribute('aria-current', button.classList.contains('active') ? 'page' : 'false');
   });
-
-  window.addEventListener('mouseup', function() {
-    if (isDown) {
-      isDown = false;
-      if (nav) {
-        nav.style.cursor = 'pointer';
-        nav.style.removeProperty('user-select');
-        var maxScroll = nav.scrollWidth - nav.clientWidth;
-        if (maxScroll > 10) {
-          if (nav.scrollLeft >= maxScroll - 2) {
-            // Myk overgang ved høyre ende
-            nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
-          } else if (nav.scrollLeft <= 2) {
-            nav.scrollTo({ left: 0, behavior: 'smooth' });
-          }
-        }
-      }
-    }
-  });
-
-  nav.addEventListener('mousemove', function(e) {
-    if (!isDown) return;
-    e.preventDefault();
-    var x = e.pageX - nav.offsetLeft;
-    var walk = (x - startX) * 1.5;
-    nav.scrollLeft = scrollLeft - walk;
-  });
+  more.classList.toggle('active', !!panel.querySelector('.bn-tab.active'));
 }
 
 function openStudybookChapter() {
@@ -6772,22 +7037,10 @@ function showTab(tab, forceType) {
     var btn = document.getElementById(tabMap[tab]);
     if (btn) {
       btn.classList.add('active');
-      var nav = document.getElementById('bottomNav');
-      if (nav) {
-        nav.classList.add('js-scrolling');
-        if (nav._scrollSnapTimer) clearTimeout(nav._scrollSnapTimer);
-        nav._scrollSnapTimer = setTimeout(function() {
-          nav.classList.remove('js-scrolling');
-        }, 350);
-
-        var navRect = nav.getBoundingClientRect();
-        var btnRect = btn.getBoundingClientRect();
-        var targetScroll = nav.scrollLeft + (btnRect.left - navRect.left) - (nav.clientWidth / 2) + (btn.clientWidth / 2);
-        nav.scrollTo({ left: targetScroll, behavior: 'smooth' });
-      }
     }
   }
-  bindBottomNavCarousel();
+  closeBottomNavMenu();
+  bindBottomNavNavigation();
   var screenMap = {
     home:'screenHome', cats:'screenCats',
     history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
@@ -9096,7 +9349,8 @@ function renderQuestion() {
       + '<div class="q-img-wrap" id="qImgWrap">'
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="' + escH(qText) + '" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
-      + '<div class="q-text">' + escH(qText) + '</div>'
+      + '<div class="q-text" id="qTextEl">' + escH(qText) + '</div>'
+      + '<div class="q-terms-wrap" id="qTermsWrap" style="display:none;"></div>'
       + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="' + escH(t('read_aloud')) + '" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
@@ -9124,6 +9378,7 @@ function renderQuestion() {
     + '</div>'
     + (freeBanner ? freeBanner : '');
 
+  currentQText = qText || '';
   if (qId) loadGlossaryTerms(qId);
 
   // ── Reset AI right panel for new question ─────────────────────────
@@ -9179,6 +9434,7 @@ function loadGlossaryTerms(qId) {
       if (requestId !== glossaryRequestId) return;
       currentTerms = ((data && data.terms) || []).filter(function(term) { return term && term.term_no; });
       renderGlossaryButton();
+      highlightFagordInQuestion();
     })
     .catch(function() { if (requestId === glossaryRequestId) { currentTerms = []; renderGlossaryButton(); } });
 }
@@ -9202,6 +9458,7 @@ function toggleGlossaryPanel() {
   panel.textContent = currentTerms[0].term_no;
   wrap.appendChild(panel);
   if (btn) btn.setAttribute('aria-expanded', 'true');
+  openFagordModal(0);
 }
 
 /**
@@ -9225,6 +9482,210 @@ function shuffleOpts(opts, correctId) {
     o.id = letters[i]; // rebind display letter to shuffled position
   });
   return { opts: arr, correct: newCorrect };
+}
+
+function highlightFagordInQuestion() {
+  var qEl = document.getElementById('qTextEl') || document.querySelector('.q-text');
+  if (!qEl) return;
+  var text = currentQText || qEl.textContent || '';
+  var termsToHighlight = (currentTerms || []).slice();
+
+  // Include approved Norwegian terms written in parentheses in the question.
+  var parenRegex = /\(([A-ZÆØÅa-zæøå\s\-\/]+)\)/g;
+  var pMatch;
+  while ((pMatch = parenRegex.exec(text)) !== null) {
+    var rawWord = pMatch[1].trim();
+    if (rawWord.length >= 3 && !termsToHighlight.some(function(t) { return (t.term_no || '').toLowerCase() === rawWord.toLowerCase(); })) {
+      var dictWord = _findWordInDictionary(rawWord);
+      if (dictWord) termsToHighlight.push(dictWord);
+    }
+  }
+
+  // Build text nodes and buttons; API terms never become executable HTML.
+  qEl.textContent = text;
+  termsToHighlight.forEach(function(term) {
+    var word = String(term.term_no || '').trim();
+    if (!word) return;
+    var escapedTerm = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var reg = new RegExp(escapedTerm, 'gi');
+    var walker = document.createTreeWalker(qEl, NodeFilter.SHOW_TEXT);
+    var nodes = [];
+    while (walker.nextNode()) {
+      if (!walker.currentNode.parentElement.closest('.q-term-inline')) nodes.push(walker.currentNode);
+    }
+    nodes.forEach(function(node) {
+      var source = node.nodeValue;
+      var fragment = document.createDocumentFragment();
+      var last = 0;
+      var match;
+      reg.lastIndex = 0;
+      while ((match = reg.exec(source)) !== null) {
+        var before = source.charAt(match.index - 1);
+        var after = source.charAt(match.index + match[0].length);
+        if (/[A-Za-zÀ-ÖØ-öø-ÿ0-9_]/.test(before) || /[A-Za-zÀ-ÖØ-öø-ÿ0-9_]/.test(after)) continue;
+        fragment.appendChild(document.createTextNode(source.slice(last, match.index)));
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'q-term-inline';
+        button.textContent = match[0];
+        button.title = t('quiz_term_explain');
+        button.addEventListener('click', function() {
+          openTermDetailModal(term.term_no, term.term_th, term.definition_th);
+        });
+        fragment.appendChild(button);
+        last = match.index + match[0].length;
+      }
+      if (last) {
+        fragment.appendChild(document.createTextNode(source.slice(last)));
+        node.replaceWith(fragment);
+      }
+    });
+  });
+
+  var wrap = document.getElementById('qTermsWrap');
+  if (!wrap) return;
+  wrap.replaceChildren();
+  if (!termsToHighlight.length) {
+    wrap.style.display = 'none';
+    return;
+  }
+  var bar = document.createElement('div');
+  bar.className = 'q-terms-bar';
+  var title = document.createElement('span');
+  title.className = 'q-terms-title';
+  title.textContent = '📖 ' + t('quiz_terms_label') + ':';
+  bar.appendChild(title);
+  termsToHighlight.forEach(function(term) {
+    if (!term.term_no) return;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'q-term-chip';
+    var label = document.createElement('span');
+    label.textContent = '🇳🇴 ' + term.term_no;
+    button.appendChild(label);
+    if (appLang === 'th' && term.term_th) {
+      var thai = document.createElement('span');
+      thai.className = 'q-term-chip-th';
+      thai.textContent = '· ' + term.term_th;
+      button.appendChild(thai);
+    }
+    button.addEventListener('click', function() {
+      openTermDetailModal(term.term_no, term.term_th, term.definition_th);
+    });
+    bar.appendChild(button);
+  });
+  wrap.appendChild(bar);
+  wrap.style.display = 'block';
+}
+var _currentActiveModalTerm = null;
+
+function _findWordInDictionary(termNo) {
+  if (!termNo) return null;
+  var tLower = termNo.trim().toLowerCase();
+  var thList = (_MS_WORDS && _MS_WORDS.th) || [];
+  for (var i = 0; i < thList.length; i++) {
+    if (thList[i][0] && thList[i][0].toLowerCase() === tLower) {
+      var fullDef = thList[i][1] || '';
+      var parts = fullDef.split('—');
+      var thWord = parts[0] ? parts[0].trim() : termNo;
+      var def = parts[1] ? parts[1].trim() : fullDef;
+      return { term_no: thList[i][0], term_th: thWord, definition_th: def };
+    }
+  }
+  return null;
+}
+
+function openTermDetailModal(termNo, termTh, termDef) {
+  if (!termNo) return;
+  if (!termTh || !termDef) {
+    var found = _findWordInDictionary(termNo);
+    if (found) {
+      termTh = termTh || found.term_th;
+      termDef = termDef || found.definition_th;
+    }
+  }
+  _currentActiveModalTerm = { term_no: termNo, term_th: termTh || termNo, definition_th: termDef || '' };
+  var modal = document.getElementById('qTermModal');
+  var titleEl = document.getElementById('qTermModalTitle');
+  var thEl = document.getElementById('qTermModalTh');
+  var defEl = document.getElementById('qTermModalDef');
+  if (titleEl) titleEl.textContent = '🇳🇴 ' + termNo;
+  if (thEl) {
+    thEl.textContent = termTh ? '🇹🇭 ' + termTh : '';
+    thEl.hidden = !termTh;
+  }
+  if (defEl) defEl.textContent = termDef || t('quiz_term_default_def');
+  if (modal) {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+}
+
+function closeTermDetailModal() {
+  var modal = document.getElementById('qTermModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  _currentActiveModalTerm = null;
+}
+
+function speakCurrentTermModal() {
+  if (_currentActiveModalTerm && _currentActiveModalTerm.term_no) {
+    speakText(_currentActiveModalTerm.term_no, 'no');
+  }
+}
+
+function askMichaelAboutCurrentTerm() {
+  if (!_currentActiveModalTerm) return;
+  var term = _currentActiveModalTerm;
+  closeTermDetailModal();
+  var promptText = t('quiz_term_ask_prompt').replace('{term}', term.term_no);
+  showTab('teacher');
+  teacherSend(promptText, promptText);
+}
+
+function openFagordModal(idx) {
+  var term = currentTerms[idx];
+  if (!term) return;
+  var existing = document.getElementById('fagordModalOverlay');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.id = 'fagordModalOverlay';
+  overlay.className = 'fagord-modal-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) closeFagordModal(); };
+
+  var defText = term.definition_th || term.definition_no || '';
+  var isThai = (appLang === 'th');
+  var askPrompt = isThai
+    ? ('ช่วยอธิบายคำว่า ' + term.term_no + ' (' + (term.term_th || '') + ') สั้นๆ พร้อมตัวอย่างขับรถจริงหน่อยครับ')
+    : ('Kan du forklare begrepet ' + term.term_no + ' kort med et praktisk eksempel fra trafikken?');
+
+  overlay.innerHTML = '<div class="fagord-modal">'
+    + '<div class="fagord-modal-head">'
+    + '<div class="fagord-modal-title">🇳🇴 ' + escH(term.term_no) + '<button type="button" class="fagord-modal-tts" onclick="speakText(\'' + escH(term.term_no).replace(/'/g, "\\'") + '\', \'no\')" title="Hør uttale">🔊</button></div>'
+    + '<button type="button" class="fagord-modal-close" onclick="closeFagordModal()" aria-label="Lukk">✕</button>'
+    + '</div>'
+    + (term.term_th ? ('<div class="fagord-modal-th">🇹🇭 ' + escH(term.term_th) + '</div>') : '')
+    + (defText ? ('<div class="fagord-modal-def">' + escH(defText) + '</div>') : '')
+    + '<button type="button" class="fagord-modal-ask" onclick="askMichaelAboutTerm(\'' + escH(askPrompt).replace(/'/g, "\\'") + '\')">💬 '
+    + escH(isThai ? 'ถามครูไมเคิลเกี่ยวกับคำนี้' : 'Spør Michael om dette ordet')
+    + '</button>'
+    + '</div>';
+
+  document.body.appendChild(overlay);
+}
+
+function closeFagordModal() {
+  var modal = document.getElementById('fagordModalOverlay');
+  if (modal) modal.remove();
+}
+
+function askMichaelAboutTerm(promptText) {
+  closeFagordModal();
+  showTab('teacher');
+  teacherSend(promptText, promptText);
 }
 
 // ── Learning state — streak + session depth tracking ─────────────────────────
@@ -11343,36 +11804,36 @@ function consultMichaelFromExamQuestion(errorIdx) {
   var prompt = '';
   if (appLang === 'th') {
     display = 'ช่วยอธิบายข้อนี้ให้หน่อยครับ: "' + err.question_text.slice(0, 80) + '..."';
-    prompt = 'ฉันตอบผิดในข้อสอบจำลอง ช่วยอธิบายข้อนี้ให้เข้าใจง่าย ๆ หน่อยครับ\n\n'
-      + '<quiz_context>\n'
-      + 'attempt_count: 3\n'
-      + 'Question: ' + err.question_text + '\n'
-      + 'Student answer: ' + userAnsDisplay + '\n'
-      + 'Correct answer: ' + correctAnsDisplay + '\n'
-      + 'Explanation: ' + err.explanation + '\n'
-      + '</quiz_context>\n'
+    prompt = 'ฉันตอบผิดในข้อสอบจำลอง ช่วยอธิบายข้อนี้ให้เข้าใจง่าย ๆ หน่อยครับ\r\n\r\n'
+      + '<quiz_context>\r\n'
+      + 'attempt_count: 3\r\n'
+      + 'Question: ' + err.question_text + '\r\n'
+      + 'Student answer: ' + userAnsDisplay + '\r\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\r\n'
+      + 'Explanation: ' + err.explanation + '\r\n'
+      + '</quiz_context>\r\n'
       + 'ช่วยอธิบายว่าทำไมคำตอบของฉันถึงไม่ถูกต้อง ทำไมคำตอบที่ถูกถึงถูกต้อง และให้หลักการจำสั้น ๆ สำหรับสถานการณ์นี้';
   } else if (appLang === 'en') {
     display = 'Could you explain this question: "' + err.question_text.slice(0, 80) + '..."?';
-    prompt = 'I got this question wrong on my exam simulation. Could you explain the principle calmly?\n\n'
-      + '<quiz_context>\n'
-      + 'attempt_count: 3\n'
-      + 'Question: ' + err.question_text + '\n'
-      + 'Student answer: ' + userAnsDisplay + '\n'
-      + 'Correct answer: ' + correctAnsDisplay + '\n'
-      + 'Explanation: ' + err.explanation + '\n'
-      + '</quiz_context>\n'
+    prompt = 'I got this question wrong on my exam simulation. Could you explain the principle calmly?\r\n\r\n'
+      + '<quiz_context>\r\n'
+      + 'attempt_count: 3\r\n'
+      + 'Question: ' + err.question_text + '\r\n'
+      + 'Student answer: ' + userAnsDisplay + '\r\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\r\n'
+      + 'Explanation: ' + err.explanation + '\r\n'
+      + '</quiz_context>\r\n'
       + 'Please explain why my pick is incorrect, why the correct answer is right, and give a practical tip.';
   } else { // Norwegian (no)
     display = 'Kan du forklare dette spørsmålet: "' + err.question_text.slice(0, 80) + '..."?';
-    prompt = 'Jeg svarte feil på dette spørsmålet under eksamenssimulatoren. Kan du forklare det pedagogisk for meg?\n\n'
-      + '<quiz_context>\n'
-      + 'attempt_count: 3\n'
-      + 'Question: ' + err.question_text + '\n'
-      + 'Student answer: ' + userAnsDisplay + '\n'
-      + 'Correct answer: ' + correctAnsDisplay + '\n'
-      + 'Explanation: ' + err.explanation + '\n'
-      + '</quiz_context>\n'
+    prompt = 'Jeg svarte feil på dette spørsmålet under eksamenssimulatoren. Kan du forklare det pedagogisk for meg?\r\n\r\n'
+      + '<quiz_context>\r\n'
+      + 'attempt_count: 3\r\n'
+      + 'Question: ' + err.question_text + '\r\n'
+      + 'Student answer: ' + userAnsDisplay + '\r\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\r\n'
+      + 'Explanation: ' + err.explanation + '\r\n'
+      + '</quiz_context>\r\n'
       + 'Forklar hvorfor mitt svar ble feil, hvorfor fasiten er riktig, og gi meg en enkel huskeregel.';
   }
 
@@ -11443,8 +11904,8 @@ function updateTtsBtn(playing) {
 function setRate(r, el) {
   _ls.set('t2d_rate', String(r));
   if (_flashcardNarrationAudio) _flashcardNarrationAudio.playbackRate = r;
-  if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   ttsRate = r;
+  if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   if (_backendAudio) _backendAudio.playbackRate = r;
   if (_teacherAudio) _teacherAudio.playbackRate = r;
   document.querySelectorAll('.spd-btn').forEach(function(b) {
@@ -11667,7 +12128,10 @@ function setLang(lang) {
     var btn = document.getElementById('lang' + l);
     if (btn) btn.classList.toggle('active', lang === l.toLowerCase());
     var topBtn = document.getElementById('topLang' + l);
-    if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
+    if (topBtn) {
+      topBtn.classList.toggle('active', lang === l.toLowerCase());
+      topBtn.setAttribute('aria-pressed', String(lang === l.toLowerCase()));
+    }
     var authBtn = document.getElementById('authLang' + l);
     if (authBtn) authBtn.classList.toggle('active', lang === l.toLowerCase());
   });
@@ -11809,11 +12273,11 @@ async function openMichaelQuizCoach() {
   var languageName = {th:'Thai', no:'Norwegian', en:'English'}[appLang] || '';
   var prompt = 'You are Michael, a calm Norwegian driving instructor. Answer only in ' + languageName + '. '
     + 'Never mix languages. Keep the answer short enough for a mobile panel. Explain why the student answer is wrong, why the correct answer is right, and give one practical traffic example. '
-    + 'Use the mental model "Kongen og tjeneren" or "HAV-regelen" only when it fits naturally; never force either model.\n\n'
-    + '<quiz_context>\nattempt_count: 3\nQuestion: ' + ctx.question
-    + '\nStudent answer (' + ctx.userAnswerId + '): ' + ctx.userAnswer
-    + '\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
-    + '\nExisting explanation: ' + ctx.explanation + '\n</quiz_context>';
+    + 'Use the mental model "Kongen og tjeneren" or "HAV-regelen" only when it fits naturally; never force either model.\r\n\r\n'
+    + '<quiz_context>\r\nattempt_count: 3\r\nQuestion: ' + ctx.question
+    + '\r\nStudent answer (' + ctx.userAnswerId + '): ' + ctx.userAnswer
+    + '\r\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
+    + '\r\nExisting explanation: ' + ctx.explanation + '\r\n</quiz_context>';
   try {
     var data = await _quizCoachRequest(prompt);
     if (!panel.classList.contains('open')) return;
@@ -11964,16 +12428,16 @@ function askMichaelAboutThis(mode) {
 
   var attemptCount = isHint ? Math.min(3, Math.max(1, _msHint.count)) : 3;
 
-  var hiddenPayload = userDisplayMsg + '\n\n'
-    + '<quiz_context>\n'
-    + (isHint ? 'STUDENT ANSWERED INCORRECTLY. THE STUDENT ASKED FOR A HINT.\n'
-              : 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n')
-    + 'attempt_count: ' + attemptCount + '\n'
-    + 'is_correct: false\n'
-    + 'Question: ' + qText + '\n'
-    + '[ELEVENS FAKTISKE SVAR] (' + userAnsId + '): ' + userAnsText + '\n'
-    + '[FAKTISK FASIT] (' + correctAnsId + '): ' + correctAnsText + '\n'
-    + 'Explanation: ' + explText + '\n'
+  var hiddenPayload = userDisplayMsg + '\r\n\r\n'
+    + '<quiz_context>\r\n'
+    + (isHint ? 'STUDENT ANSWERED INCORRECTLY. THE STUDENT ASKED FOR A HINT.\r\n'
+              : 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\r\n')
+    + 'attempt_count: ' + attemptCount + '\r\n'
+    + 'is_correct: false\r\n'
+    + 'Question: ' + qText + '\r\n'
+    + '[ELEVENS FAKTISKE SVAR] (' + userAnsId + '): ' + userAnsText + '\r\n'
+    + '[FAKTISK FASIT] (' + correctAnsId + '): ' + correctAnsText + '\r\n'
+    + 'Explanation: ' + explText + '\r\n'
     + '</quiz_context>';
 
   // Navigate to teacher tab in 'quiz' mode
@@ -12378,20 +12842,11 @@ function _msGazeStop() {
   for (var i = 0; i < els.length; i++) els[i].classList.remove('lit');
 }
 
-function resetTeacherForLanguage() {
-  _teacherSessionId = null;
-  _teacherConversationId = null;
-  _teacherHasUserMsg = false;
-  _teacherWelcomeLang = null;
-  _teacherTyping = false;
-  _teacherActiveSessionType = 'normal';
-  _teacherQuizSessionId = null;
-  _teacherQuizConversationId = null;
-  _teacherNormalHtml = '';
 var _MS_SAFETY = {
   th: [
     {
       title: '💡 1. ไฟรถและการมองเห็น',
+      img: '/api/assets/safety_check/safety_lights.webp',
       items: [
         'ไฟหน้ารถ (ไฟต่ำ) ต้องเปิดตลอดเวลาที่ขับรถในนอร์เวย์ ทั้งกลางวันและกลางคืน',
         'ไฟสูงใช้นอกเขตชุมชนเมื่อมืด และต้องหรี่เป็นไฟต่ำทันทีเมื่อมีรถสวนมาหรือขับตามหลังรถคันอื่นใกล้ ๆ',
@@ -12405,6 +12860,7 @@ var _MS_SAFETY = {
     },
     {
       title: '🛑 2. ระบบเบรกและพวงมาลัย',
+      img: '/api/assets/safety_check/safety_brakes.webp',
       items: [
         'ตรวจหม้อลมเบรก: เหยียบแป้นเบรกย้ำ ๆ ขณะดับเครื่อง แป้นจะแข็ง แล้วเหยียบค้างไว้พร้อมสตาร์ทเครื่อง แป้นเบรกต้องจมลงเล็กน้อย',
         'ถ้าระบบเบรกวงจรใดวงจรหนึ่งเสีย ไฟเตือนสีแดงจะสว่างขึ้น และระยะเบรกจะยาวขึ้นมาก',
@@ -12418,19 +12874,21 @@ var _MS_SAFETY = {
     },
     {
       title: '🛞 3. ยางรถยนต์และล้อ',
+      img: '/api/assets/safety_check/safety_tyres.webp',
       items: [
         'ยางหน้าร้อนต้องมีดอกยางลึกอย่างน้อย 1.6 มม. ส่วนยางหน้าหนาวต้องลึกอย่างน้อย 3.0 มม.',
         'ตรวจแรงดันลมยางตามค่าที่ระบุในคู่มือรถหรือขอบประตูรถ และดูว่าแก้มยางไม่มีรอยฉีกหรือบวม',
         'ห้ามใส่ยางต่างชนิดปนกัน และถ้ายางสึกตรงกลางมากเกินไปแปลว่าเติมลมยางแข็งเกินไป'
       ],
       why: 'ดอกยางที่ตื้นเกินไปทำให้รถเหินน้ำได้ง่ายและระยะเบรกบนถนนเปียกหรือหิมะยาวขึ้นมาก',
-      q: 'ดอกยางหน้าหนาวสำหรับรถยนต์นั่งส่วนบุคคล (คลาส B) ต้องลึกอย่างน้อยกี่มิลลิเมตร?',
+      q: 'ดอกยางหน้าหนาวสำหรับรถยนต์นั่งส่วนบุคคล (คลาสบี) ต้องลึกอย่างน้อยกี่มิลลิเมตร?',
       o: ['อย่างน้อย 3.0 มม.', 'อย่างน้อย 1.6 มม.', 'อย่างน้อย 5.0 มม.'],
       c: 0,
       ask: 'ช่วยอธิบายเรื่องความลึกดอกยางหน้าร้อนกับหน้าหนาว และแรงดันลมยางหน่อยครับ'
     },
     {
       title: '⚠️ 4. ไฟเตือนบนหน้าปัดรถ',
+      img: '/api/assets/safety_check/safety_warning_lights.webp',
       items: [
         'ไฟเตือนสีแดง (เช่น เบรก หรือแรงดันน้ำมันเครื่อง): อันตรายร้ายแรง ต้องหยุดรถในที่ปลอดภัยทันที',
         'ไฟเตือนสีเหลืองหรือส้ม (เช่น เครื่องยนต์ หรือระบบป้องกันล้อล็อก): ขับต่อได้ด้วยความระมัดระวัง แต่ต้องนำรถไปตรวจเช็คโดยเร็ว',
@@ -12444,6 +12902,7 @@ var _MS_SAFETY = {
     },
     {
       title: '📄 5. เอกสารจดทะเบียนรถและอุปกรณ์ฉุกเฉิน',
+      img: '/api/assets/safety_check/safety_emergency_gear.webp',
       items: [
         'เอกสารจดทะเบียนรถส่วนที่ 1 ต้องเก็บไว้ในรถเสมอ (ใช้ดูน้ำหนักบรรทุกและน้ำหนักลากจูงที่อนุญาต)',
         'เสื้อกั๊กสะท้อนแสงต้องหยิบได้จากที่นั่งคนขับ และต้องสวมทันทีเมื่อต้องลงจากรถบนถนน',
@@ -12459,6 +12918,7 @@ var _MS_SAFETY = {
   no: [
     {
       title: '💡 1. Lys og sikt',
+      img: '/api/assets/safety_check/safety_lights.webp',
       items: [
         'Kjørelys / nærlys er påbudt hele døgnet i Norge, uansett vær.',
         'Fjernlys brukes utenfor tettbygd strøk i mørket. Blend ned i god tid for møtende trafikk og når du ligger bak en annen bil.',
@@ -12472,6 +12932,7 @@ var _MS_SAFETY = {
     },
     {
       title: '🛑 2. Bremser og styring',
+      img: '/api/assets/safety_check/safety_brakes.webp',
       items: [
         'Sjekk bremsekraftforsterker: Pump bremsepedalen 4–5 ganger med motoren av til den blir hard. Hold trykket og start motoren — pedalen skal synke litt inn.',
         'Hvis en av de to bremsekretsene ryker, lyser rød varsellampe og bremselengden blir mye lengre.',
@@ -12485,6 +12946,7 @@ var _MS_SAFETY = {
     },
     {
       title: '🛞 3. Dekk og hjul',
+      img: '/api/assets/safety_check/safety_tyres.webp',
       items: [
         'Sommerdekk skal ha minst 1,6 mm mønsterdybde. Vinterdekk skal ha minst 3,0 mm mønsterdybde.',
         'Riktig lufttrykk finner du i bilens instruksjonsbok eller på merkelappen i dørkarmen. Sjekk at dekkene ikke har kutt eller kordbrudd ( kuler i siden ).',
@@ -12498,6 +12960,7 @@ var _MS_SAFETY = {
     },
     {
       title: '⚠️ 4. Varsellamper i dashbordet',
+      img: '/api/assets/safety_check/safety_warning_lights.webp',
       items: [
         'Rød varsellampe (f.eks. bremser eller oljetrykk): Alvorlig feil — stans bilen på et trygt sted med en gang.',
         'Gul / oransje varsellampe (f.eks. motor eller ABS): Feil som må sjekkes på verksted, men du kan kjøre forsiktig videre.',
@@ -12511,6 +12974,7 @@ var _MS_SAFETY = {
     },
     {
       title: '📄 5. Vognkort Del 1 & sikkerhetsutstyr',
+      img: '/api/assets/safety_check/safety_emergency_gear.webp',
       items: [
         'Vognkort Del 1 skal alltid ligge i bilen (viser blant annet tillatt totalvekt, nyttelast og tilhengervekt).',
         'Refleksvest skal være tilgjengelig fra førersetet, slik at du kan ta den på før du går ut av bilen.',
@@ -12526,6 +12990,7 @@ var _MS_SAFETY = {
   en: [
     {
       title: '💡 1. Lights and visibility',
+      img: '/api/assets/safety_check/safety_lights.webp',
       items: [
         'Daytime running lights / dipped headlights are mandatory at all times when driving in Norway, day and night.',
         'Main beam is used outside built-up areas in the dark. Dip your lights in good time for oncoming traffic and when driving behind another vehicle.',
@@ -12539,6 +13004,7 @@ var _MS_SAFETY = {
     },
     {
       title: '🛑 2. Brakes and steering',
+      img: '/api/assets/safety_check/safety_brakes.webp',
       items: [
         'Brake booster check: Pump the brake pedal 4–5 times with the engine off until firm. Hold pressure and start the engine — the pedal should sink slightly.',
         'If one of the dual brake circuits fails, the red brake warning light comes on and braking distance increases significantly.',
@@ -12552,6 +13018,7 @@ var _MS_SAFETY = {
     },
     {
       title: '🛞 3. Tyres and wheels',
+      img: '/api/assets/safety_check/safety_tyres.webp',
       items: [
         'Summer tyres must have at least 1.6 mm tread depth. Winter tyres must have at least 3.0 mm tread depth.',
         'Correct tyre pressure is listed in the owner manual or door pillar sticker. Check sidewalls for cuts or bulges.',
@@ -12565,6 +13032,7 @@ var _MS_SAFETY = {
     },
     {
       title: '⚠️ 4. Dashboard warning lights',
+      img: '/api/assets/safety_check/safety_warning_lights.webp',
       items: [
         'Red warning light (e.g. brakes or oil pressure): Serious fault — stop the car in a safe place immediately.',
         'Amber / yellow warning light (e.g. engine or ABS): Fault that needs checking soon, but you may drive on carefully.',
@@ -12578,6 +13046,7 @@ var _MS_SAFETY = {
     },
     {
       title: '📄 5. Registration document Part 1 & emergency gear',
+      img: '/api/assets/safety_check/safety_emergency_gear.webp',
       items: [
         'Vehicle registration document Part 1 (Vognkort Del 1) must always be kept in the car (shows permitted total weight, payload and trailer weight).',
         'A reflective vest must be reachable from the driver seat so you can put it on before stepping out onto the road.',
@@ -12600,12 +13069,18 @@ function _msSafetyHtml() {
     var optsHtml = (cat.o || []).map(function(opt, oi) {
       return '<button type="button" class="ms-opt" onclick="_msSafetyAnswer(this,' + ci + ',' + oi + ')">' + escH(opt) + '</button>';
     }).join('');
+    var imgHtml = cat.img ? (
+      '<div class="ms-safety-visual">'
+      + '<img class="ms-safety-img" src="' + escH(cat.img) + '" alt="' + escH(cat.title) + '" onclick="openLightbox(\'' + escH(cat.img) + '\',\'' + escH(cat.title) + '\')" loading="lazy">'
+      + '</div>'
+    ) : '';
     var ttsPayload = cat.title + '. ' + (cat.items || []).join(' ') + ' ' + cat.why;
     return '<div class="ms-safety-cat">'
       + '<div class="ms-safety-head">'
       + '<div class="ms-safety-title">' + escH(cat.title) + '</div>'
       + '<button type="button" class="ms-safety-tts" data-tts="' + escH(ttsPayload) + '" onclick="speakText(this.getAttribute(\'data-tts\'))">' + escH(L.listen || '🔊') + '</button>'
       + '</div>'
+      + imgHtml
       + '<ul class="ms-safety-list">' + listHtml + '</ul>'
       + '<div class="ms-safety-why"><b>' + escH(L.whyLbl || '') + '</b> ' + escH(cat.why) + '</div>'
       + '<div class="ms-q">' + escH(L.checkQ || '') + ' ' + escH(cat.q) + '</div>'
@@ -12662,13 +13137,49 @@ function toggleSlowTts() {
   setRate(nextRate);
 }
 
+function initTeacherLayout() {
+  var app = document.getElementById('app');
+  var hub = document.getElementById('teacherHubMenu');
+  if (!app || !hub || app._teacherLayoutBound) return;
+  app._teacherLayoutBound = true;
+  var mobile = window.matchMedia('(max-width:767px)');
+  function updateHeight() {
+    if (window.visualViewport) app.style.setProperty('--teacher-viewport-height', window.visualViewport.height + 'px');
+    if (mobile.matches && hub.open) {
+      var composer = document.querySelector('#screenTeacher .teacher-inputbar');
+      var summary = hub.querySelector('summary');
+      if (composer && summary) hub.style.setProperty('--teacher-hub-height', Math.max(0, composer.getBoundingClientRect().top - summary.getBoundingClientRect().bottom - 8) + 'px');
+    }
+    if (mobile.matches && document.activeElement && document.activeElement.id === 'teacherInput') {
+      window.requestAnimationFrame(function() {
+        var messages = document.getElementById('teacherMessages');
+        if (messages) messages.scrollTop = messages.scrollHeight;
+      });
+    }
+  }
+  function updateHub() { hub.open = !mobile.matches; updateHeight(); }
+  mobile.addEventListener('change', updateHub);
+  window.addEventListener('resize', updateHeight);
+  hub.addEventListener('toggle', updateHeight);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', updateHeight);
+  updateHub();
+}
+
 function _syncTeacherToolbar() {
+  initTeacherLayout();
+  var levelGroup = document.querySelector('#screenTeacher .teacher-lvl-group');
+  var levelLabel = document.querySelector('#screenTeacher .teacher-lvl-lbl');
+  if (levelGroup) levelGroup.style.display = appLang === 'th' ? '' : 'none';
+  if (levelLabel) levelLabel.style.display = appLang === 'th' ? '' : 'none';
   document.querySelectorAll('.teacher-lvl-btn').forEach(function(b) {
-    b.classList.toggle('active', parseInt(b.getAttribute('data-lvl'), 10) === (_teacherExplainLevel || 1));
+    var selected = parseInt(b.getAttribute('data-lvl'), 10) === (_teacherExplainLevel || 1);
+    b.classList.toggle('active', selected);
+    b.setAttribute('aria-pressed', String(selected));
   });
   var slowBtn = document.getElementById('teacherSlowTtsBtn');
   if (slowBtn) {
     slowBtn.classList.toggle('active', Math.abs((ttsRate || 1) - 0.75) < 0.05);
+    slowBtn.setAttribute('aria-pressed', String(Math.abs((ttsRate || 1) - 0.75) < 0.05));
   }
 }
 
@@ -12685,6 +13196,16 @@ function discussSignWithMichael(signId) {
   teacherSend(p, p);
 }
 
+function resetTeacherForLanguage() {
+  _teacherSessionId = null;
+  _teacherConversationId = null;
+  _teacherHasUserMsg = false;
+  _teacherWelcomeLang = null;
+  _teacherTyping = false;
+  _teacherActiveSessionType = 'normal';
+  _teacherQuizSessionId = null;
+  _teacherQuizConversationId = null;
+  _teacherNormalHtml = '';
   _teacherQuizHtml = '';
   _teacherNormalHasUserMsg = false;
   _teacherQuizHasUserMsg = false;
@@ -12704,8 +13225,8 @@ function _stripMd(text) {
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/__(.+?)__/g, '$1')
-    .replace(/\*([^*\n]+?)\*/g, '$1')
-    .replace(/_([^_\n]+?)_/g, '$1')
+    .replace(/\*([^*\r\n]+?)\*/g, '$1')
+    .replace(/_([^_\r\n]+?)_/g, '$1')
     .replace(/^[-*]{3,}$/gm, '')
     .replace(/^[\-\*]\s+/gm, '• ')
     .replace(/`([^`]+)`/g, '$1')
@@ -12718,7 +13239,7 @@ function _stripMd(text) {
 //          regular paragraphs (blocks separated by blank lines)
 function _buildAssistantContent(text, container) {
   var cleaned = _stripMd(text);
-  var blocks = cleaned.split(/\n{2,}/);  // split on blank lines
+  var blocks = cleaned.split(/\r\n{2,}/);  // split on blank lines
 
   blocks.forEach(function(block) {
     block = block.trim();
@@ -12804,7 +13325,7 @@ function _buildAssistantContent(text, container) {
     if (/^🚗\s*(Praktisk råd|คำแนะนำ|Practical tip)/i.test(block)) {
       var box = document.createElement('div');
       box.className = 'tm-advice-box';
-      var lines = block.split('\n');
+      var lines = block.split('\r\n');
       var hdr = document.createElement('div');
       hdr.className = 'tm-advice-hdr';
       hdr.textContent = lines[0].trim();
@@ -12822,7 +13343,7 @@ function _buildAssistantContent(text, container) {
     }
 
     // Section header: single short line ending with ":"
-    var singleLine = block.indexOf('\n') === -1;
+    var singleLine = block.indexOf('\r\n') === -1;
     if (singleLine && block.endsWith(':') && block.length < 40) {
       var hdrEl = document.createElement('span');
       hdrEl.className = 'tm-section-hdr';
@@ -12882,7 +13403,7 @@ async function loadTeacher() {
     }
   }
 
-  var tspMap2 = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary', safety:'tsp_safety' };
+  var tspMap2 = { right_of_way:'tsp_right_of_way', positioning_lane:'tsp_positioning_lane', interaction:'tsp_interaction', speed_distance:'tsp_speed_distance', road_conditions:'tsp_road_conditions', signs_markings:'tsp_signs_markings', other_topics:'tsp_other_topics', strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary', safety:'tsp_safety' };
   document.querySelectorAll('[data-tsp]').forEach(function(el) {
     var key = tspMap2[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
@@ -12930,6 +13451,74 @@ function toggleTeacherSidebar() {
 
 function closeTeacherSidebar() {
   setTeacherSidebar(false);
+}
+
+var _teacherSelectedArea = null;
+
+function selectLearningArea(areaId) {
+  var areaPrompts = {
+    right_of_way: {
+      no: 'Lær meg om vikeplikt og kryss (høyreregel, forkjørsvei, venstresving, utkjøring og ulike krysstyper).',
+      th: 'สอนฉันเรื่องการให้ทางและทางแยก (กฎทางขวา ทางเอก การเลี้ยวซ้าย การออกจากซอย และทางแยกประเภทต่างๆ)',
+      en: 'Teach me about right of way and intersections (priority to the right, priority road, left turn, exiting property, and junction types).'
+    },
+    positioning_lane: {
+      no: 'Lær meg om plassering og feltskifte (høyre-/venstresving, flere felt, enveiskjøring og rundkjøring).',
+      th: 'สอนฉันเรื่องตำแหน่งรถและการเปลี่ยนเลน (การเลี้ยวขวา/ซ้าย การขับหลายเลน ทางเดินรถทางเดียว และวงเวียน)',
+      en: 'Teach me about road positioning and lane change (right/left turns, multi-lane roads, one-way streets, and roundabouts).'
+    },
+    interaction: {
+      no: 'Lær meg om samhandling i trafikken (fotgjengere, syklister, motorsykler, buss og tunge kjøretøy).',
+      th: 'สอนฉันเรื่องการปฏิสัมพันธ์กับผู้ร่วมทาง (คนเดินถนน ผู้ขี่จักรยาน มอเตอร์ไซค์ รถบัส และรถบรรทุกขนาดใหญ่)',
+      en: 'Teach me about interaction with other road users (pedestrians, cyclists, motorcycles, buses, and heavy vehicles).'
+    },
+    speed_distance: {
+      no: 'Lær meg om fart og avstand (sikt, reaksjon, bremsing, stans og avstand til andre).',
+      th: 'สอนฉันเรื่องความเร็วและระยะห่าง (ระยะการมองเห็น เวลาตอบสนอง ระยะเบรก ระยะหยุด และระยะห่างปลอดภัย)',
+      en: 'Teach me about speed and distance (visibility, reaction time, braking distance, stopping distance, and following distance).'
+    },
+    road_conditions: {
+      no: 'Lær meg om vei og forhold (by, landevei, motorvei, tunnel, mørke, regn, snø og glatt vei).',
+      th: 'สอนฉันเรื่องถนนและสภาพการขับขี่ (ขับในเมือง ทางหลวง มอเตอร์เวย์ อุโมงค์ กลางคืน ฝนตก หิมะ และถนนลื่น)',
+      en: 'Teach me about road and driving conditions (city driving, country roads, motorways, tunnels, night driving, rain, snow, and slippery roads).'
+    },
+    signs_markings: {
+      no: 'Lær meg om skilt og oppmerking (skilt alene og brukt i en faktisk trafikksituasjon).',
+      th: 'สอนฉันเรื่องป้ายจราจรและเครื่องหมายบนถนน (ป้ายจราจรและการใช้งานในสถานการณ์จริง)',
+      en: 'Teach me about signs and road markings (signs alone and used in real traffic situations).'
+    },
+    other_topics: {
+      no: 'Lær meg om andre læringstemaer (parkering, forbikjøring, jernbane, kjøretøykontroll og ulykker).',
+      th: 'สอนฉันเรื่องหัวข้อการเรียนรู้อื่นๆ (การจอดรถ การแซง ทางรถไฟ การตรวจเช็ครถ และอุบัติเหตุ)',
+      en: 'Teach me about other learning topics (parking, overtaking, railway crossings, vehicle checks, and accidents).'
+    }
+  };
+
+  var areaIcons = {
+    right_of_way: '🛑',
+    positioning_lane: '🚗',
+    interaction: '🤝',
+    speed_distance: '⏱️',
+    road_conditions: '🌧️',
+    signs_markings: '🪧',
+    other_topics: '📚'
+  };
+
+  _teacherSelectedArea = areaId;
+
+  document.querySelectorAll('.teacher-side-panel .tsp-btn[data-area]').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-area') === areaId);
+  });
+
+  var item = areaPrompts[areaId] || {};
+  var prompt = item[appLang] || '';
+  if (!prompt) return;
+
+  closeTeacherSidebar();
+
+  var icon = areaIcons[areaId] || '';
+  var displayLabel = icon ? (icon + ' ' + (t('tsp_' + areaId) || '')) : (t('tsp_' + areaId) || '');
+  teacherSend(prompt, displayLabel, 'learning_area_' + areaId);
 }
 
 function teacherSidebarAction(kind) {
@@ -13010,6 +13599,8 @@ function _teacherAppendBubble(role, text) {
     ttsBtn.className = 'tm-bubble-tts';
     ttsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
     ttsBtn.title = t('read_aloud');
+    ttsBtn.setAttribute('aria-label', t('read_aloud'));
+    ttsBtn.setAttribute('data-label-key', 'read_aloud');
     ttsBtn.onclick = function() {
       speakText(text);
     };
@@ -13061,7 +13652,7 @@ function closeLightbox(e) {
 }
 
 function _teacherTextOnlyReply(text) {
-  return String(text || '').replace(/\[image:[^\]]*\]/gi, '').replace(/\n{3,}/g, '\n\n').trim();
+  return String(text || '').replace(/\[image:[^\]]*\]/gi, '').replace(/\r\n{3,}/g, '\r\n\r\n').trim();
 }
 
 function _teacherSignValue(sign, field) {
@@ -14316,25 +14907,25 @@ function askAiAboutSign() {
 
   var prompt = "";
   if (lang === 'th') {
-    prompt = "กรุณาอธิบายเกี่ยวกับป้ายจราจรนี้ให้ฉันฟังหน่อย:\n"
-      + "- ชื่อป้าย: " + name + "\n"
-      + "- รหัส/หมายเลขป้าย: " + code + "\n"
-      + "- คำอธิบาย: " + expl + "\n"
-      + "- สิ่งที่ผู้ขับขี่ต้องปฏิบัติ: " + driver + "\n"
+    prompt = "กรุณาอธิบายเกี่ยวกับป้ายจราจรนี้ให้ฉันฟังหน่อย:\r\n"
+      + "- ชื่อป้าย: " + name + "\r\n"
+      + "- รหัส/หมายเลขป้าย: " + code + "\r\n"
+      + "- คำอธิบาย: " + expl + "\r\n"
+      + "- สิ่งที่ผู้ขับขี่ต้องปฏิบัติ: " + driver + "\r\n"
       + "- ข้อผิดพลาดที่พบบ่อย: " + mistake;
   } else if (lang === 'no') {
-    prompt = "Vennligst forklar dette trafikkskiltet for meg:\n"
-      + "- Navn på skiltet: " + name + "\n"
-      + "- Skiltnummer: " + code + "\n"
-      + "- Forklaring: " + expl + "\n"
-      + "- Hva føreren må gjøre: " + driver + "\n"
+    prompt = "Vennligst forklar dette trafikkskiltet for meg:\r\n"
+      + "- Navn på skiltet: " + name + "\r\n"
+      + "- Skiltnummer: " + code + "\r\n"
+      + "- Forklaring: " + expl + "\r\n"
+      + "- Hva føreren må gjøre: " + driver + "\r\n"
       + "- Vanlig feil: " + mistake;
   } else {
-    prompt = "Please explain this traffic sign to me:\n"
-      + "- Sign Name: " + name + "\n"
-      + "- Sign Number/Code: " + code + "\n"
-      + "- Explanation: " + expl + "\n"
-      + "- Driver Action: " + driver + "\n"
+    prompt = "Please explain this traffic sign to me:\r\n"
+      + "- Sign Name: " + name + "\r\n"
+      + "- Sign Number/Code: " + code + "\r\n"
+      + "- Explanation: " + expl + "\r\n"
+      + "- Driver Action: " + driver + "\r\n"
       + "- Typical Mistake: " + mistake;
   }
 
@@ -14450,8 +15041,8 @@ def _webapp_html(default_lang: str = "th") -> str:
     html = html.replace(
         '<meta name="deploy-version" content="__DEPLOY_VERSION__">'.replace('__DEPLOY_VERSION__', DEPLOY_VERSION),
         (
-            f'<meta name="deploy-version" content="{DEPLOY_VERSION}">\n'
-            f'<link rel="canonical" href="{app_canonical_for(lang)}"/>\n'
+            f'<meta name="deploy-version" content="{DEPLOY_VERSION}">\r\n'
+            f'<link rel="canonical" href="{app_canonical_for(lang)}"/>\r\n'
             f'{app_hreflang_tags()}'
         ),
         1,
@@ -14460,9 +15051,9 @@ def _webapp_html(default_lang: str = "th") -> str:
     import re
     if not hasattr(_webapp_html, "_ui_dict"):
         _ui_dict = {}
-        ui_str_match = re.search(r'var UI = \{(.*?)\n\};', WEBAPP_HTML, re.DOTALL)
+        ui_str_match = re.search(r'var UI = \{(.*?)\r?\n\};', WEBAPP_HTML, re.DOTALL)
         if ui_str_match:
-            for line in ui_str_match.group(1).split('\n'):
+            for line in ui_str_match.group(1).splitlines():
                 line = line.split('//')[0].strip()
                 if not line: continue
                 m = re.match(r'([a-zA-Z0-9_]+)\s*:\s*\{(.*?)\}', line)

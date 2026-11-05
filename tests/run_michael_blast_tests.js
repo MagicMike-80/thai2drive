@@ -16,7 +16,6 @@ const sw_code = fs.readFileSync(path.join(ROOT, 'backend', 'service-worker.js'),
 console.log('🚀 Running Michael AI BLAST Contract Tests & Missions 1–8 Suite...');
 
 let failures = 0;
-
 function test(name, fn) {
   try {
     fn();
@@ -76,7 +75,7 @@ test('webapp.py contains Video button adjacent to Michael and Media Cards', () =
   assert(webapp_code.indexOf('id="bnTeacher"') < webapp_code.indexOf('id="bnLibrary"'), 'bnLibrary must be adjacent to bnTeacher in bottomNav');
   assert(webapp_code.includes('buildVideoCard('), 'buildVideoCard function must exist');
   assert(webapp_code.includes('buildPodcastCard('), 'buildPodcastCard function must exist');
-  assert(webapp_code.includes('bindBottomNavCarousel()'), 'bindBottomNavCarousel function must exist');
+  assert(webapp_code.includes('bindBottomNavNavigation()'), 'responsive navigation function must exist');
 });
 
 test('Language purity: no forbidden cross-language fallback patterns', () => {
@@ -105,10 +104,10 @@ test('Oppdrag 1: Trafikkreglene § 7 nr. 2 Oncoming traffic & Left-turn exact ex
 });
 
 // ─── Oppdrag 2: Karusell på iOS Safari ───
-test('Oppdrag 2: Karusell-Risting iOS Safari (scroll-snap-type: none på #bottomNav)', () => {
-  assert(webapp_code.includes('scroll-snap-type: none'), '#bottomNav must disable aggressive scroll-snap');
-  assert(webapp_code.includes('.js-scrolling'), '.js-scrolling class must exist');
-  assert(webapp_code.includes('_scrollSnapTimer'), '_scrollSnapTimer must exist in showTab');
+test('Oppdrag 2: Navigation must not intercept wheel or drag gestures', () => {
+  assert(!webapp_code.includes("nav.addEventListener('wheel'"), 'navigation must not hijack wheel scrolling');
+  assert(!webapp_code.includes("nav.addEventListener('mousedown'"), 'navigation must not hijack drag gestures');
+  assert(!webapp_code.includes('_scrollSnapTimer'), 'navigation must not need a scroll-snap timer');
 });
 
 // ─── Oppdrag 3: Audio & TTS ───
@@ -177,9 +176,9 @@ test('Samsung/Android Hardening: FileResponse & HTTP 206 Range Streaming in serv
   assert(server_code.includes('@app.get("/public_assets/{filename:path}")'), 'public_assets path must be registered in server.py');
 });
 
-test('Samsung/Android Hardening: #bottomNav flex-wrap nowrap & Hidden Scrollbars in webapp.py', () => {
-  assert(webapp_code.includes('flex-wrap: nowrap !important;'), '#bottomNav must have flex-wrap: nowrap !important');
-  assert(webapp_code.includes('-ms-overflow-style: none;'), '#bottomNav must hide scrollbars on all platforms');
+test('Samsung/Android Hardening: compact navigation uses a disclosure menu', () => {
+  assert(webapp_code.includes('id="bottomNavMorePanel" hidden'), 'secondary navigation must start closed');
+  assert(webapp_code.includes('min-width: 44px;'), 'navigation must retain touch-sized buttons');
 });
 
 if (failures) {
