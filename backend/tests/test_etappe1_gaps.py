@@ -65,6 +65,15 @@ class Etappe1GapsTests(unittest.TestCase):
         # Med allow_parenthetical_latin=True skal det godkjennes
         self.assertTrue(self.tc._reply_matches_language_script(thai_text_with_paren, "th", allow_parenthetical_latin=True))
 
+    def test_level2_adds_known_norwegian_term_without_changing_thai_fact(self):
+        reply = "เมื่อเลี้ยวซ้าย คุณต้องให้ทางรถสวนทาง"
+        annotated = self.tc._ensure_level2_norwegian_term(reply, "เมื่อเลี้ยวซ้ายต้องทำอย่างไร")
+        self.assertIn("เลี้ยวซ้าย (venstresving)", annotated)
+        self.assertEqual(annotated.replace(" (venstresving)", ""), reply)
+        self.assertEqual(self.tc._ensure_level2_norwegian_term(annotated, ""), annotated)
+        cited = self.tc._ensure_level2_norwegian_term(reply + " (Trafikkreglene § 7)", "")
+        self.assertIn("เลี้ยวซ้าย (venstresving)", cited)
+
     def test_reply_matches_language_script_level1_pure_thai(self):
         pure_thai = "คุณต้องอยู่ห่างจากรถคันหน้าอย่างน้อย 3 วินาทีเพื่อให้ปลอดภัย"
         self.assertTrue(self.tc._reply_matches_language_script(pure_thai, "th"))

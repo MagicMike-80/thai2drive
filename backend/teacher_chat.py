@@ -5812,6 +5812,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = await _guard_selected_language(
             reply_text, messages, reply_lang, allow_parenthetical_latin=(explain_level == 2)
         )
+    if explain_level == 2:
+        reply_text = _ensure_level2_norwegian_term(reply_text, user_msg)
 
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.
@@ -5899,6 +5901,28 @@ def _fallback_reply(lang: str) -> str:
 
 def _contains_thai_script(text: str) -> bool:
     return bool(re.search(r"[\u0e00-\u0e7f]", text or ""))
+
+
+def _ensure_level2_norwegian_term(reply: str, user_msg: str) -> str:
+    """Attach an approved Norwegian term to an existing Thai concept if omitted."""
+    terms = (
+        ("เว้นระยะห่าง", "følgeavstand"),
+        ("ระยะห่าง", "følgeavstand"),
+        ("กฎทางขวา", "høyreregelen"),
+        ("เลี้ยวซ้าย", "venstresving"),
+        ("ทางม้าลาย", "gangfelt"),
+        ("จำกัดความเร็ว", "fartsgrense"),
+        ("ให้ทาง", "vikeplikt"),
+    )
+    if any(f"({norwegian})" in reply for _, norwegian in terms):
+        return reply
+    for thai, norwegian in terms:
+        if thai in reply:
+            return reply.replace(thai, f"{thai} ({norwegian})", 1)
+    for thai, norwegian in terms:
+        if thai in user_msg:
+            return f"{reply.rstrip()}\n\nคำศัพท์นอร์เวย์: {thai} ({norwegian})"
+    return reply
 
 
 def _reply_matches_language_script(text: str, lang: str, allow_parenthetical_latin: bool = False) -> bool:
