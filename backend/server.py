@@ -7306,7 +7306,6 @@ async def startup_purge_private_images():
         res = await db.questions.update_many(
             {"$or": [
                 {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
-                {"bildeUrl": {"$regex": "T2D_", "$options": "i"}},
                 {"bildeUrl": {"$regex": "Screenshot", "$options": "i"}},
                 {"bildeUrl": {"$regex": "base64", "$options": "i"}},
                 {"bildeUrl": {"$regex": "Førerprøver", "$options": "i"}}
