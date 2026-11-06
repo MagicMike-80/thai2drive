@@ -3742,7 +3742,18 @@ LANDING_JS = r"""
       // Image questions ONLY — filter out any without a valid base64/url image
       const res = await fetch('/api/questions/random?count=15&has_image=true');
       const raw = await res.json();
-      questions = (raw || []).filter(q => q.bildeUrl && (typeof q.bildeUrl === 'string' || Object.keys(q.bildeUrl).length)).slice(0, TOTAL + 2);
+      questions = (raw || []).filter(q => {
+        if (!q || !q.bildeUrl) return false;
+        if (typeof q.bildeUrl !== 'string' && !Object.keys(q.bildeUrl).length) return false;
+        if (q.id === '4d8507e7-8f75-59f3-bb58-1de6ea899421') return false;
+        if (q.source_file && String(q.source_file).toLowerCase().includes('screenshot')) return false;
+        if (q.orig_disk_path && String(q.orig_disk_path).toLowerCase().includes('screenshot')) return false;
+        if (q.bildeUrl && typeof q.bildeUrl === 'string' && q.bildeUrl.toLowerCase().includes('screenshot')) return false;
+        if (q.question && typeof q.question === 'object') {
+          if (q.question.th && q.question.no && q.question.th === q.question.no) return false;
+        }
+        return true;
+      }).slice(0, TOTAL + 2);
       if(questions.length === 0){
         showLoadError();
         return;

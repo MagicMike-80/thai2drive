@@ -938,8 +938,25 @@ async def health():
 
 # App-wide image-only filter: ALL quiz modes (Practice, Exam, Daily Test)
 # must ONLY return questions that have an image (bildeUrl present and non-empty).
-HELD_QUESTION_IDS = ("q016", "03e1d9e8-3bfc-4636-8536-fe84ad1506cc")
-AVAILABLE_QUESTION_FILTER = {"id": {"$nin": list(HELD_QUESTION_IDS)}}
+_held_ids_file = os.path.join(os.path.dirname(__file__), "held_screenshot_ids.json")
+_extra_held_ids = []
+if os.path.exists(_held_ids_file):
+    try:
+        with open(_held_ids_file, "r", encoding="utf-8") as _f:
+            _extra_held_ids = json.load(_f)
+    except Exception:
+        pass
+
+HELD_QUESTION_IDS = tuple(
+    {"q016", "03e1d9e8-3bfc-4636-8536-fe84ad1506cc", "4d8507e7-8f75-59f3-bb58-1de6ea899421"}
+    | set(_extra_held_ids)
+)
+AVAILABLE_QUESTION_FILTER = {
+    "id": {"$nin": list(HELD_QUESTION_IDS)},
+    "active": {"$ne": False},
+    "source_file": {"$not": {"$regex": "^Screenshot_"}},
+    "orig_disk_path": {"$not": {"$regex": "(?i)screenshot"}},
+}
 IMAGE_ONLY_FILTER = {
     **AVAILABLE_QUESTION_FILTER,
     "bildeUrl": {"$exists": True, "$nin": [None, ""]},
@@ -978,7 +995,7 @@ async def _get_exam_questions(
     - All questions must have an image (existing site requirement)
     - Falls back gracefully if there are not enough hard questions
     """
-    image_filter = {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}
+    image_filter = dict(IMAGE_ONLY_FILTER)
 
     # ── Step 1: collect recently-wrong question IDs ───────────────────────
     wrong_ids: list = []
