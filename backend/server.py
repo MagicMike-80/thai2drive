@@ -156,6 +156,27 @@ from admin_analytics import admin_analytics_router
 app = FastAPI()
 
 
+EMERGENCY_MAINTENANCE = True
+
+@app.middleware("http")
+async def emergency_maintenance_middleware(request: Request, call_next):
+    if not EMERGENCY_MAINTENANCE:
+        return await call_next(request)
+    path = request.url.path
+    if path in {"/api/health", "/health", "/_whoami", "/favicon.ico"}:
+        return await call_next(request)
+    if path.startswith("/static/"):
+        return await call_next(request)
+    try:
+        from webapp import MAINTENANCE_HTML
+    except ImportError:
+        from backend.webapp import MAINTENANCE_HTML
+    from fastapi.responses import HTMLResponse
+    if not path.startswith("/api/"):
+        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
+    return JSONResponse(status_code=503, content={"detail": "Systemet er midlertidig stengt for vedlikehold i 1 time."})
+
+
 @app.middleware("http")
 async def redirect_www_to_apex(request: Request, call_next):
     """Keep browser GET/HEAD traffic on the apex origin for shared auth state.
