@@ -167,6 +167,19 @@ async def emergency_maintenance_middleware(request: Request, call_next):
         return await call_next(request)
     if path.startswith("/static/"):
         return await call_next(request)
+    # Tillat full admin-tilgang slik at bilder kan administreres og slettes under vedlikehold
+    if (
+        path.startswith("/api/admin")
+        or path.startswith("/admin")
+        or path.startswith("/api/cms")
+        or path.startswith("/api/auth")
+        or path.startswith("/api/questions")
+        or path.startswith("/gridfs")
+        or path.startswith("/api/gridfs")
+        or path.startswith("/media")
+        or path.startswith("/api/media")
+    ):
+        return await call_next(request)
     try:
         from webapp import MAINTENANCE_HTML
     except ImportError:
@@ -6806,6 +6819,7 @@ async def admin_page_short():
 
 
 # Shorter aliases
+@app.get("/admin", response_class=HTMLResponse)
 @app.get("/api/admin", response_class=HTMLResponse)
 async def admin_page_alias_admin():
     if _ADMIN_HTML_PATH.exists():
