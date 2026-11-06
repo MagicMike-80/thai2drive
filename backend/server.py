@@ -156,7 +156,7 @@ from admin_analytics import admin_analytics_router
 app = FastAPI()
 
 
-EMERGENCY_MAINTENANCE = True
+EMERGENCY_MAINTENANCE = False
 
 @app.middleware("http")
 async def emergency_maintenance_middleware(request: Request, call_next):
