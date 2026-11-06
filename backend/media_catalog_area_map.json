@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "areas": {
+    "7_2a_vikeplikt_punt_2": "right_of_way",
+    "7_2b_vikeplikt_punt_2": "right_of_way",
+    "7_4a_vikeplikt_for_all_trafikk_ved_utkjoering_fra_privat_punt_4": "right_of_way",
+    "7_4_vikeplikt_punt_4": "right_of_way",
+    "7_5a_vikeplikt_punt_6_bussregel": "right_of_way",
+    "7_5b_ikke_vikeplikt_punt_6_bussregel": "right_of_way",
+    "braking_40_km_h": "speed_distance",
+    "braking_40_km_h_2": "speed_distance",
+    "braking_80_km_h": "speed_distance",
+    "stopping_distance_40km_h": "speed_distance",
+    "stopping_distance_80km_h": "speed_distance",
+    "stopping_distance_80km_h_2": "speed_distance",
+    "tesla_reaction_distance_40km_h": "speed_distance",
+    "tesla_reaction_distance_80km_h": "speed_distance"
+  }
+}

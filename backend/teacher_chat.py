@@ -41,10 +41,12 @@ except ImportError:
     from backend import ai_learning as _ai_learning
 from dotenv import load_dotenv
 try:
-    from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media, serialize_catalog_document
+    from media_catalog import LEARNING_AREA_IDS, SUPPORTED_LANGUAGES, catalog_sort_key, expand_law_synonyms, rank_catalog_media, serialize_catalog_document
 except ImportError:  # package-style imports used by isolated tests
     from backend.media_catalog import (
+        LEARNING_AREA_IDS,
         SUPPORTED_LANGUAGES,
+        catalog_sort_key,
         expand_law_synonyms,
         rank_catalog_media,
         serialize_catalog_document,
@@ -5076,6 +5078,38 @@ async def teacher_topics(lang: str = Query(default="no")):
     if lang not in MICHAEL_TOPICS:
         raise HTTPException(status_code=422, detail="Unsupported or missing language.")
     return {"lang": lang, "topics": MICHAEL_TOPICS[lang]}
+
+
+@teacher_router.get("/teacher/media")
+async def teacher_area_media(
+    language: str = Query(...),
+    learning_area_id: str = Query(...),
+):
+    """Return only approved, active, language-pure media for one selected area."""
+    if language not in SUPPORTED_LANGUAGES or learning_area_id not in LEARNING_AREA_IDS:
+        raise HTTPException(status_code=422, detail="Unsupported language or learning area")
+    query = {
+        "is_active": True,
+        "approved_for_michael": True,
+        "approved_for_teacher": True,
+        "learning_area_id": learning_area_id,
+        "content_language": {"$in": [language, "neutral"]},
+    }
+    documents = await _db["media_catalog"].find(query).to_list(length=200)
+    media = []
+    for document in documents:
+        if (
+            document.get("is_active") is not True
+            or document.get("approved_for_michael") is not True
+            or document.get("approved_for_teacher") is not True
+            or document.get("learning_area_id") != learning_area_id
+        ):
+            continue
+        item = serialize_catalog_document(document, language)
+        if item is not None:
+            media.append(item)
+    media.sort(key=catalog_sort_key)
+    return {"language": language, "learning_area_id": learning_area_id, "media": media}
 
 
 class ContactHumanRequest(BaseModel):
