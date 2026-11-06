@@ -9,6 +9,7 @@ import argparse
 import os
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 from bson import json_util
 from pymongo import MongoClient
@@ -18,6 +19,8 @@ from backend.media_catalog import normalize_catalog_text, validate_catalog_docum
 
 AREA_BY_CATEGORY = {"vikeplikt": "right_of_way", "stoppelengde": "speed_distance"}
 EXPECTED_SOURCE_COUNT = 26
+EXPECTED_CATALOG_COUNT = 25
+NO_VIDEO_ID = "sit_kryss_hoyreregel_7"
 FIELDS = ("type", "category", "learning_area_id", "tags", "media_url",
           "thumbnail_url", "is_active", "content_language", "i18n",
           "approved_for_michael", "approved_for_teacher", "source_id")
@@ -31,6 +34,9 @@ def catalog_document(source: dict) -> dict:
     language = source.get("language")
     if language != "no":
         raise ValueError(f"unexpected video language: {source.get('id')}")
+    video_url = str(source.get("static_url") or "")
+    if not video_url.startswith("/static/videos/") or not video_url.endswith(".mp4"):
+        raise ValueError(f"missing static video URL: {source.get('id')}")
     item = {
         "media_id": source["id"],
         "type": "video",
@@ -38,7 +44,7 @@ def catalog_document(source: dict) -> dict:
         "learning_area_id": AREA_BY_CATEGORY[source["category"]],
         "tags": list(dict.fromkeys(normalize_catalog_text(tag)
                                    for tag in source["topic_tags"])),
-        "media_url": source["source_url"],
+        "media_url": video_url,
         "thumbnail_url": source["thumbnail_url"],
         "is_active": True,
         "content_language": language,
@@ -51,6 +57,19 @@ def catalog_document(source: dict) -> dict:
     }
     validate_catalog_document(item)
     return item
+
+
+def check_urls(documents: list[dict]) -> None:
+    for item in documents:
+        for path, expected in ((item["media_url"], "video/mp4"),
+                               (item["thumbnail_url"], "image/")):
+            url = "https://thai2drive.no" + path
+            request = Request(url, headers={"Range": "bytes=0-0",
+                                            "Cache-Control": "no-cache"})
+            with urlopen(request, timeout=20) as response:
+                content_type = response.headers.get_content_type()
+                if response.status not in (200, 206) or not content_type.startswith(expected):
+                    raise ValueError(f"bad URL for {item['media_id']}: {response.status} {content_type}")
 
 
 def main() -> int:
@@ -74,17 +93,25 @@ def main() -> int:
             {"active": True, "approved_for_michael": True}))
         if len(sources) != EXPECTED_SOURCE_COUNT:
             raise ValueError(f"expected {EXPECTED_SOURCE_COUNT} approved sources, got {len(sources)}")
-        documents = [catalog_document(source) for source in sources]
+        missing = [source["id"] for source in sources if not source.get("static_url")]
+        if missing != [NO_VIDEO_ID]:
+            raise ValueError(f"unexpected missing videos: {missing}")
+        documents = [catalog_document(source) for source in sources if source.get("static_url")]
+        if len(documents) != EXPECTED_CATALOG_COUNT:
+            raise ValueError(f"expected {EXPECTED_CATALOG_COUNT} valid videos")
+        check_urls(documents)
         ids = [item["media_id"] for item in documents]
         if len(set(ids)) != len(ids):
             raise ValueError("duplicate source IDs")
         collection = db["media_catalog"]
         previous = list(collection.find({"media_id": {"$in": ids}}))
+        invalid_row = collection.find_one({"media_id": NO_VIDEO_ID})
         by_id = {item["media_id"]: item for item in previous}
         changes = [item for item in documents if any(
             by_id.get(item["media_id"], {}).get(field) != item[field] for field in FIELDS)]
         print(f"DRY RUN database={db_name} approved={len(documents)} existing={len(previous)} "
-              f"would_write={len(changes)} areas=right_of_way:12,speed_distance:14")
+              f"would_write={len(changes)} would_deactivate_invalid={bool(invalid_row and invalid_row.get('is_active'))} "
+              f"areas=right_of_way:11,speed_distance:14")
         if not args.apply:
             return 0
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -98,12 +125,17 @@ def main() -> int:
                 {"media_id": item["media_id"]},
                 {"$set": {**item, "updated_at": now},
                  "$setOnInsert": {"created_at": now}}, upsert=True)
+        collection.update_one({"media_id": NO_VIDEO_ID},
+                              {"$set": {"is_active": False, "approved_for_teacher": False,
+                                        "updated_at": now}})
         after = list(collection.find({"media_id": {"$in": ids}}))
         if len(after) != len(ids) or any(
             any(row.get(field) != item[field] for field in FIELDS)
             for item in documents for row in after if row.get("media_id") == item["media_id"]
         ):
             raise RuntimeError("post-write verification failed; inspect snapshot")
+        if collection.count_documents({"media_id": NO_VIDEO_ID, "is_active": True}):
+            raise RuntimeError("invalid video remains active")
         print(f"APPLY OK database={db_name} written={len(changes)} verified={len(after)} "
               f"snapshot={snapshot}")
         return 0
