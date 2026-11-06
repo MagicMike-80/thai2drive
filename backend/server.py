@@ -7148,6 +7148,29 @@ async def publish_michael_video_catalog():
 
 
 @app.on_event("startup")
+async def startup_seed_master_quiz_catalog():
+    """Seed / update the 239 Master Quiz questions on startup. Fail-soft."""
+    try:
+        try:
+            from seed_master_quiz import seed_master_quiz_collection
+        except ImportError:
+            from backend.seed_master_quiz import seed_master_quiz_collection
+
+        res = await seed_master_quiz_collection(db.questions)
+        logging.getLogger("master_quiz_seed").info(
+            "Master Quiz catalog seed status: matched=%s upserted=%s modified=%s total=%s",
+            res.get("matched"),
+            res.get("upserted"),
+            res.get("modified"),
+            res.get("total"),
+        )
+    except Exception as exc:
+        logging.getLogger("master_quiz_seed").error(
+            "Master Quiz catalog seed failed: %s", exc
+        )
+
+
+@app.on_event("startup")
 async def load_quiz_glossary_cache():
     """Load the Fagordkortet glossary cache. Fail-soft — the endpoint answers
     {"terms": []} rather than 500 if this fails or hasn't run yet."""
