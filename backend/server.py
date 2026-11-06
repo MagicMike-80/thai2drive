@@ -7200,55 +7200,9 @@ async def publish_michael_video_catalog():
 
 
 @app.get("/api/admin/cleanup-screenshots-now")
-async def manual_cleanup_screenshots():
-    """Emergency trigger to wipe screenshots and guarantee 100% clean image coverage for ALL questions."""
-    from pymongo import UpdateOne
-    # 1. Clean bad screenshots
-    r_bad = await db.questions.update_many(
-        {"$or": [
-            {"source_file": {"$regex": "Screenshot_", "$options": "i"}},
-            {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
-            {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
-        ]},
-        {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
-    )
-
-    # 2. Collect image pool
-    quiz_dir = Path(__file__).parent / "public_assets" / "quiz_images"
-    sign_dir = Path(__file__).parent / "sign_images"
-    pool = []
-    if quiz_dir.exists():
-        pool.extend([f"/api/public_assets/quiz_images/{f.name}" for f in quiz_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-    if sign_dir.exists():
-        pool.extend([f"/api/sign-images/{f.name}" for f in sign_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-
-    # 3. Find ANY question missing image
-    cursor = db.questions.find(
-        {"$or": [{"bildeUrl": {"$exists": False}}, {"bildeUrl": None}, {"bildeUrl": ""}, {"bildeUrl": {"$regex": "^data:image"}}]}
-    )
-    missing_docs = await cursor.to_list(length=5000)
-    updated_count = 0
-    if missing_docs and pool:
-        ops = [
-            UpdateOne({"_id": doc["_id"]}, {"$set": {"bildeUrl": pool[i % len(pool)], "active": True}})
-            for i, doc in enumerate(missing_docs)
-        ]
-        res = await db.questions.bulk_write(ops, ordered=False)
-        updated_count = getattr(res, "modified_count", 0)
-
-    total_with_img = await db.questions.count_documents({"active": True, "bildeUrl": {"$exists": True, "$nin": [None, ""]}})
-    total_active = await db.questions.count_documents({"active": True})
-
-    return {
-        "ok": True,
-        "bad_screenshots_cleaned": getattr(r_bad, "modified_count", 0),
-        "pool_size": len(pool),
-        "missing_found": len(missing_docs),
-        "updated_count": updated_count,
-        "total_active": total_active,
-        "with_image": total_with_img,
-        "coverage_pct": round(total_with_img / total_active * 100, 1) if total_active else 0
-    }
+async def manual_cleanup_screenshots(_: dict = Depends(require_admin)):
+    """Retired: image cleanup must use a reviewed, explicit question-to-image map."""
+    raise HTTPException(status_code=410, detail="Automatic image cleanup is disabled")
 
 
 @app.on_event("startup")
@@ -7266,12 +7220,10 @@ async def startup_strip_bad_screenshot_images():
                     {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
                 )
                 logging.getLogger("image_cleanup").info("Stripped screenshot images from %s questions in MongoDB", getattr(res, "modified_count", 0))
-        # Also clean any questions matching Screenshot_ regex
+        # Only clear an actual screenshot URL. An old source_file label must
+        # not erase a newer image selected in admin.
         res2 = await db.questions.update_many(
-            {"$or": [
-                {"source_file": {"$regex": "Screenshot_", "$options": "i"}},
-                {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
-            ]},
+            {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
             {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
         )
         if getattr(res2, "modified_count", 0):
@@ -7279,7 +7231,6 @@ async def startup_strip_bad_screenshot_images():
         # 3. Strip all raw base64 data-URI screenshot images from MongoDB
         res3 = await db.questions.update_many(
             {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
-            {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
             {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
         )
         if getattr(res3, "modified_count", 0):
@@ -7294,7 +7245,6 @@ async def startup_purge_private_images():
     try:
         res = await db.questions.update_many(
             {"$or": [
-                {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
                 {"bildeUrl": {"$regex": "Screenshot", "$options": "i"}},
                 {"bildeUrl": {"$regex": "base64", "$options": "i"}},
                 {"bildeUrl": {"$regex": "Førerprøver", "$options": "i"}}
@@ -7304,36 +7254,6 @@ async def startup_purge_private_images():
         logging.getLogger("purge").info("Purged unwanted images: %s", res.modified_count)
     except Exception as exc:
         logging.getLogger("purge").error("Failed purge: %s", exc)
-
-@app.on_event("startup")
-async def startup_link_t2d_verified_images():
-    """Guarantee 100% clean image coverage for ALL questions in MongoDB on boot."""
-    try:
-        from pymongo import UpdateOne
-        # 1. Image pool
-        quiz_dir = Path(__file__).parent / "public_assets" / "quiz_images"
-        sign_dir = Path(__file__).parent / "sign_images"
-        pool = []
-        if quiz_dir.exists():
-            pool.extend([f"/api/public_assets/quiz_images/{f.name}" for f in quiz_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-        if sign_dir.exists():
-            pool.extend([f"/api/sign-images/{f.name}" for f in sign_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-
-        # 2. Find and update missing
-        cursor = db.questions.find(
-            {"$or": [{"bildeUrl": {"$exists": False}}, {"bildeUrl": None}, {"bildeUrl": ""}, {"bildeUrl": {"$regex": "^data:image"}}]}
-        )
-        missing_docs = await cursor.to_list(length=5000)
-        if missing_docs and pool:
-            ops = [
-                UpdateOne({"_id": doc["_id"]}, {"$set": {"bildeUrl": pool[i % len(pool)], "active": True}})
-                for i, doc in enumerate(missing_docs)
-            ]
-            res = await db.questions.bulk_write(ops, ordered=False)
-            logging.getLogger("image_coverage").info("100% Image Coverage Synced: %s questions updated", res.modified_count)
-    except Exception as exc:
-        logging.getLogger("image_coverage").error("Failed to sync 100% image coverage: %s", exc)
-
 
 @app.on_event("startup")
 async def startup_seed_master_quiz_catalog():

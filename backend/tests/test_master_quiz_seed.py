@@ -38,7 +38,7 @@ class MasterQuizSeedTests(unittest.TestCase):
             self.assertIn(q["learning_area_id"], VALID_AREAS)
             self.assertEqual(len(q["options"]), 4)
             self.assertIn(q["correctOptionId"], ("A", "B", "C", "D"))
-            self.assertTrue(q["bildeUrl"].startswith("data:image/jpeg;base64,"))
+            self.assertIn("bildeUrl", q)
 
     def test_seeding_executes_bulk_write_with_240_operations(self):
         mock_col = _MockCollection()
@@ -46,6 +46,15 @@ class MasterQuizSeedTests(unittest.TestCase):
         self.assertEqual(result["total"], 240)
         self.assertEqual(result["upserted"], 240)
         self.assertEqual(len(mock_col.operations), 240)
+
+    def test_seeding_never_overwrites_existing_image_links(self):
+        operations = build_master_quiz_operations()
+        for operation in operations[:-1]:
+            self.assertNotIn("bildeUrl", operation._doc["$set"])
+            image_url = operation._doc["$setOnInsert"].get("bildeUrl", "")
+            self.assertTrue(
+                not image_url or image_url.startswith("/api/public_assets/quiz_images/")
+            )
 
 if __name__ == "__main__":
     unittest.main()
