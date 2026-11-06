@@ -1052,6 +1052,94 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
 }
 
 
+/* ─── FOUNDER NOTE (Michael's personal greeting) ─── */
+.t2d-founder-note-section {
+  padding: 24px 0 28px;
+  position: relative;
+  z-index: 20;
+}
+.t2d-founder-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: linear-gradient(135deg, rgba(20, 26, 40, 0.94) 0%, rgba(12, 16, 26, 0.96) 100%);
+  border: 1px solid rgba(255, 106, 43, 0.35);
+  border-radius: 20px;
+  padding: 24px 28px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(255, 106, 43, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.t2d-founder-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.t2d-founder-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #FF6A2B;
+  box-shadow: 0 0 18px rgba(255, 106, 43, 0.45);
+  display: block;
+}
+.t2d-founder-badge {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #FF6A2B;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.t2d-founder-content {
+  position: relative;
+  flex: 1;
+}
+.t2d-founder-quote {
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+  font-style: italic;
+  margin: 0 0 10px 0;
+}
+.t2d-founder-sig {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.t2d-founder-name {
+  color: #FF6A2B;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.t2d-founder-role {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+@media (max-width: 640px) {
+  .t2d-founder-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 16px;
+    gap: 16px;
+  }
+  .t2d-founder-sig {
+    justify-content: center;
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
 /* ─── TRUST BAR (56px) + 5-STJERNERS VEGGEN (#anmeldelser) ─── */
 .t2d-trust-bar {
   border-top: 1px solid rgba(255, 255, 255, 0.07);
@@ -1934,9 +2022,9 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
         </h1>
 
         <p class="hero-subtext">
-          <span data-lang="th">ผ่านการสอบทฤษฎีได้เร็วขึ้น ครูไมเคิลอธิบายทุกอย่างเป็นภาษาไทย — สถานการณ์จริงบนถนนนอร์เวย์ ข้อสอบกว่า 1000+ ข้อ และดูแลเป็นรายบุคคล</span>
-          <span data-lang="no">Bestå teoriprøven raskere. Michael forklarer alt på thai – med ekte norske veisituasjoner, 1000+ spørsmål og personlig oppfølging.</span>
-          <span data-lang="en">Pass the theory test faster. Michael explains everything in Thai — real Norwegian road scenarios, 1000+ questions, and personal coaching.</span>
+          <span data-lang="th">ข้อสอบกว่า 2,000 ข้อพร้อมภาพประกอบ ทุ่มเทเวลาทำงานนับไม่ถ้วน ด้วยเป้าหมายเดียว: ช่วยให้คุณเข้าใจทฤษฎีจราจรนอร์เวย์ ด้วยภาษาที่อบอุ่นและคุ้นเคยเหมือนอยู่บ้าน</span>
+          <span data-lang="no">2 000 spørsmål med bilder. Utallige timer med arbeid. Ett mål: å hjelpe deg å forstå norsk trafikkteori på et språk som føles som hjemme.</span>
+          <span data-lang="en">2,000 questions with images. Countless hours of work. One goal: to help you understand Norwegian traffic theory in a language that feels like home.</span>
         </p>
 
         <!-- Ring 2: 8 Funksjoner Bunn Venstre (Låst rekkefølge, #1 størst med oransje glød) -->
@@ -2217,9 +2305,9 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
           <span class="hdp-footer-ico">📱</span>
         </div>
         <div class="hdp-footer-text">
-          <span data-lang="th">คำถามกว่า 1000+ ข้อ • ไทย &amp; นอร์เวย์ • ใช้งานได้ทั้งใน Nett-App และ Web App</span>
-          <span data-lang="no">1000+ spørsmål • Norsk &amp; Thai • Tilgjengelig i Nett-App og Web App</span>
-          <span data-lang="en">1000+ questions • Norwegian &amp; Thai • Available in Nett-App and Web App</span>
+          <span data-lang="th">คำถามกว่า 2000 ข้อ • ไทย &amp; นอร์เวย์ • ใช้งานได้ทั้งใน Nett-App และ Web App</span>
+          <span data-lang="no">2000 spørsmål • Norsk &amp; Thai • Tilgjengelig i Nett-App og Web App</span>
+          <span data-lang="en">2000 questions • Norwegian &amp; Thai • Available in Nett-App and Web App</span>
         </div>
       </div>
     </div>
@@ -2262,6 +2350,37 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
               <span data-lang="en">Open app</span>
             </a>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+
+def _founder_note_html() -> str:
+    return """
+<section class="t2d-founder-note-section">
+  <div class="container">
+    <div class="t2d-founder-card">
+      <div class="t2d-founder-avatar-wrap">
+        <img src="/api/assets/michael-avatar-v1.webp" alt="Michael" class="t2d-founder-avatar" />
+        <span class="t2d-founder-badge">Founder</span>
+      </div>
+      <div class="t2d-founder-content">
+        <p class="t2d-founder-quote">
+          <span data-lang="th">“Thai2Drive คือสิ่งที่มาจากใจผมอย่างแท้จริง ผมเป็นคนไทย ใช้ชีวิตครึ่งหนึ่งในสวีเดน และทำงานเป็นครูสอนขับรถในออสโลมานานกว่า 16 ปี ทั้งหมดนี้คือประสบการณ์ หัวใจ และความตั้งใจของผมที่จะช่วยพาคุณก้าวไปข้างหน้า”</span>
+          <span data-lang="no">«Thai2Drive er personlig for meg. Jeg er fra Thailand, har bodd halve livet i Sverige, og jobbet som trafikklærer i Oslo i 16 år. Dette er min erfaring, mitt hjerte og min måte å hjelpe deg videre på.»</span>
+          <span data-lang="en">“Thai2Drive is personal to me. I’m from Thailand, spent half my life in Sweden, and worked as a driving instructor in Oslo for 16 years. This is my experience, my heart, and my way of helping you move forward.”</span>
+        </p>
+        <div class="t2d-founder-sig">
+          <span class="t2d-founder-name">— Michael</span>
+          <span class="t2d-founder-role">
+            <span data-lang="th">ผู้ก่อตั้ง Thai2Drive &amp; ครูสอนขับรถ</span>
+            <span data-lang="no">grunnlegger av Thai2Drive &amp; trafikklærer</span>
+            <span data-lang="en">Founder of Thai2Drive &amp; driving instructor</span>
+          </span>
         </div>
       </div>
     </div>
@@ -2794,7 +2913,7 @@ def _stats_html() -> str:
   <div class="container">
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-num">1000+</div>
+        <div class="stat-num">2000</div>
         <div class="stat-label">
           <span data-lang="th">คำถาม</span>
           <span data-lang="no">spørsmål</span>
@@ -2948,9 +3067,9 @@ def _video_html(lang: str = "th") -> str:
           <span data-lang="en">Want to learn <span>more</span>?</span>
         </div>
         <div class="vpt-sub">
-          <span data-lang="th">1000+ คำถาม · AI ครู · ป้ายจราจร · ไทย นอร์เวย์ อังกฤษ · คอร์สวิดีโอ Premium</span>
-          <span data-lang="no">1000+ spørsmål · AI-lærer · Trafikkskilt · Thai, norsk og engelsk · Premium videokurs</span>
-          <span data-lang="en">1000+ questions · AI teacher · Traffic signs · Thai, Norwegian and English · Premium video courses</span>
+          <span data-lang="th">2000 คำถาม · AI ครู · ป้ายจราจร · ไทย นอร์เวย์ อังกฤษ · คอร์สวิดีโอ Premium</span>
+          <span data-lang="no">2000 spørsmål · AI-lærer · Trafikkskilt · Thai, norsk og engelsk · Premium videokurs</span>
+          <span data-lang="en">2000 questions · AI teacher · Traffic signs · Thai, Norwegian and English · Premium video courses</span>
         </div>
         <div class="vpt-features">{feat_html}</div>
         <a href="#pricing" class="cta-btn" style="display:inline-flex;text-decoration:none">
@@ -3096,7 +3215,7 @@ def _why_html() -> str:
 
 def _features_html() -> str:
     features = [
-        ('📚', {'th': '1000+ คำถาม', 'no': '1000+ spørsmål', 'en': '1000+ questions'},
+        ('📚', {'th': '2000 คำถาม', 'no': '2000 spørsmål', 'en': '2000 questions'},
                {'th': 'ครอบคลุมทุกหมวดหมู่ของข้อสอบใบขับขี่นอร์เวย์',
                 'no': 'Dekker alle kategoriene i den norske teoriprøven',
                 'en': 'Covers every category of the Norwegian test'}),
@@ -3735,9 +3854,9 @@ LANDING_JS = r"""
       en: 'Continue practicing in the web app',
     };
     const subs = {
-      th: 'เปิดเว็บแอปเพื่อเข้าถึงคำถามทั้งหมด 1000+ ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
-      no: 'Åpne webappen for tilgang til alle 1000+ spørsmål, forklaringer og ekte eksamensmodus.',
-      en: 'Open the web app for access to all 1000+ questions, explanations, and real exam mode.',
+      th: 'เปิดเว็บแอปเพื่อเข้าถึงคำถามทั้งหมด 2000 ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
+      no: 'Åpne webappen for tilgang til alle 2000 spørsmål, forklaringer og ekte eksamensmodus.',
+      en: 'Open the web app for access to all 2000 questions, explanations, and real exam mode.',
     };
     const ctas = {
       th: 'เปิดเว็บแอป',
@@ -3840,6 +3959,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 <body>
 {_nav_html(lang, app_query)}
 {_hero_html(lang, app_query)}
+{_founder_note_html()}
 {_reviews_wall_html()}
 {_stats_html()}
 {_try_html(lang)}

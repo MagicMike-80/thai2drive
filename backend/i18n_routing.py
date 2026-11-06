@@ -36,7 +36,7 @@ SEO_META = {
         },
         "no": {
             "title": "Teoriprøven på thai – Trygg på norsk vei | Thai2Drive",
-            "description": "Norsk teoriprøve forklart på ditt eget morsmål. 1000+ spørsmål på thai, norsk og engelsk. Laget av godkjent trafikklærer.",
+            "description": "Norsk teoriprøve forklart på ditt eget morsmål. 2000 spørsmål med bilder på thai, norsk og engelsk. Laget av godkjent trafikklærer.",
         },
         "en": {
             "title": "Norwegian driving theory test in Thai — Safe on Norwegian roads | Thai2Drive",
@@ -60,15 +60,15 @@ SEO_META = {
     "app": {
         "th": {
             "title": "แอปฝึกสอบทฤษฎีใบขับขี่นอร์เวย์ | Thai2Drive",
-            "description": "ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย กว่า 1000 ข้อ พร้อมคำอธิบาย",
+            "description": "ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย กว่า 2000 ข้อ พร้อมคำอธิบาย",
         },
         "no": {
             "title": "Øv til teoriprøven – quiz-app | Thai2Drive",
-            "description": "Øv til den norske teoriprøven med over 1000 spørsmål og forklaringer på norsk.",
+            "description": "Øv til den norske teoriprøven med over 2000 spørsmål og forklaringer på norsk.",
         },
         "en": {
             "title": "Practice the Norwegian theory test – quiz app | Thai2Drive",
-            "description": "Practice for the Norwegian driving theory test with 1000+ questions and explanations in English.",
+            "description": "Practice for the Norwegian driving theory test with 2000 questions and explanations in English.",
         },
     },
 }
