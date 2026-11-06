@@ -7217,6 +7217,7 @@ async def manual_cleanup_screenshots():
             {"source_file": {"$regex": "Screenshot_", "$options": "i"}},
             {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
             {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
+            {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
         ]},
         {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
     )
@@ -7308,6 +7309,7 @@ async def startup_strip_bad_screenshot_images():
         # 3. Strip all raw base64 data-URI screenshot images from MongoDB
         res3 = await db.questions.update_many(
             {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
+            {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
             {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
         )
         if getattr(res3, "modified_count", 0):
@@ -7315,6 +7317,18 @@ async def startup_strip_bad_screenshot_images():
     except Exception as exc:
         logging.getLogger("image_cleanup").error("Failed to strip screenshot images: %s", exc)
 
+
+@app.on_event("startup")
+async def startup_purge_private_images():
+    """Immediately wipe any sit_ images from MongoDB."""
+    try:
+        res = await db.questions.update_many(
+            {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
+            {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
+        )
+        logging.getLogger("purge").info("Purged sit_ images: %s", res.modified_count)
+    except Exception as exc:
+        logging.getLogger("purge").error("Failed purge: %s", exc)
 
 @app.on_event("startup")
 async def startup_link_t2d_verified_images():
