@@ -7201,50 +7201,27 @@ async def publish_michael_video_catalog():
 
 @app.get("/api/admin/cleanup-screenshots-now")
 async def manual_cleanup_screenshots():
-    """Emergency trigger to wipe screenshots and guarantee 100% clean image coverage for ALL questions."""
+    """Admin trigger to sync verified T2D images and report genuine database coverage."""
     from pymongo import UpdateOne
-    # 1. Clean bad screenshots
-    r_bad = await db.questions.update_many(
-        {"$or": [
-            {"source_file": {"$regex": "Screenshot_", "$options": "i"}},
-            {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
-            {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
-        ]},
-        {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
-    )
-
-    # 2. Collect image pool
-    quiz_dir = Path(__file__).parent / "public_assets" / "quiz_images"
-    sign_dir = Path(__file__).parent / "sign_images"
-    pool = []
-    if quiz_dir.exists():
-        pool.extend([f"/api/public_assets/quiz_images/{f.name}" for f in quiz_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-    if sign_dir.exists():
-        pool.extend([f"/api/sign-images/{f.name}" for f in sign_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-
-    # 3. Find ANY question missing image
-    cursor = db.questions.find(
-        {"$or": [{"bildeUrl": {"$exists": False}}, {"bildeUrl": None}, {"bildeUrl": ""}, {"bildeUrl": {"$regex": "^data:image"}}]}
-    )
-    missing_docs = await cursor.to_list(length=5000)
-    updated_count = 0
-    if missing_docs and pool:
+    pack_file = Path(__file__).parent / "content_packs" / "t2d_verified_191_images.json"
+    t2d_linked = 0
+    if pack_file.exists():
+        with open(pack_file, "r", encoding="utf-8") as f:
+            links = json.load(f)
         ops = [
-            UpdateOne({"_id": doc["_id"]}, {"$set": {"bildeUrl": pool[i % len(pool)], "active": True}})
-            for i, doc in enumerate(missing_docs)
+            UpdateOne({"id": item["id"]}, {"$set": {"bildeUrl": item["bildeUrl"], "active": True}})
+            for item in links if item.get("id") and item.get("bildeUrl")
         ]
-        res = await db.questions.bulk_write(ops, ordered=False)
-        updated_count = getattr(res, "modified_count", 0)
+        if ops:
+            res = await db.questions.bulk_write(ops, ordered=False)
+            t2d_linked = getattr(res, "modified_count", 0)
 
     total_with_img = await db.questions.count_documents({"active": True, "bildeUrl": {"$exists": True, "$nin": [None, ""]}})
     total_active = await db.questions.count_documents({"active": True})
 
     return {
         "ok": True,
-        "bad_screenshots_cleaned": getattr(r_bad, "modified_count", 0),
-        "pool_size": len(pool),
-        "missing_found": len(missing_docs),
-        "updated_count": updated_count,
+        "t2d_verified_linked": t2d_linked,
         "total_active": total_active,
         "with_image": total_with_img,
         "coverage_pct": round(total_with_img / total_active * 100, 1) if total_active else 0
@@ -7289,50 +7266,23 @@ async def startup_strip_bad_screenshot_images():
 
 
 @app.on_event("startup")
-async def startup_purge_private_images():
-    """Immediately wipe any sit_, T2D_, or unverified non-sign images from MongoDB."""
-    try:
-        res = await db.questions.update_many(
-            {"$or": [
-                {"bildeUrl": {"$regex": "sit_", "$options": "i"}},
-                {"bildeUrl": {"$regex": "Screenshot", "$options": "i"}},
-                {"bildeUrl": {"$regex": "base64", "$options": "i"}},
-                {"bildeUrl": {"$regex": "Førerprøver", "$options": "i"}}
-            ]},
-            {"$set": {"bildeUrl": "", "has_real_image": False, "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
-        )
-        logging.getLogger("purge").info("Purged unwanted images: %s", res.modified_count)
-    except Exception as exc:
-        logging.getLogger("purge").error("Failed purge: %s", exc)
-
-@app.on_event("startup")
 async def startup_link_t2d_verified_images():
-    """Guarantee 100% clean image coverage for ALL questions in MongoDB on boot."""
+    """Link verified 1:1 T2D illustrations to their questions on boot."""
     try:
         from pymongo import UpdateOne
-        # 1. Image pool
-        quiz_dir = Path(__file__).parent / "public_assets" / "quiz_images"
-        sign_dir = Path(__file__).parent / "sign_images"
-        pool = []
-        if quiz_dir.exists():
-            pool.extend([f"/api/public_assets/quiz_images/{f.name}" for f in quiz_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-        if sign_dir.exists():
-            pool.extend([f"/api/sign-images/{f.name}" for f in sign_dir.iterdir() if f.suffix.lower() in ('.png', '.jpg', '.jpeg', '.webp')])
-
-        # 2. Find and update missing
-        cursor = db.questions.find(
-            {"$or": [{"bildeUrl": {"$exists": False}}, {"bildeUrl": None}, {"bildeUrl": ""}, {"bildeUrl": {"$regex": "^data:image"}}]}
-        )
-        missing_docs = await cursor.to_list(length=5000)
-        if missing_docs and pool:
+        pack_file = Path(__file__).parent / "content_packs" / "t2d_verified_191_images.json"
+        if pack_file.exists():
+            with open(pack_file, "r", encoding="utf-8") as f:
+                links = json.load(f)
             ops = [
-                UpdateOne({"_id": doc["_id"]}, {"$set": {"bildeUrl": pool[i % len(pool)], "active": True}})
-                for i, doc in enumerate(missing_docs)
+                UpdateOne({"id": item["id"]}, {"$set": {"bildeUrl": item["bildeUrl"], "active": True}})
+                for item in links if item.get("id") and item.get("bildeUrl")
             ]
-            res = await db.questions.bulk_write(ops, ordered=False)
-            logging.getLogger("image_coverage").info("100% Image Coverage Synced: %s questions updated", res.modified_count)
+            if ops:
+                res = await db.questions.bulk_write(ops, ordered=False)
+                logging.getLogger("image_coverage").info("Synced verified T2D images: matched=%s modified=%s", res.matched_count, res.modified_count)
     except Exception as exc:
-        logging.getLogger("image_coverage").error("Failed to sync 100% image coverage: %s", exc)
+        logging.getLogger("image_coverage").error("Failed to sync verified T2D images: %s", exc)
 
 
 @app.on_event("startup")
