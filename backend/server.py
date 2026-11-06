@@ -7220,11 +7220,27 @@ async def manual_cleanup_screenshots():
         ]},
         {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
     )
+    # Also link verified T2D images
+    pack_file = Path(__file__).parent / "content_packs" / "t2d_verified_191_images.json"
+    t2d_linked = 0
+    if pack_file.exists():
+        with open(pack_file, "r", encoding="utf-8") as f:
+            links = json.load(f)
+        from pymongo import UpdateOne
+        ops = [
+            UpdateOne({"id": item["id"]}, {"$set": {"bildeUrl": item["bildeUrl"], "active": True}})
+            for item in links if item.get("id") and item.get("bildeUrl")
+        ]
+        if ops:
+            res_link = await db.questions.bulk_write(ops, ordered=False)
+            t2d_linked = getattr(res_link, "modified_count", 0)
+
     return {
         "ok": True,
         "stripped_by_id": getattr(r1, "modified_count", 0),
         "stripped_by_regex": getattr(r2, "modified_count", 0),
-        "total_held_ids": len(held_ids)
+        "total_held_ids": len(held_ids),
+        "t2d_images_linked": t2d_linked
     }
 
 
@@ -7263,6 +7279,26 @@ async def startup_strip_bad_screenshot_images():
     except Exception as exc:
         logging.getLogger("image_cleanup").error("Failed to strip screenshot images: %s", exc)
 
+
+@app.on_event("startup")
+async def startup_link_t2d_verified_images():
+    """Link verified 16:9 T2D images to questions in MongoDB."""
+    try:
+        import json
+        pack_file = Path(__file__).parent / "content_packs" / "t2d_verified_191_images.json"
+        if pack_file.exists():
+            with open(pack_file, "r", encoding="utf-8") as f:
+                links = json.load(f)
+            from pymongo import UpdateOne
+            ops = [
+                UpdateOne({"id": item["id"]}, {"$set": {"bildeUrl": item["bildeUrl"], "active": True}})
+                for item in links if item.get("id") and item.get("bildeUrl")
+            ]
+            if ops:
+                res = await db.questions.bulk_write(ops, ordered=False)
+                logging.getLogger("t2d_images").info("Linked T2D verified images: matched=%s modified=%s", res.matched_count, res.modified_count)
+    except Exception as exc:
+        logging.getLogger("t2d_images").error("Failed to link T2D verified images: %s", exc)
 
 @app.on_event("startup")
 async def startup_seed_master_quiz_catalog():

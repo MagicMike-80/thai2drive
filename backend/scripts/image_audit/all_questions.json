@@ -46,10 +46,10 @@
       "th": "เมื่อจอดรถในที่มืดนอกพื้นที่ที่มีไฟส่องสว่าง คุณต้องเปิดไฟจอดรถ",
       "en": "When parking in the dark outside lit areas, you must have parking lights on."
     },
-    "bildeUrl": null,
+    "bildeUrl": "/api/public_assets/quiz_images/T2D_543de954514cf5e2.jpg",
     "category": "Driving Conditions",
     "difficulty": "easy",
-    "active": false,
+    "active": true,
     "schema_version": 2,
     "created_at": "2026-04-12T06:24:31.084560+00:00",
     "validated": true,
@@ -58,7 +58,8 @@
       "korrekt": false,
       "tillit": "høy",
       "kommentar": "Hovedregelen er at parkeringslys ikke er påbudt ved parkering på opplyst veg eller på steder med tilstrekkelig belysning. På uopplyst veg utenfor tettbygd strøk skal kjøretøyet ha parkeringslys på, eller være merket med refleks/parkeringslyktene må være tente. Det er altså ikke et generelt krav om parkeringslys ved all parkering i mørke."
-    }
+    },
+    "source_file": "T2D_543de954514cf5e2.jpg"
   },
   {
     "id": "19e13f27-461a-4208-9bc1-0d32fd3fea22",
