@@ -7200,6 +7200,35 @@ async def publish_michael_video_catalog():
 
 
 @app.on_event("startup")
+async def startup_strip_bad_screenshot_images():
+    """Strip external screenshot images from questions in MongoDB so the question is kept, but the image is deleted."""
+    try:
+        import json
+        held_file = Path(__file__).parent / "held_screenshot_ids.json"
+        if held_file.exists():
+            with open(held_file, "r", encoding="utf-8") as f:
+                held_ids = list(json.load(f))
+            if held_ids:
+                res = await db.questions.update_many(
+                    {"id": {"$in": held_ids}},
+                    {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
+                )
+                logging.getLogger("image_cleanup").info("Stripped screenshot images from %s questions in MongoDB", getattr(res, "modified_count", 0))
+        # Also clean any questions matching Screenshot_ regex
+        res2 = await db.questions.update_many(
+            {"$or": [
+                {"source_file": {"$regex": "Screenshot_", "$options": "i"}},
+                {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
+            ]},
+            {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
+        )
+        if getattr(res2, "modified_count", 0):
+            logging.getLogger("image_cleanup").info("Stripped %s additional Screenshot_ images from MongoDB", res2.modified_count)
+    except Exception as exc:
+        logging.getLogger("image_cleanup").error("Failed to strip screenshot images: %s", exc)
+
+
+@app.on_event("startup")
 async def startup_seed_master_quiz_catalog():
     """Seed / update the 239 Master Quiz questions on startup. Fail-soft."""
     try:
