@@ -2,6 +2,13 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.3.3.0] - 2026-11-06
+
+### Added
+
+- Restore the existing account-restricted editorial book preview with private, hash-verified storage, three-language lessons, answer gating and bounded Michael explanations.
+- Keep private content outside Git and public learner catalogs; preserve quiz progress, subscriptions and the frozen mobile app.
+
 ## [0.3.2.0] - 2026-10-25
 
 ### Fixed

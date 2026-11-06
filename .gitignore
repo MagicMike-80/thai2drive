@@ -105,3 +105,6 @@ context/agent-pact.md
 
 # temporary scratch files
 scratch/
+
+/backend/private_book_assets/
+/backend/private_book_data/

@@ -1,0 +1,8 @@
+<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Thai2Drive</title><style>body{background:#081222;color:#e8edf6;font:18px system-ui;max-width:40rem;margin:15vh auto;padding:24px}a{color:#7ee8f3}</style><main><p id="message"></p><a id="login" href="/api/web"></a></main><script>
+'use strict';
+const copy={no:{wait:'Åpner privat forhåndsvisning …',login:'Logg inn i Thai2Drive og åpne denne lenken igjen.',denied:'Denne forhåndsvisningen er bare tilgjengelig for Michaels konto.'},th:{wait:'กำลังเปิดตัวอย่างส่วนตัว …',login:'เข้าสู่ระบบแล้วเปิดลิงก์นี้อีกครั้ง',denied:'ตัวอย่างนี้เปิดให้เฉพาะบัญชีของไมเคิล'},en:{wait:'Opening private preview …',login:'Sign in to Thai2Drive, then open this link again.',denied:'This preview is available only to Michael’s account.'}};
+let lang=localStorage.getItem('t2d_lang')||'th';if(!copy[lang])lang='th';document.documentElement.lang=lang==='no'?'nb':lang;
+const token=localStorage.getItem('t2d_token'), message=document.getElementById('message');message.textContent=copy[lang].wait;
+document.getElementById('login').textContent=copy[lang].login;
+if(token){fetch('/api/book-preview/session',{method:'POST',headers:{Authorization:'Bearer '+token},cache:'no-store'}).then(r=>{if(r.ok)location.replace('/api/book-preview/view?language='+lang);else message.textContent=copy[lang].denied;}).catch(()=>message.textContent=copy[lang].denied);}else{message.textContent=copy[lang].login;}
+</script></html>
