@@ -1071,7 +1071,7 @@ async def _get_exam_questions(
             {"$sample": {"size": wrong_slot}},
             {"$project": {"_id": 0}},
         ]).to_list(wrong_slot)
-        exclude_ids = [q.get("id") for q in wrong_qs if q.get("id")]
+        exclude_ids += [q.get("id") for q in wrong_qs if q.get("id")]
 
     # ── Step 4: hard questions ────────────────────────────────────────────
     hard_match: dict = {**image_filter, "difficulty": "hard"}
@@ -7199,6 +7199,35 @@ async def publish_michael_video_catalog():
         )
 
 
+@app.get("/api/admin/cleanup-screenshots-now")
+async def manual_cleanup_screenshots():
+    """Emergency trigger to wipe all base64 and screenshot images from MongoDB while keeping all questions."""
+    import json
+    held_file = Path(__file__).parent / "held_screenshot_ids.json"
+    held_ids = []
+    if held_file.exists():
+        with open(held_file, "r", encoding="utf-8") as f:
+            held_ids = list(json.load(f))
+    r1 = await db.questions.update_many(
+        {"id": {"$in": held_ids}},
+        {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
+    )
+    r2 = await db.questions.update_many(
+        {"$or": [
+            {"source_file": {"$regex": "Screenshot_", "$options": "i"}},
+            {"bildeUrl": {"$regex": "Screenshot_", "$options": "i"}},
+            {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
+        ]},
+        {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
+    )
+    return {
+        "ok": True,
+        "stripped_by_id": getattr(r1, "modified_count", 0),
+        "stripped_by_regex": getattr(r2, "modified_count", 0),
+        "total_held_ids": len(held_ids)
+    }
+
+
 @app.on_event("startup")
 async def startup_strip_bad_screenshot_images():
     """Strip external screenshot images from questions in MongoDB so the question is kept, but the image is deleted."""
@@ -7224,6 +7253,13 @@ async def startup_strip_bad_screenshot_images():
         )
         if getattr(res2, "modified_count", 0):
             logging.getLogger("image_cleanup").info("Stripped %s additional Screenshot_ images from MongoDB", res2.modified_count)
+        # 3. Strip all raw base64 data-URI screenshot images from MongoDB
+        res3 = await db.questions.update_many(
+            {"bildeUrl": {"$regex": "^data:image", "$options": "i"}},
+            {"$set": {"bildeUrl": "", "bildeUrl_original_backup": "", "source_file": "", "sha256": ""}}
+        )
+        if getattr(res3, "modified_count", 0):
+            logging.getLogger("image_cleanup").info("Stripped %s base64 data-URI images from MongoDB", res3.modified_count)
     except Exception as exc:
         logging.getLogger("image_cleanup").error("Failed to strip screenshot images: %s", exc)
 
