@@ -94,13 +94,19 @@ def build_master_quiz_operations(payload_path: Optional[Path] = None) -> list[Up
         doc_id = q.get("id")
         if not doc_id:
             continue
-        update_fields = {k: v for k, v in q.items() if k != "id"}
+        # Existing image choices may have been corrected in admin. A catalog
+        # seed must never overwrite those question-to-image links on restart.
+        update_fields = {k: v for k, v in q.items() if k not in ("id", "bildeUrl")}
+        insert_fields = {"id": doc_id, "created_at": q.get("updated_at")}
+        image_url = q.get("bildeUrl") or ""
+        if image_url.startswith("/api/public_assets/quiz_images/"):
+            insert_fields["bildeUrl"] = image_url
         operations.append(
             UpdateOne(
                 {"id": doc_id},
                 {
                     "$set": update_fields,
-                    "$setOnInsert": {"id": doc_id, "created_at": q.get("updated_at")},
+                    "$setOnInsert": insert_fields,
                 },
                 upsert=True,
             )
