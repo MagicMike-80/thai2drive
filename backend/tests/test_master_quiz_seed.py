@@ -40,12 +40,12 @@ class MasterQuizSeedTests(unittest.TestCase):
             self.assertIn(q["correctOptionId"], ("A", "B", "C", "D"))
             self.assertTrue(q["bildeUrl"].startswith("data:image/jpeg;base64,"))
 
-    def test_seeding_executes_bulk_write_with_239_operations(self):
+    def test_seeding_executes_bulk_write_with_240_operations(self):
         mock_col = _MockCollection()
         result = seed_master_quiz_sync(mock_col)
-        self.assertEqual(result["total"], 239)
-        self.assertEqual(result["upserted"], 239)
-        self.assertEqual(len(mock_col.operations), 239)
+        self.assertEqual(result["total"], 240)
+        self.assertEqual(result["upserted"], 240)
+        self.assertEqual(len(mock_col.operations), 240)
 
 if __name__ == "__main__":
     unittest.main()
