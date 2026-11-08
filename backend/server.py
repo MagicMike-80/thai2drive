@@ -8,6 +8,7 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 from pymongo import ReturnDocument
 from pymongo.errors import DuplicateKeyError
 import os
+import json
 import logging
 import hashlib
 import smtplib
@@ -3302,7 +3303,7 @@ class CampaignRegisterRequest(BaseModel):
 
 CAMPAIGN_SOLD_OUT_MSG = {
     "th": "แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว) โปรดติดตามข้อเสนอใหม่เร็วๆ นี้ครับผม",
-    "no": "Kampanjen er nå fulltegnet (50 av 50 plasser er tatt). Følg med for nye tilbud!",
+    "no": "Beklager, alle 50 plassene er tatt",
     "en": "This campaign is now fully booked (50 of 50 spots taken). Stay tuned for new offers!"
 }
 
@@ -3361,6 +3362,45 @@ class _CampaignClaimConflict(Exception):
         self.response = response
 
 
+def _send_free30_confirmation_sync(to_email: str, premium_until: str) -> tuple[bool, str]:
+    """Send a confirmation only after the campaign transaction commits."""
+    import urllib.request
+
+    expiry = datetime.fromisoformat(premium_until.replace("Z", "+00:00"))
+    date_text = expiry.astimezone(ZoneInfo("Europe/Oslo")).strftime("%d.%m.%Y")
+    message = f"FREE30 er aktivert – Premium til {date_text}"
+    sendgrid_key = os.environ.get("SENDGRID_API_KEY", "").strip()
+    resend_key = os.environ.get("RESEND_API_KEY", "").strip()
+    if sendgrid_key:
+        payload = json.dumps({
+            "personalizations": [{"to": [{"email": to_email}]}],
+            "from": {
+                "email": os.environ.get("SENDGRID_FROM_EMAIL", "noreply@thai2drive.no").strip(),
+                "name": os.environ.get("SENDGRID_FROM_NAME", "Thai2Drive").strip(),
+            },
+            "subject": message,
+            "content": [{"type": "text/plain", "value": message}],
+        }).encode("utf-8")
+        url = "https://api.sendgrid.com/v3/mail/send"
+        headers = {"Authorization": f"Bearer {sendgrid_key}", "Content-Type": "application/json"}
+    elif resend_key:
+        payload = json.dumps({
+            "from": os.environ.get("RESEND_FROM", "Thai2Drive <onboarding@resend.dev>").strip(),
+            "to": [to_email], "subject": message, "text": message,
+        }).encode("utf-8")
+        url = "https://api.resend.com/emails"
+        headers = {"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"}
+    else:
+        return False, "email_provider_not_configured"
+
+    try:
+        request = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+        with urllib.request.urlopen(request, timeout=15) as response:
+            return response.status in (200, 201, 202), f"http_{response.status}"
+    except Exception as exc:
+        return False, type(exc).__name__
+
+
 @api_router.post("/campaign/register")
 @app.post("/api/campaign/register")
 async def register_campaign_user(
@@ -3375,6 +3415,7 @@ async def register_campaign_user(
     user_id = str(current_user.get("sub") or "").strip()
     if not user_id:
         return JSONResponse(status_code=401, content={"success": False, "error": "authentication_required"})
+    confirmation_email = None
     # Initialize only a serialization document; this does not grant a seat.
     try:
         await db.campaign_counters.update_one(
@@ -3384,6 +3425,7 @@ async def register_campaign_user(
         pass
 
     async def claim(session):
+        nonlocal confirmation_email
         # Every claimant writes the same document first. Mongo retries conflicts
         # with a fresh snapshot; capacity is the committed claim count, not sequence.
         await db.campaign_counters.find_one_and_update(
@@ -3454,6 +3496,7 @@ async def register_campaign_user(
             msg = CAMPAIGN_USED_MSG[lang]
             raise _CampaignClaimConflict(JSONResponse(status_code=409, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg}))
 
+        confirmation_email = user_doc.get("email")
         success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
         return JSONResponse(status_code=200, content={
             "success": True,
@@ -3468,9 +3511,16 @@ async def register_campaign_user(
 
     try:
         async with await db.client.start_session() as session:
-            return await session.with_transaction(claim)
+            response = await session.with_transaction(claim)
     except _CampaignClaimConflict as conflict:
         return conflict.response
+    if response.status_code == 200 and confirmation_email:
+        sent, reason = await asyncio.to_thread(
+            _send_free30_confirmation_sync, confirmation_email, json.loads(response.body)["premium_until"]
+        )
+        if not sent:
+            logging.getLogger("campaign").error("free30_confirmation_failed reason=%s", reason)
+    return response
 
 
 # ==================== ADMIN ROUTES ====================

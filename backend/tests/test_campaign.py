@@ -1,7 +1,9 @@
 """Offline tests for the account-bound 30-day Premium campaign."""
 import re
+import json
 import sys
 import unittest
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
@@ -125,6 +127,30 @@ class TestCampaignBackend(unittest.TestCase):
         expires = datetime.fromisoformat(inserted["trial_expires_at"])
         self.assertEqual(expires - started, timedelta(days=30))
 
+    def test_confirmation_is_sent_only_for_a_committed_claim(self):
+        with patch.object(server, "_send_free30_confirmation_sync", return_value=(True, "sent")) as send:
+            response = self.register("no")
+            self.assertEqual(response.status_code, 200)
+            send.assert_called_once_with(self.account["email"], response.json()["premium_until"])
+
+            send.reset_mock()
+            self.mock_campaign_users.count_documents.return_value = 50
+            response = self.register("no")
+            self.assertEqual(response.json()["error"], "campaign_sold_out")
+            send.assert_not_called()
+
+    def test_sendgrid_confirmation_contains_expiry_date(self):
+        expiry = "2026-12-08T12:00:00+00:00"
+        with patch.dict(server.os.environ, {"SENDGRID_API_KEY": "test-key", "SENDGRID_FROM_EMAIL": "noreply@thai2drive.no"}), patch.object(urllib.request, "urlopen") as open_url:
+            open_url.return_value.__enter__.return_value.status = 202
+            sent, reason = server._send_free30_confirmation_sync(self.account["email"], expiry)
+        self.assertTrue(sent)
+        self.assertEqual(reason, "http_202")
+        request = open_url.call_args.args[0]
+        payload = json.loads(request.data)
+        self.assertEqual(payload["subject"], "FREE30 er aktivert – Premium til 08.12.2026")
+        self.assertEqual(payload["content"][0]["value"], payload["subject"])
+
     def test_response_language_isolated_for_thai_english_and_norwegian(self):
         for language, expected, forbidden in (
             ("th", "ยินดีด้วยครับ", "Congratulations"),
@@ -191,6 +217,9 @@ class TestCampaignBackend(unittest.TestCase):
         self.assertEqual(response.json()["error"], "campaign_sold_out")
         self.mock_campaign_users.insert_one.assert_not_awaited()
         self.mock_users.update_one.assert_not_awaited()
+
+        response_no = self.register("no")
+        self.assertEqual(response_no.json()["message"], "Beklager, alle 50 plassene er tatt")
 
     def test_50th_claim_uses_committed_count_not_old_sequence(self):
         self.mock_campaign_users.count_documents.return_value = 49
