@@ -5027,6 +5027,11 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
+      <div id="launchBanner" style="display:none;align-items:center;gap:10px;background:#f97316;color:#0F172A;border-radius:12px;padding:10px 14px;margin:0 0 16px;font-weight:700;font-size:.9rem;line-height:1.35;">
+        <a href="mailto:admin@thai2drive.no" style="flex:1;color:#0F172A;text-decoration:none;"><span data-key="launch_banner"></span></a>
+        <button type="button" aria-label="Close" onclick="document.getElementById('launchBanner').style.display='none';try{sessionStorage.setItem('t2d_launch_banner_closed','1');}catch(e){}" style="background:none;border:0;color:#0F172A;font-size:1.3rem;line-height:1;cursor:pointer;padding:0 4px;">&times;</button>
+      </div>
+
       <div class="home-main-label" data-key="home_choose_action">Velg hva du vil gjøre</div>
       <button class="home-cta" onclick="startRandomQuiz()">
         <span data-key="home_primary_action">▶ Start quiz / daglig test</span>
@@ -6057,6 +6062,7 @@ var UI = {
   bm_short:    {th:'บุ๊กมาร์ก',         no:'Bokmerker',        en:'Bookmarks'},
   hist_short:  {th:'ประวัติ',            no:'Historikk',        en:'History'},
   loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},
+  launch_banner: {th:'เปิดตัว: FREE30 – พรีเมียมฟรี 30 วัน – จำกัด 50 ที่ – ส่งอีเมลถึง admin@thai2drive.no เพื่อเปิดใช้งาน', no:'LANSERING: FREE30 – 30 dager gratis Premium – 50 plasser – Send e-post til admin@thai2drive.no for å aktivere', en:'LAUNCH: FREE30 – 30 days free Premium – 50 spots – Email admin@thai2drive.no to activate'},
   streak:      {th:'วันติดต่อกัน',     no:'dagers rekke',    en:'day streak'},
   answered:    {th:'ตอบแล้ว',          no:'BESVART',          en:'ANSWERED'},
   correct_stat:{th:'ถูกต้อง',           no:'RIKTIGE',          en:'CORRECT'},
@@ -6555,6 +6561,14 @@ function applyUILang() {
   document.documentElement.lang = appLang === 'no' ? 'nb' : appLang;
   var metaDescription = document.getElementById('metaDescription');
   if (metaDescription) metaDescription.setAttribute('content', t('meta_description'));
+  (function() {
+    var lb = document.getElementById('launchBanner');
+    if (!lb) return;
+    var closed = false;
+    try { closed = sessionStorage.getItem('t2d_launch_banner_closed') === '1'; } catch (e) {}
+    var txt = (UI.launch_banner && typeof UI.launch_banner[appLang] === 'string') ? UI.launch_banner[appLang].trim() : '';
+    lb.style.display = (!closed && txt) ? 'flex' : 'none';
+  })();
   // Generic text and placeholders first, so every visible static label follows appLang.
   document.querySelectorAll('[data-key]').forEach(function(el) {
     var key = el.getAttribute('data-key');
