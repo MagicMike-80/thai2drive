@@ -122,7 +122,8 @@ class TestCampaignBackend(unittest.TestCase):
         inserted = self.mock_campaign_users.insert_one.await_args.args[0]
         self.assertEqual(inserted["user_id"], "synthetic-user-001")
         self.assertEqual(inserted["_id"], "free30-2026-10:synthetic-user-001")
-        self.assertFalse({"email", "phone", "name", "password"}.intersection(inserted))
+        self.assertEqual(inserted["email"], self.account["email"])
+        self.assertFalse({"phone", "name", "password"}.intersection(inserted))
         started = datetime.fromisoformat(inserted["trial_started_at"])
         expires = datetime.fromisoformat(inserted["trial_expires_at"])
         self.assertEqual(expires - started, timedelta(days=30))

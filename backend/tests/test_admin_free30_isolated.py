@@ -13,6 +13,7 @@ from unittest.mock import AsyncMock, MagicMock
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
+from pydantic import ValidationError
 from pymongo import ReturnDocument
 from pymongo.errors import DuplicateKeyError
 from starlette.responses import JSONResponse
@@ -27,6 +28,7 @@ def actual_namespace():
         "_user_has_active_trial", "_user_has_active_premium", "_access_expires_at",
         "require_admin", "AdminFree30LookupRequest", "AdminFree30ActivateRequest",
         "_admin_free30_user", "admin_free30_lookup", "admin_free30_activate",
+        "AdminFreePeriodRequest", "admin_free30_free_period",
     }
     async def get_current_user():
         raise HTTPException(status_code=401)
@@ -53,6 +55,7 @@ class AdminFree30Tests(unittest.TestCase):
         self.ns = actual_namespace()
         self.user = {"id":"learner-1", "email":"learner@example.test", "is_premium":False, "trial_used":False}
         self.claims = []
+        self.grants = {}
         self.db = MagicMock()
         self.db.admin_users.find_one = AsyncMock(return_value={"email":"admin@example.test"})
         async def find_user(query, *args, **kwargs):
@@ -69,6 +72,9 @@ class AdminFree30Tests(unittest.TestCase):
         self.db.campaign_users.count_documents = AsyncMock(side_effect=lambda *a,**k:len(self.claims))
         async def insert_claim(doc, **kwargs): self.claims.append(dict(doc))
         self.db.campaign_users.insert_one = AsyncMock(side_effect=insert_claim)
+        self.db.manual_premium_grants.find_one = AsyncMock(side_effect=lambda q,**k:self.grants.get(q['_id']))
+        async def insert_grant(doc, **kwargs): self.grants[doc['_id']] = dict(doc)
+        self.db.manual_premium_grants.insert_one = AsyncMock(side_effect=insert_grant)
         class Session:
             async def __aenter__(self): return self
             async def __aexit__(self,*args): return False
@@ -99,19 +105,21 @@ class AdminFree30Tests(unittest.TestCase):
         credentials=HTTPAuthorizationCredentials(scheme="Bearer",credentials=raw.removeprefix("Bearer ")) if raw else None
         try:
             admin=self.finish(self.ns["require_admin"](credentials))
-            model=self.ns["AdminFree30LookupRequest" if path=="lookup" else "AdminFree30ActivateRequest"](**body)
-            response=self.finish(self.ns["admin_free30_"+path](model,admin))
+            model=self.ns[{'lookup':'AdminFree30LookupRequest','activate':'AdminFree30ActivateRequest','free-period':'AdminFreePeriodRequest'}[path]](**body)
+            response=self.finish(self.ns["admin_free30_"+path.replace('-','_')](model,admin))
             if isinstance(response,dict): response=JSONResponse(response)
         except HTTPException as error:
             response=JSONResponse({"detail":error.detail},status_code=error.status_code)
+        except ValidationError:
+            response=JSONResponse({"detail":"invalid request"},status_code=422)
         return SimpleNamespace(status_code=response.status_code,text=response.body.decode(),json=lambda:json.loads(response.body))
 
     def post(self,path,**body):
         return self.request(path,body,self.headers)
 
     def test_both_routes_require_admin_and_reject_missing_or_invalid_tokens(self):
-        for path in ["lookup","activate"]:
-            body={"email":self.user["email"],"user_id":self.user["id"]}
+        for path in ["lookup","activate","free-period"]:
+            body={"email":self.user["email"],"user_id":self.user["id"],"days":60,"request_id":"00000000-0000-4000-8000-000000000001"}
             for headers in [{},{"Authorization":"Bearer invalid"}]:
                 self.assertEqual(self.request(path,body,headers).status_code,401)
             self.db.admin_users.find_one.return_value=None
@@ -179,6 +187,73 @@ class AdminFree30Tests(unittest.TestCase):
         self.user.update(trial_expires_at=(datetime.now(timezone.utc)-timedelta(seconds=1)).isoformat(),trial_used=True)
         self.assertFalse(self.ns["_user_has_active_premium"](self.user))
         self.assertIsNone(self.ns["_access_expires_at"](self.user))
+
+    def manual(self, **overrides):
+        data=dict(email=self.user['email'],user_id=self.user['id'],days=60,
+                  request_id='00000000-0000-4000-8000-000000000001')
+        data.update(overrides)
+        return self.post('free-period',**data)
+
+    def test_manual_grant_uses_existing_access_contract_and_audits(self):
+        self.assertEqual(self.manual().status_code,200)
+        self.assertTrue(self.ns['_user_has_active_premium'](self.user))
+        start=datetime.fromisoformat(self.user['trial_started_at'])
+        expiry=datetime.fromisoformat(self.user['trial_expires_at'])
+        self.assertEqual(expiry-start,timedelta(days=60))
+        grant=next(iter(self.grants.values()))
+        self.assertEqual(grant['email'],self.user['email'])
+        self.assertEqual(grant['activated_by_admin'],'admin-1')
+        self.assertEqual(len(self.claims),0)
+        self.send.assert_not_called()
+
+    def test_manual_retry_is_idempotent_and_changed_request_rejected(self):
+        first=self.manual().json()
+        again=self.manual().json()
+        self.assertEqual(first['premium_until'],again['premium_until'])
+        self.assertTrue(again['replayed'])
+        self.assertEqual(self.manual(days=30).status_code,409)
+        self.assertEqual(len(self.grants),1)
+        self.db.users.update_one.assert_awaited_once()
+
+    def test_manual_period_preserves_paid_billing_and_existing_trial(self):
+        paid=(datetime.now(timezone.utc)+timedelta(days=10)).isoformat()
+        trial=(datetime.now(timezone.utc)+timedelta(days=20)).isoformat()
+        self.user.update(is_premium=True,premium_expires_at=paid,trial_expires_at=trial,
+                         stripe_subscription_id='synthetic-sub',subscription_status='active')
+        result=self.manual().json()
+        self.assertEqual(datetime.fromisoformat(result['premium_until']),datetime.fromisoformat(trial)+timedelta(days=60))
+        for key,value in [('premium_expires_at',paid),('stripe_subscription_id','synthetic-sub'),('subscription_status','active'),('is_premium',True)]:
+            self.assertEqual(self.user[key],value)
+
+    def test_manual_validation_and_ineligible_accounts(self):
+        for days in [0,-1,366,1.5,True,'60']:
+            self.assertEqual(self.manual(days=days).status_code,422)
+        self.assertEqual(self.manual(user_id='wrong').status_code,409)
+        self.assertEqual(self.manual(request_id='invalid').status_code,422)
+        for flag in ['disabled','deleted_at','is_admin','is_premium']:
+            self.user[flag]=True
+            self.assertIn(self.manual().status_code,[404,409])
+            del self.user[flag]
+        self.db.users.update_one.assert_not_awaited()
+
+    def test_lookup_displays_name_used_status_and_disables_disabled_account(self):
+        self.user['name']='Synthetic learner'
+        data=self.post('lookup',email=self.user['email']).json()
+        self.assertEqual(data['name'],'Synthetic learner')
+        self.assertFalse(data['free30_used'])
+        self.assertFalse(data['premium_active'])
+        self.assertTrue(data['manual_eligible'])
+        self.user['disabled']=True
+        self.assertEqual(self.post('lookup',email=self.user['email']).status_code,404)
+
+    def test_free30_email_is_retained_and_checked_for_recreated_account(self):
+        self.assertEqual(self.post('activate',email=self.user['email'],user_id=self.user['id']).status_code,200)
+        self.assertEqual(self.claims[0]['email'],self.user['email'])
+        self.user={'id':'recreated','email':self.user['email']}
+        result=self.post('activate',email=self.user['email'],user_id=self.user['id'])
+        self.assertEqual(result.json()['error'],'already_registered')
+        query=self.db.campaign_users.find_one.await_args.args[0]
+        self.assertIn({'email':self.user['email']},query['$or'])
 
 
 if __name__ == "__main__": unittest.main()
