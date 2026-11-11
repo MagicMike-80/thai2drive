@@ -18,7 +18,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import Depends
+from fastapi import BackgroundTasks, Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from pymongo import MongoClient, ReturnDocument
@@ -47,7 +47,7 @@ def actual_claim_namespace():
         ):
             nodes.append(node)
     namespace = dict(datetime=datetime, timedelta=timedelta, timezone=timezone,
-                     Optional=Optional, BaseModel=BaseModel, Depends=Depends,
+                     Optional=Optional, BaseModel=BaseModel, Depends=Depends, BackgroundTasks=BackgroundTasks,
                      get_current_user=lambda: None, ReturnDocument=ReturnDocument,
                      DuplicateKeyError=DuplicateKeyError, JSONResponse=JSONResponse,
                      asyncio=asyncio, json=json, logging=logging,

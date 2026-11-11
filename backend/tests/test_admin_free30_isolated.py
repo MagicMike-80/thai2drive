@@ -10,7 +10,7 @@ from types import SimpleNamespace
 from typing import Optional
 from unittest.mock import AsyncMock, MagicMock
 
-from fastapi import APIRouter, Depends, FastAPI, HTTPException
+from fastapi import BackgroundTasks, APIRouter, Depends, FastAPI, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 from pydantic import ValidationError
@@ -36,7 +36,7 @@ def actual_namespace():
     async def inline_thread(func, *args):
         return func(*args)
     ns = dict(datetime=datetime, timedelta=timedelta, timezone=timezone, Optional=Optional,
-              BaseModel=BaseModel, Field=Field, Depends=Depends, HTTPException=HTTPException,
+              BackgroundTasks=BackgroundTasks, BaseModel=BaseModel, Field=Field, Depends=Depends, HTTPException=HTTPException,
               HTTPAuthorizationCredentials=HTTPAuthorizationCredentials,
               security=HTTPBearer(auto_error=False), get_current_user=get_current_user,
               ReturnDocument=ReturnDocument, DuplicateKeyError=DuplicateKeyError,
@@ -175,6 +175,19 @@ class AdminFree30Tests(unittest.TestCase):
         self.assertEqual(datetime.fromisoformat(self.user["trial_expires_at"]),expires)
         self.db.users.update_one.assert_awaited_once()
         self.send.assert_called_once_with(self.user["email"],expires.isoformat())
+
+    def test_self_service_returns_committed_expiry_before_email_runs(self):
+        tasks = BackgroundTasks()
+        response = self.finish(self.ns["register_campaign_user"](
+            self.ns["CampaignRegisterRequest"](language="th"),
+            {"sub": self.user["id"]}, tasks))
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.body)
+        self.assertEqual(payload["premium_until"], self.user["trial_expires_at"])
+        self.send.assert_not_called()
+        self.assertEqual(len(tasks.tasks), 1)
+        self.assertEqual(tasks.tasks[0].args, (self.user["email"], payload["premium_until"]))
+        self.assertEqual(len(self.claims), 1)
 
     def test_email_failure_does_not_roll_back_or_hide_grant(self):
         self.send.return_value=(False,"synthetic_failure")
