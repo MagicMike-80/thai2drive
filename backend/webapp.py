@@ -15217,7 +15217,11 @@ def _serve_app(request: Request, lang: str):
         return api_redirect
     if MAINTENANCE_MODE:
         return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
-    response = HTMLResponse(content=_webapp_html(lang))
+    response = HTMLResponse(content=_webapp_html(lang), headers={
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    })
     set_lang_cookie(response, lang)
     return response
 
