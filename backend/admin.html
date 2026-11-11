@@ -212,6 +212,7 @@
   <!-- ── MEDIA CATALOG & SIGNS CMS VIEW ───────────────────── -->
   <section id="free30-view" style="display:none;background:var(--panel);padding:20px;border-radius:12px;margin-bottom:16px">
     <h2>Aktiver FREE30</h2>
+    <p id="free30-count" role="status">Henter ledige plasser…</p>
     <p>Bruk e-postadressen kunden registrerte seg med. Tilbudet gir 30 dager gratis Premium fra aktivering, uten automatisk betaling.</p>
     <form id="free30-form" onsubmit="event.preventDefault(); lookupFree30()">
       <label for="free30-email">Kundens e-postadresse</label>
@@ -223,6 +224,12 @@
     </form>
     <p id="free30-result" role="status" aria-live="polite" style="white-space:pre-line"></p>
     <button id="free30-activate" type="button" onclick="activateFree30()" disabled style="padding:12px">Aktiver 30 dager gratis</button>
+    <hr style="margin:20px 0;border-color:#475569">
+    <h3>Gratisperiode for spesialtilfeller</h3>
+    <p>Legges etter eksisterende tilgang, eller fra nå hvis kunden ikke har Premium. Bruker ingen FREE30-plass. Oppretter ingen betaling og avslutter ikke eksisterende abonnementer.</p>
+    <label for="free30-days">Antall dager (1–365)</label>
+    <input id="free30-days" type="number" min="1" max="365" step="1" value="60" style="width:90px;padding:12px">
+    <button id="free30-manual" type="button" onclick="activateFreePeriod()" disabled style="padding:12px">Aktiver gratisperiode</button>
   </section>
 
   <div id="media-view" style="display:none">
@@ -435,10 +442,21 @@ async function api(path, opts = {}) {
 let free30Customer = null;
 let free30Request = 0;
 let free30Busy = false;
+let free30ManualRequest = null;
+async function refreshFree30Count() {
+  const output = document.getElementById('free30-count');
+  try {
+    const status = await api('/campaign/status');
+    output.textContent = 'FREE30 igjen: ' + status.remaining + ' av ' + status.total_seats;
+  } catch (_) { output.textContent = 'Kunne ikke hente antall plasser.'; }
+}
 function clearFree30() {
   free30Request++;
   free30Customer = null;
   document.getElementById('free30-activate').disabled = true;
+  document.getElementById('free30-manual').disabled = true;
+  free30ManualRequest = null;
+  if (!free30Busy) document.getElementById('free30-days').disabled = false;
   document.getElementById('free30-result').textContent = '';
 }
 function free30Date(value) {
@@ -455,10 +473,18 @@ async function lookupFree30() {
     const customer = await api('/admin/free30/lookup', {method:'POST', body:JSON.stringify({email})});
     if (request !== free30Request) return;
     free30Customer = customer;
-    output.textContent = customer.email + '\n' + (customer.eligible
+    output.textContent = (customer.name || 'Navn ikke registrert') + '\n' + customer.email
+      + '\nPremium: ' + (customer.premium_active ? 'Aktiv' : 'Ikke aktiv')
+      + '\nFREE30 brukt: ' + (customer.free30_used ? 'Ja' : 'Nei')
+      + (customer.free30_activated_at ? '\nFREE30 aktivert: ' + free30Date(customer.free30_activated_at) : '')
+      + (customer.free30_activated_by ? '\nAktivert av: ' + customer.free30_activated_by : '')
+      + '\n' + (customer.eligible
       ? 'Kan få FREE30. ' + customer.remaining_seats + ' plasser igjen. Bekreft e-postadressen før du aktiverer.'
       : customer.reason) + (customer.premium_until ? '\nPremium til ' + free30Date(customer.premium_until) : '');
     document.getElementById('free30-activate').disabled = !customer.eligible;
+    document.getElementById('free30-manual').disabled = !customer.manual_eligible;
+    document.getElementById('free30-count').textContent = 'FREE30 igjen: ' + customer.remaining_seats + ' av 50';
+    if (customer.billing_linked) output.textContent += '\nStripe-abonnement er registrert. Kontroller oppsigelsen i Stripe separat.';
   } catch (error) {
     if (request === free30Request) output.textContent = error.message;
   }
@@ -468,7 +494,7 @@ async function activateFree30() {
   const customer = free30Customer;
   free30Busy = true;
   free30Request++;
-  for (const id of ['free30-activate','free30-search','free30-email']) document.getElementById(id).disabled = true;
+  for (const id of ['free30-activate','free30-manual','free30-days','free30-search','free30-email']) document.getElementById(id).disabled = true;
   const output = document.getElementById('free30-result');
   output.textContent = 'Aktiverer FREE30 for ' + customer.email + '…';
   try {
@@ -484,6 +510,40 @@ async function activateFree30() {
     free30Customer = null;
     document.getElementById('free30-search').disabled = false;
     document.getElementById('free30-email').disabled = false;
+    document.getElementById('free30-days').disabled = false;
+    refreshFree30Count();
+  }
+}
+
+async function activateFreePeriod() {
+  if (free30Busy || !free30Customer || !free30Customer.manual_eligible) return;
+  const days = Number(document.getElementById('free30-days').value);
+  if (!Number.isInteger(days) || days < 1 || days > 365) {
+    document.getElementById('free30-result').textContent = 'Velg et helt antall dager fra 1 til 365.';
+    return;
+  }
+  const customer = free30Customer;
+  // Keep the exact request after a network failure; retry cannot add another period.
+  if (!free30ManualRequest) free30ManualRequest = {
+    email:customer.email, user_id:customer.user_id, days, request_id:crypto.randomUUID()
+  };
+  free30Busy = true;
+  free30Request++;
+  for (const id of ['free30-activate','free30-manual','free30-days','free30-search','free30-email']) document.getElementById(id).disabled = true;
+  const output = document.getElementById('free30-result');
+  try {
+    const result = await api('/admin/free30/free-period', {method:'POST', body:JSON.stringify(free30ManualRequest)});
+    output.textContent = 'Gratisperiode aktivert for ' + customer.email + '\nPremium til ' + free30Date(result.premium_until)
+      + '.\nIngen ny betaling opprettet. Bekreftelse må sendes manuelt.';
+    free30Customer = null;
+    free30ManualRequest = null;
+  } catch (error) {
+    output.textContent = error.message + '\nPrøv samme aktivering igjen, eller søk på nytt for å kontrollere lagret sluttdato.';
+    document.getElementById('free30-manual').disabled = false;
+  } finally {
+    free30Busy = false;
+    for (const id of ['free30-search','free30-email']) document.getElementById(id).disabled = false;
+    document.getElementById('free30-days').disabled = !!free30ManualRequest;
   }
 }
 
@@ -1247,6 +1307,7 @@ document.getElementById('password').addEventListener('keydown', e => {
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════════
 function switchTab(tab) {
+  if (tab === 'free30') refreshFree30Count();
   document.getElementById('free30-view').style.display = tab === 'free30' ? '' : 'none';
   document.getElementById('tab-free30').classList.toggle('active', tab === 'free30');
   document.getElementById('questions-view').style.display  = tab === 'questions'  ? '' : 'none';

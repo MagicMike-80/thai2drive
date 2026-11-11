@@ -3443,7 +3443,10 @@ async def register_campaign_user(
             msg = CAMPAIGN_USED_MSG[lang]
             return JSONResponse(status_code=400, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg})
 
-        existing = await db.campaign_users.find_one({"campaign_id": "free30-2026-10", "user_id": user_id}, session=session)
+        existing = await db.campaign_users.find_one({
+            "campaign_id": "free30-2026-10",
+            "$or": [{"user_id": user_id}, {"email": user_doc["email"].strip().lower()}],
+        }, session=session)
         if existing:
             msg = CAMPAIGN_DUPLICATE_MSG[lang]
             return JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg})
@@ -3462,6 +3465,7 @@ async def register_campaign_user(
             "user_id": user_id,
             "language": lang,
             "campaign_index": campaign_index,
+            "email": user_doc["email"].strip().lower(),
             "trial_started_at": now.isoformat(),
             "trial_expires_at": premium_until,
             "created_at": now.isoformat(),
@@ -4674,6 +4678,11 @@ class AdminFree30ActivateRequest(AdminFree30LookupRequest):
     user_id: str = Field(min_length=1, max_length=100)
 
 
+class AdminFreePeriodRequest(AdminFree30ActivateRequest):
+    days: int = Field(ge=1, le=365, strict=True)
+    request_id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+
+
 async def _admin_free30_user(email: str) -> dict:
     # Exact normalized address only; never expose password hashes or unrelated users.
     normalized = email.strip().lower()
@@ -4683,8 +4692,10 @@ async def _admin_free30_user(email: str) -> dict:
         "_id": 0, "id": 1, "email": 1, "is_admin": 1, "is_premium": 1,
         "premium_expires_at": 1, "trial_expires_at": 1,
         "trial_started_at": 1, "trial_used": 1,
+        "name": 1, "full_name": 1, "disabled": 1, "deleted_at": 1,
+        "stripe_subscription_id": 1,
     })
-    if not user:
+    if not user or user.get("disabled") or user.get("deleted_at"):
         raise HTTPException(status_code=404, detail="Kontoen finnes ikke. Kunden må registrere seg først.")
     return user
 
@@ -4693,8 +4704,10 @@ async def _admin_free30_user(email: str) -> dict:
 async def admin_free30_lookup(req: AdminFree30LookupRequest, _: dict = Depends(require_admin)):
     user = await _admin_free30_user(req.email)
     claimed = await db.campaign_users.find_one(
-        {"campaign_id": "free30-2026-10", "user_id": user["id"]},
-        {"_id": 0, "trial_expires_at": 1},
+        {"campaign_id": "free30-2026-10", "$or": [
+            {"user_id": user["id"]}, {"email": user["email"].strip().lower()},
+        ]},
+        {"_id": 0, "trial_expires_at": 1, "created_at": 1, "activated_by_admin": 1},
     )
     count = await db.campaign_users.count_documents({"campaign_id": "free30-2026-10"})
     reason = ""
@@ -4710,6 +4723,15 @@ async def admin_free30_lookup(req: AdminFree30LookupRequest, _: dict = Depends(r
         reason = "Alle 50 kampanjeplassene er tatt."
     return {
         "user_id": user["id"], "email": user["email"],
+        "name": user.get("name") or user.get("full_name") or "",
+        "premium_active": _user_has_active_premium(user),
+        "free30_used": bool(claimed),
+        "free30_activated_at": (claimed or {}).get("created_at"),
+        "free30_activated_by": (claimed or {}).get("activated_by_admin"),
+        "manual_eligible": not user.get("is_admin") and not (
+            _paid_premium_active(user) and not _access_expires_at(user)
+        ),
+        "billing_linked": bool(user.get("stripe_subscription_id")),
         "eligible": not bool(reason), "reason": reason,
         "premium_until": _access_expires_at(user), "remaining_seats": max(0, 50 - count),
     }
@@ -4726,6 +4748,60 @@ async def admin_free30_activate(req: AdminFree30ActivateRequest, admin: dict = D
         CampaignRegisterRequest(language="no"),
         current_user={"sub": user["id"], "admin_actor": admin["sub"]},
     )
+
+
+@api_router.post("/admin/free30/free-period")
+async def admin_free30_free_period(req: AdminFreePeriodRequest, admin: dict = Depends(require_admin)):
+    """Grant separate time-limited access; never change paid billing fields."""
+    user = await _admin_free30_user(req.email)
+    if user["id"] != req.user_id:
+        raise HTTPException(status_code=409, detail="Kontoen er endret. Søk etter kunden på nytt.")
+    # Share the FREE30 lock so both types of grants see committed access dates.
+    try:
+        await db.campaign_counters.update_one(
+            {"_id": "free30-2026-10"}, {"$setOnInsert": {"sequence": 0}}, upsert=True,
+        )
+    except DuplicateKeyError:
+        pass
+
+    async def grant(session):
+        await db.campaign_counters.find_one_and_update(
+            {"_id": "free30-2026-10"}, {"$inc": {"claim_revision": 1}},
+            return_document=ReturnDocument.AFTER, session=session,
+        )
+        previous = await db.manual_premium_grants.find_one({"_id": req.request_id}, session=session)
+        if previous:
+            if (previous["user_id"], previous["days"], previous["activated_by_admin"]) != (
+                req.user_id, req.days, admin["sub"]
+            ):
+                raise HTTPException(status_code=409, detail="Forespørselen er endret. Søk etter kunden på nytt.")
+            return {"success": True, "premium_until": previous["expires_at"], "replayed": True}
+        current = await db.users.find_one({"id": req.user_id}, session=session)
+        if (not current or current.get("disabled") or current.get("deleted_at")
+                or current.get("email") != user["email"] or current.get("is_admin")):
+            raise HTTPException(status_code=409, detail="Kontoen kan ikke få en gratisperiode.")
+        active_until = _access_expires_at(current)
+        if _paid_premium_active(current) and not active_until:
+            raise HTTPException(status_code=409, detail="Kontoen har allerede Premium uten sluttdato.")
+        now = datetime.now(timezone.utc)
+        starts = max(now, _parse_iso_utc(active_until) or now)
+        expires = (starts + timedelta(days=req.days)).isoformat()
+        await db.manual_premium_grants.insert_one({
+            "_id": req.request_id, "user_id": req.user_id, "email": user["email"],
+            "days": req.days, "starts_at": starts.isoformat(), "expires_at": expires,
+            "created_at": now.isoformat(), "activated_by_admin": admin["sub"],
+            "activation_source": "admin_manual_free",
+        }, session=session)
+        result = await db.users.update_one({"id": req.user_id, "email": user["email"]}, {"$set": {
+            "trial_started_at": current.get("trial_started_at") or starts.isoformat(),
+            "trial_expires_at": expires, "trial_used": True, "has_premium": True,
+        }}, session=session)
+        if not getattr(result, "modified_count", 0):
+            raise HTTPException(status_code=409, detail="Tilgangen ble ikke endret. Søk etter kunden på nytt.")
+        return {"success": True, "premium_until": expires, "replayed": False}
+
+    async with await db.client.start_session() as session:
+        return await session.with_transaction(grant)
 
 
 @api_router.get("/admin/questions")
