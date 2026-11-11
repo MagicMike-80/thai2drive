@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
+from fastapi import BackgroundTasks, FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse as FastAPIFileResponse, JSONResponse, RedirectResponse
@@ -3406,6 +3406,7 @@ def _send_free30_confirmation_sync(to_email: str, premium_until: str) -> tuple[b
 async def register_campaign_user(
     req: CampaignRegisterRequest,
     current_user: dict = Depends(get_current_user),
+    background_tasks: BackgroundTasks = None,
 ):
     """Claim one 30-day FREE30 trial for the authenticated account only."""
     lang = _normalize_campaign_lang(req.language)
@@ -3522,6 +3523,11 @@ async def register_campaign_user(
     except _CampaignClaimConflict as conflict:
         return conflict.response
     if response.status_code == 200 and confirmation_email:
+        if background_tasks is not None and not current_user.get("admin_actor"):
+            background_tasks.add_task(
+                _send_free30_confirmation_sync, confirmation_email, json.loads(response.body)["premium_until"]
+            )
+            return response
         sent, reason = await asyncio.to_thread(
             _send_free30_confirmation_sync, confirmation_email, json.loads(response.body)["premium_until"]
         )

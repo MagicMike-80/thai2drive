@@ -5004,6 +5004,7 @@ a { color:inherit; text-decoration:none; }
           </div>
         </div>
 
+        <button type="button" class="auth-btn" onclick="openCampaignModal()">FREE30 · <span data-key="campaign_submit_btn"></span></button>
         <div class="auth-guest">
           <button type="button" class="auth-guest-btn" onclick="enterGuest()" data-key="auth_guest_btn">Fortsett som gjest</button>
           <p class="auth-guest-hint" data-key="auth_guest_hint">Prøv fem spørsmål uten konto</p>
@@ -5028,8 +5029,8 @@ a { color:inherit; text-decoration:none; }
       </div>
 
       <div id="launchBanner" style="display:none;align-items:center;gap:10px;background:#f97316;color:#0F172A;border-radius:12px;padding:10px 14px;margin:0 0 16px;font-weight:700;font-size:.9rem;line-height:1.35;">
-        <a href="mailto:admin@thai2drive.no" style="flex:1;color:#0F172A;text-decoration:none;"><span data-key="launch_banner"></span></a>
-        <button type="button" aria-label="Close" onclick="document.getElementById('launchBanner').style.display='none';try{sessionStorage.setItem('t2d_launch_banner_closed','1');}catch(e){}" style="background:none;border:0;color:#0F172A;font-size:1.3rem;line-height:1;cursor:pointer;padding:0 4px;">&times;</button>
+        <button type="button" onclick="openCampaignModal()" style="flex:1;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;min-height:44px">FREE30 · <span data-key="campaign_submit_btn"></span></button>
+        <button type="button" data-label-key="close" aria-label="" onclick="document.getElementById('launchBanner').style.display='none';try{sessionStorage.setItem('t2d_free30_direct_banner_closed','1');}catch(e){}" style="background:none;border:0;color:#0F172A;font-size:1.3rem;line-height:1;cursor:pointer;padding:0 4px;">&times;</button>
       </div>
 
       <div class="home-main-label" data-key="home_choose_action">Velg hva du vil gjøre</div>
@@ -5133,13 +5134,13 @@ a { color:inherit; text-decoration:none; }
         <div class="hr-pct" id="hrPct"></div>
       </div>
 
-      <div class="premium-banner" id="homePremiumBanner" style="display:none">
+      <button type="button" class="premium-banner" id="homePremiumBanner" onclick="openCampaignModal()" style="display:none;cursor:pointer;color:inherit;font:inherit">
         <span class="pb-icon">💎</span>
         <div class="pb-text">
           <h4 class="pb-title" data-key="premium_on">⭐ Premium</h4>
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
         </div>
-      </div>
+      </button>
 
       <!-- Legacy campaign enrollment retired (A1). -->
     </div>
@@ -5711,11 +5712,12 @@ a { color:inherit; text-decoration:none; }
     <button class="campaign-modal-close" type="button" onclick="closeCampaignModal()" data-label-key="close" aria-label="Lukk">&times;</button>
     <div class="cm-header">
       <div class="cm-badge" data-key="campaign_badge"></div>
-      <h3 class="cm-title" id="campaignModalTitle" data-key="campaign_modal_title"></h3>
+      <h3 class="cm-title" id="campaignModalTitle">FREE30 · <span data-key="campaign_title"></span></h3>
       <p class="cm-sub" data-key="campaign_modal_sub"></p>
       <p class="cm-sub" data-key="campaign_includes"></p>
     </div>
-    <div class="cm-feedback" id="campFeedback" style="display:none" role="status" aria-live="polite"></div>
+    <p class="cm-sub" id="campRemainingText" aria-live="polite"></p>
+    <div class="cm-feedback" id="campFeedback" style="display:none;white-space:pre-line" role="status" aria-live="polite"></div>
     <button class="cm-submit-btn" type="button" id="campSubmitBtn" onclick="submitCampaignRegistration(event)" data-key="campaign_submit_btn"></button>
   </section>
 </div>
@@ -6062,7 +6064,6 @@ var UI = {
   bm_short:    {th:'บุ๊กมาร์ก',         no:'Bokmerker',        en:'Bookmarks'},
   hist_short:  {th:'ประวัติ',            no:'Historikk',        en:'History'},
   loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},
-  launch_banner: {th:'เปิดตัว: FREE30 – พรีเมียมฟรี 30 วัน – จำกัด 50 ที่ – ส่งอีเมลถึง admin@thai2drive.no เพื่อเปิดใช้งาน', no:'LANSERING: FREE30 – 30 dager gratis Premium – 50 plasser – Send e-post til admin@thai2drive.no for å aktivere', en:'LAUNCH: FREE30 – 30 days free Premium – 50 spots – Email admin@thai2drive.no to activate'},
   streak:      {th:'วันติดต่อกัน',     no:'dagers rekke',    en:'day streak'},
   answered:    {th:'ตอบแล้ว',          no:'BESVART',          en:'ANSWERED'},
   correct_stat:{th:'ถูกต้อง',           no:'RIKTIGE',          en:'CORRECT'},
@@ -6557,6 +6558,7 @@ function ttsStreamUrl(text, lang) {
 }
 
 function applyUILang() {
+  renderCampaignFeedback();
   if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();
   document.documentElement.lang = appLang === 'no' ? 'nb' : appLang;
   var metaDescription = document.getElementById('metaDescription');
@@ -6565,9 +6567,9 @@ function applyUILang() {
     var lb = document.getElementById('launchBanner');
     if (!lb) return;
     var closed = false;
-    try { closed = sessionStorage.getItem('t2d_launch_banner_closed') === '1'; } catch (e) {}
-    var txt = (UI.launch_banner && typeof UI.launch_banner[appLang] === 'string') ? UI.launch_banner[appLang].trim() : '';
-    lb.style.display = (!closed && txt) ? 'flex' : 'none';
+    try { closed = sessionStorage.getItem('t2d_free30_direct_banner_closed') === '1'; } catch (e) {}
+    var txt = t('campaign_submit_btn');
+    lb.style.display = (!closed && txt && !(user && (isPremium() || user.trial_used))) ? 'flex' : 'none';
   })();
   // Generic text and placeholders first, so every visible static label follows appLang.
   document.querySelectorAll('[data-key]').forEach(function(el) {
@@ -8549,58 +8551,116 @@ async function checkCampaignStatus() {
     console.debug('FREE30 status unavailable');
   }
 }
-function openCampaignModal() {
+var campaignBusy = false;
+var campaignReady = false;
+var campaignEpoch = 0;
+var campaignFeedback = null;
+var campaignRemaining = null;
+function renderCampaignFeedback() {
+  var el = document.getElementById('campFeedback');
+  var count = document.getElementById('campRemainingText');
+  if (count) count.textContent = campaignRemaining === null ? '' : tf('campaign_desc', {remaining:campaignRemaining});
+  if (!el) return;
+  el.style.display = campaignFeedback ? 'block' : 'none';
+  if (!campaignFeedback) { el.textContent = ''; return; }
+  el.className = 'cm-feedback ' + campaignFeedback.kind;
+  el.textContent = t(campaignFeedback.key);
+  if (campaignFeedback.until) {
+    var end = new Date(campaignFeedback.until);
+    var start = new Date(end.getTime() - 30 * 86400000);
+    var options = {dateStyle:'medium', timeStyle:'short'};
+    el.textContent += '\nFREE30: ' + start.toLocaleString(localeForLang(), options) + ' → ' + end.toLocaleString(localeForLang(), options);
+  }
+}
+async function openCampaignModal() {
   if (!user || !token) {
     campaignClaimPending = true;
     openGuestRegistration();
     return;
   }
+  if (campaignBusy) return;
   campaignClaimPending = false;
-  var feedback = document.getElementById('campFeedback');
-  if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; feedback.className = 'cm-feedback'; }
+  campaignReady = false;
+  campaignRemaining = null;
+  campaignFeedback = null;
+  var epoch = ++campaignEpoch, owner = user, ownerToken = token;
+  var submit = document.getElementById('campSubmitBtn');
+  if (submit) submit.disabled = true;
   var modal = document.getElementById('campaignModal');
   if (modal) modal.style.display = 'flex';
   applyUILang();
+  if (user.trial_used || isPremium()) {
+    campaignFeedback = {kind:'error', key:user.trial_used ? 'campaign_used' : 'campaign_active'};
+    renderCampaignFeedback();
+    return;
+  }
+  try {
+    var status = await api('GET', '/api/campaign/status');
+    if (epoch !== campaignEpoch || user !== owner || token !== ownerToken) return;
+    if (!status || !status.success) throw new Error('status unavailable');
+    campaignRemaining = Math.max(0, Number(status.remaining) || 0);
+    campaignReady = !!status.is_active && campaignRemaining > 0;
+    if (!campaignReady) campaignFeedback = {kind:'error', key:'campaign_sold_out'};
+  } catch(e) {
+    if (epoch !== campaignEpoch || user !== owner || token !== ownerToken) return;
+    campaignFeedback = {kind:'error', key:'campaign_network_error'};
+  }
+  if (submit) submit.disabled = !campaignReady;
+  renderCampaignFeedback();
 }
 function closeCampaignModal() {
+  ++campaignEpoch;
+  campaignReady = false;
   var modal = document.getElementById('campaignModal');
   if (modal) modal.style.display = 'none';
 }
 async function submitCampaignRegistration(event) {
   if (event) event.preventDefault();
   if (!token || !user) { openCampaignModal(); return false; }
-  var feedback = document.getElementById('campFeedback');
+  if (campaignBusy || !campaignReady || user.trial_used || isPremium()) return false;
+  campaignBusy = true;
+  var owner = user, ownerToken = token, epoch = campaignEpoch;
   var submit = document.getElementById('campSubmitBtn');
   if (submit) submit.disabled = true;
   try {
     var response = await fetch('/api/campaign/register', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
-      body: JSON.stringify({language: appLang})
+      headers: {'Content-Type':'application/json', 'Authorization':'Bearer ' + ownerToken},
+      body: JSON.stringify({language:appLang})
     });
     var data = await response.json();
+    if (user !== owner || token !== ownerToken) return false;
     if (!response.ok || !data.success) {
       var errorKey = {
-        unsupported_language: 'campaign_language_error',
-        already_registered: 'campaign_duplicate',
-        premium_already_active: 'campaign_active',
-        trial_already_used: 'campaign_used',
-        campaign_sold_out: 'campaign_sold_out'
+        unsupported_language:'campaign_language_error', already_registered:'campaign_duplicate',
+        premium_already_active:'campaign_active', trial_already_used:'campaign_used', campaign_sold_out:'campaign_sold_out'
       }[data.error] || 'campaign_rejected';
-      if (feedback) { feedback.className = 'cm-feedback error'; feedback.textContent = t(errorKey); feedback.style.display = 'block'; }
+      campaignReady = false;
+      campaignFeedback = {kind:'error', key:errorKey};
       return false;
     }
-    await refreshCurrentUser();
+    // Only the committed backend response grants access; email is independent.
+    user.is_premium = true;
+    user.trial_used = true;
+    user.premium_status = 'trialing';
+    user.premium_expires_at = data.premium_until;
+    delete user.trial_days_left;
+    campaignReady = false;
+    campaignRemaining = campaignRemaining === null ? null : Math.max(0, campaignRemaining - 1);
+    campaignFeedback = {kind:'success', key:'campaign_success_fallback', until:data.premium_until};
     renderPremiumBanner();
-    await checkCampaignStatus();
-    if (feedback) { feedback.className = 'cm-feedback success'; feedback.textContent = data.message || t('campaign_success_fallback'); feedback.style.display = 'block'; }
-    setTimeout(closeCampaignModal, 3500);
+    checkCampaignStatus();
+    applyUILang();
     return true;
-  } catch (e) {
-    if (feedback) { feedback.className = 'cm-feedback error'; feedback.textContent = t('campaign_network_error'); feedback.style.display = 'block'; }
+  } catch(e) {
+    if (user === owner && token === ownerToken) campaignFeedback = {kind:'error', key:'campaign_network_error'};
     return false;
   } finally {
-    if (submit) submit.disabled = false;
+    campaignBusy = false;
+    if (epoch === campaignEpoch && user === owner && token === ownerToken) {
+      if (submit) submit.disabled = !campaignReady;
+      renderCampaignFeedback();
+    }
   }
 }
 
@@ -8918,7 +8978,14 @@ function trialBannerText() {
 function renderPremiumBanner() {
   var pb = document.getElementById('homePremiumBanner');
   if (!pb) return;
-  if (!(user && user.is_premium)) { pb.style.display = 'none'; return; }
+  if (!(user && user.is_premium)) {
+    pb.style.display = 'flex';
+    var label = pb.querySelector('.pb-title');
+    if (label) label.textContent = 'FREE30 · ' + t('campaign_submit_btn');
+    var sub = pb.querySelector('.pb-sub');
+    if (sub) sub.textContent = t('campaign_modal_sub');
+    return;
+  }
   var trial  = isTrialActive();
   var icon   = pb.querySelector('.pb-icon');
   var ptitle = pb.querySelector('.pb-title');
@@ -12077,7 +12144,7 @@ function loadSettings() {
   document.getElementById('settEmail').textContent = email;
   var badges = document.getElementById('settBadges');
   badges.innerHTML = '';
-  if (user && user.is_premium) badges.innerHTML += '<span class="premium-badge">⭐ Premium</span>';
+  if (user && user.is_premium) badges.innerHTML += '<button type="button" class="premium-badge" onclick="openCampaignModal()">⭐ Premium</button>';
   if (user && user.is_admin)   badges.innerHTML += '<span class="admin-badge">🔧 Admin</span>';
 
   ['TH','NO','EN'].forEach(function(l) {
