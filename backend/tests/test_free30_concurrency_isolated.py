@@ -8,6 +8,7 @@ import ast
 import asyncio
 import hashlib
 import json
+import logging
 import os
 from pathlib import Path
 import socket
@@ -17,7 +18,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import Depends
+from fastapi import BackgroundTasks, Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from pymongo import MongoClient, ReturnDocument
@@ -46,9 +47,11 @@ def actual_claim_namespace():
         ):
             nodes.append(node)
     namespace = dict(datetime=datetime, timedelta=timedelta, timezone=timezone,
-                     Optional=Optional, BaseModel=BaseModel, Depends=Depends,
+                     Optional=Optional, BaseModel=BaseModel, Depends=Depends, BackgroundTasks=BackgroundTasks,
                      get_current_user=lambda: None, ReturnDocument=ReturnDocument,
-                     DuplicateKeyError=DuplicateKeyError, JSONResponse=JSONResponse)
+                     DuplicateKeyError=DuplicateKeyError, JSONResponse=JSONResponse,
+                     asyncio=asyncio, json=json, logging=logging,
+                     _send_free30_confirmation_sync=lambda *args: (True, "synthetic"))
     exec(compile(ast.Module(body=nodes, type_ignores=[]), str(source), "exec"), namespace)
     return namespace
 
@@ -189,7 +192,8 @@ class Free30RealTransactions(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn("other-learner", json.dumps(body))
         claim = await self.db.campaign_users.find_one({})
         self.assertEqual(claim["user_id"], "caller")
-        self.assertFalse({"email", "name", "phone", "password"} & set(claim))
+        self.assertEqual(claim["email"], "caller@example.test")
+        self.assertFalse({"name", "phone", "password"} & set(claim))
 
     async def test_failed_conditional_update_rolls_back_seat(self):
         before = await self.account("conflict", premium_expires_at=(datetime.now(timezone.utc)+timedelta(days=90)).isoformat())
