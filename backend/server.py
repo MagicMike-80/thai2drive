@@ -3466,6 +3466,9 @@ async def register_campaign_user(
             "trial_expires_at": premium_until,
             "created_at": now.isoformat(),
         }
+        if current_user.get("admin_actor"):
+            campaign_doc["activated_by_admin"] = current_user["admin_actor"]
+            campaign_doc["activation_source"] = "admin_email_request"
         try:
             await db.campaign_users.insert_one(campaign_doc, session=session)
         except DuplicateKeyError:
@@ -3520,6 +3523,10 @@ async def register_campaign_user(
         )
         if not sent:
             logging.getLogger("campaign").error("free30_confirmation_failed reason=%s", reason)
+        if current_user.get("admin_actor"):
+            result = json.loads(response.body)
+            result["confirmation_email_sent"] = bool(sent)
+            return JSONResponse(status_code=200, content=result)
     return response
 
 
@@ -4657,6 +4664,68 @@ async def require_admin(credentials: HTTPAuthorizationCredentials = Depends(secu
     if not admin_entry:
         raise HTTPException(status_code=403, detail="Admin access required")
     return payload
+
+
+class AdminFree30LookupRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=254)
+
+
+class AdminFree30ActivateRequest(AdminFree30LookupRequest):
+    user_id: str = Field(min_length=1, max_length=100)
+
+
+async def _admin_free30_user(email: str) -> dict:
+    # Exact normalized address only; never expose password hashes or unrelated users.
+    normalized = email.strip().lower()
+    if "@" not in normalized or any(char.isspace() for char in normalized):
+        raise HTTPException(status_code=400, detail="Skriv en gyldig e-postadresse.")
+    user = await db.users.find_one({"email": normalized}, {
+        "_id": 0, "id": 1, "email": 1, "is_admin": 1, "is_premium": 1,
+        "premium_expires_at": 1, "trial_expires_at": 1,
+        "trial_started_at": 1, "trial_used": 1,
+    })
+    if not user:
+        raise HTTPException(status_code=404, detail="Kontoen finnes ikke. Kunden må registrere seg først.")
+    return user
+
+
+@api_router.post("/admin/free30/lookup")
+async def admin_free30_lookup(req: AdminFree30LookupRequest, _: dict = Depends(require_admin)):
+    user = await _admin_free30_user(req.email)
+    claimed = await db.campaign_users.find_one(
+        {"campaign_id": "free30-2026-10", "user_id": user["id"]},
+        {"_id": 0, "trial_expires_at": 1},
+    )
+    count = await db.campaign_users.count_documents({"campaign_id": "free30-2026-10"})
+    reason = ""
+    if claimed:
+        reason = "FREE30 er allerede aktivert på denne kontoen."
+    elif _user_has_active_premium(user):
+        reason = "Kontoen har allerede aktiv Premium-tilgang."
+    elif any(user.get(key) for key in (
+        "trial_used", "is_premium", "trial_started_at", "trial_expires_at", "premium_expires_at"
+    )):
+        reason = "Kontoen har allerede brukt en Premium-prøveperiode."
+    elif count >= 50:
+        reason = "Alle 50 kampanjeplassene er tatt."
+    return {
+        "user_id": user["id"], "email": user["email"],
+        "eligible": not bool(reason), "reason": reason,
+        "premium_until": _access_expires_at(user), "remaining_seats": max(0, 50 - count),
+    }
+
+
+@api_router.post("/admin/free30/activate")
+async def admin_free30_activate(req: AdminFree30ActivateRequest, admin: dict = Depends(require_admin)):
+    user = await _admin_free30_user(req.email)
+    if user["id"] != req.user_id:
+        raise HTTPException(status_code=409, detail="Kontoen er endret. Søk etter kunden på nytt.")
+    # Reuse the transactional claim: rechecks eligibility/capacity under the same
+    # lock as self-service, so retries and simultaneous requests cannot grant twice.
+    return await register_campaign_user(
+        CampaignRegisterRequest(language="no"),
+        current_user={"sub": user["id"], "admin_actor": admin["sub"]},
+    )
 
 
 @api_router.get("/admin/questions")

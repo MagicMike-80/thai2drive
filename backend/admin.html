@@ -197,6 +197,7 @@
 
   <!-- Tabs -->
   <div class="tabs">
+    <button class="tab" id="tab-free30" onclick="switchTab('free30')">FREE30</button>
     <button class="tab active" id="tab-questions" onclick="switchTab('questions')">📝 Spørsmål</button>
     <button class="tab" id="tab-studiebok" onclick="switchTab('studiebok')">📖 Studiebok</button>
     <button class="tab" id="tab-book" onclick="switchTab('book')">📗 Læringsbok</button>
@@ -209,6 +210,21 @@
   </div>
 
   <!-- ── MEDIA CATALOG & SIGNS CMS VIEW ───────────────────── -->
+  <section id="free30-view" style="display:none;background:var(--panel);padding:20px;border-radius:12px;margin-bottom:16px">
+    <h2>Aktiver FREE30</h2>
+    <p>Bruk e-postadressen kunden registrerte seg med. Tilbudet gir 30 dager gratis Premium fra aktivering, uten automatisk betaling.</p>
+    <form id="free30-form" onsubmit="event.preventDefault(); lookupFree30()">
+      <label for="free30-email">Kundens e-postadresse</label>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0">
+        <input id="free30-email" type="email" required maxlength="254" autocomplete="off" oninput="clearFree30()"
+          style="flex:1;min-width:180px;padding:12px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px">
+        <button id="free30-search" type="submit" style="padding:12px">Finn kunde</button>
+      </div>
+    </form>
+    <p id="free30-result" role="status" aria-live="polite" style="white-space:pre-line"></p>
+    <button id="free30-activate" type="button" onclick="activateFree30()" disabled style="padding:12px">Aktiver 30 dager gratis</button>
+  </section>
+
   <div id="media-view" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
       <div style="font-size:13px;color:var(--muted)" id="media-meta"></div>
@@ -414,6 +430,61 @@ async function api(path, opts = {}) {
     throw new Error('HTTP ' + r.status + ' on ' + (opts.method || 'GET') + ' ' + path + detail);
   }
   return r.json();
+}
+
+let free30Customer = null;
+let free30Request = 0;
+let free30Busy = false;
+function clearFree30() {
+  free30Request++;
+  free30Customer = null;
+  document.getElementById('free30-activate').disabled = true;
+  document.getElementById('free30-result').textContent = '';
+}
+function free30Date(value) {
+  return new Intl.DateTimeFormat('nb-NO', {dateStyle:'long', timeStyle:'short', timeZone:'Europe/Oslo'}).format(new Date(value));
+}
+async function lookupFree30() {
+  if (free30Busy) return;
+  clearFree30();
+  const request = free30Request;
+  const email = document.getElementById('free30-email').value.trim().toLowerCase();
+  const output = document.getElementById('free30-result');
+  output.textContent = 'Søker etter kunde…';
+  try {
+    const customer = await api('/admin/free30/lookup', {method:'POST', body:JSON.stringify({email})});
+    if (request !== free30Request) return;
+    free30Customer = customer;
+    output.textContent = customer.email + '\n' + (customer.eligible
+      ? 'Kan få FREE30. ' + customer.remaining_seats + ' plasser igjen. Bekreft e-postadressen før du aktiverer.'
+      : customer.reason) + (customer.premium_until ? '\nPremium til ' + free30Date(customer.premium_until) : '');
+    document.getElementById('free30-activate').disabled = !customer.eligible;
+  } catch (error) {
+    if (request === free30Request) output.textContent = error.message;
+  }
+}
+async function activateFree30() {
+  if (free30Busy || !free30Customer || !free30Customer.eligible) return;
+  const customer = free30Customer;
+  free30Busy = true;
+  free30Request++;
+  for (const id of ['free30-activate','free30-search','free30-email']) document.getElementById(id).disabled = true;
+  const output = document.getElementById('free30-result');
+  output.textContent = 'Aktiverer FREE30 for ' + customer.email + '…';
+  try {
+    const result = await api('/admin/free30/activate', {method:'POST', body:JSON.stringify({email:customer.email, user_id:customer.user_id})});
+    output.textContent = 'FREE30 er aktivert for ' + customer.email + '.\nPremium til ' + free30Date(result.premium_until)
+      + '. Ingen automatisk betaling.\n' + (result.confirmation_email_sent
+        ? 'Bekreftelsesmail er sendt til e-postleverandøren.'
+        : 'Bekreftelsesmail kunne ikke sendes. Tilgangen er lagret; gi kunden beskjed manuelt.');
+  } catch (error) {
+    output.textContent = error.message + '\nSøk etter kunden på nytt for å kontrollere status før et nytt forsøk.';
+  } finally {
+    free30Busy = false;
+    free30Customer = null;
+    document.getElementById('free30-search').disabled = false;
+    document.getElementById('free30-email').disabled = false;
+  }
 }
 
 async function login() {
@@ -1176,6 +1247,8 @@ document.getElementById('password').addEventListener('keydown', e => {
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════════
 function switchTab(tab) {
+  document.getElementById('free30-view').style.display = tab === 'free30' ? '' : 'none';
+  document.getElementById('tab-free30').classList.toggle('active', tab === 'free30');
   document.getElementById('questions-view').style.display  = tab === 'questions'  ? '' : 'none';
   document.getElementById('studiebok-view').style.display  = tab === 'studiebok'  ? '' : 'none';
   document.getElementById('book-view').style.display       = tab === 'book'       ? '' : 'none';
