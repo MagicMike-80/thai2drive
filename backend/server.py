@@ -7657,6 +7657,52 @@ def _stream_mp3_file(path: str, request: Request, headers: Optional[dict] = None
     return _range_file_response(Path(path), request, "audio/mpeg", resp_headers)
 
 
+async def _tts_cached_audio(path, provider, voice, lang, text, *, settings=None, version="1", legacy_path=None):
+    """Local first, then private archive; a storage outage is a cache miss."""
+    from tts_storage import TTSAudioStorage, cache_key, legacy_key, read_audio, write_audio_atomic
+
+    def restore():
+        for candidate in (path, legacy_path):
+            if candidate and Path(candidate).is_file():
+                try:
+                    data = read_audio(Path(candidate))
+                    if candidate != path:
+                        write_audio_atomic(Path(path), data)
+                    return True
+                except (ValueError, OSError):
+                    pass
+        storage = TTSAudioStorage.from_environment()
+        if storage is None:
+            return False
+        key = cache_key(provider, voice, lang, text, settings=settings, version=version)
+        backup_keys = [legacy_key(path)]
+        if legacy_path and legacy_path != path:
+            backup_keys.append(legacy_key(legacy_path))
+        return storage.restore(key, path, legacy=backup_keys)
+
+    try:
+        return await asyncio.to_thread(restore)
+    except Exception as exc:
+        logger.warning("TTS archive read unavailable (%s)", type(exc).__name__)
+        return False
+
+
+async def _tts_archive_audio(path, provider, voice, lang, text, *, settings=None, version="1"):
+    """Best-effort after-response copy of complete audio, with read-back verification."""
+    from tts_storage import TTSAudioStorage, cache_key
+
+    def archive():
+        storage = TTSAudioStorage.from_environment()
+        if storage is None:
+            return
+        storage.store(cache_key(provider, voice, lang, text, settings=settings, version=version), path)
+
+    try:
+        await asyncio.to_thread(archive)
+    except Exception as exc:
+        logger.warning("TTS archive write unverified (%s)", type(exc).__name__)
+
+
 async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, request: Request):
     """Helper — synthesize speech via Google Cloud TTS and return MP3."""
     import base64
@@ -7683,15 +7729,18 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, re
             data = r.json()
             audio_bytes = base64.b64decode(data["audioContent"])
 
-            with open(cache_path, "wb") as f:
-                f.write(audio_bytes)
+            from tts_storage import write_audio_atomic
+            await asyncio.to_thread(write_audio_atomic, Path(cache_path), audio_bytes)
 
             _tts_record_success("google", lang)
-            return _stream_mp3_file(
+            response = _stream_mp3_file(
                 cache_path,
                 request,
                 headers={"X-TTS-Provider": "google", "X-TTS-Voice": voice_name},
             )
+            from starlette.background import BackgroundTask
+            response.background = BackgroundTask(_tts_archive_audio, cache_path, "google", voice_name, lang, text)
+            return response
 
     except HTTPException as he:
         raise he
@@ -7759,9 +7808,19 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     cache_provider = f"elevenlabs:{model_id}"
     if lang == "th-TH":
         cache_provider += f":style={voice_settings['style']}"
+    legacy_cache_path = _tts_cache_path(cache_provider, voice_id, lang, text)
+    voice_version = os.environ.get("TTS_VOICE_VERSION", "1")
+    legacy_settings = {"stability": 0.5, "similarity_boost": 0.75}
+    if lang == "th-TH":
+        legacy_settings["style"] = 1.0
+    if voice_settings != legacy_settings or voice_version != "1":
+        legacy_cache_path = None
+    settings_hash = hashlib.sha256(json.dumps(voice_settings, sort_keys=True).encode()).hexdigest()
+    cache_provider += f":settings={settings_hash}:version={voice_version}"
     cloned_cache_path = _tts_cache_path(cache_provider, voice_id, lang, text)
 
-    if os.path.exists(cloned_cache_path):
+    if await _tts_cached_audio(cloned_cache_path, cache_provider, voice_id, lang, text,
+                               settings=voice_settings, version=voice_version, legacy_path=legacy_cache_path):
         return _stream_mp3_file(
             cloned_cache_path,
             request,
@@ -7809,6 +7868,8 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                                     continue
                                 cache_file.write(chunk)
                                 yield chunk
+                        from tts_storage import read_audio
+                        await asyncio.to_thread(read_audio, Path(temp_cache_path))
                         os.replace(temp_cache_path, cloned_cache_path)
                         completed = True
                         _tts_record_success("elevenlabs", lang)
@@ -7832,10 +7893,13 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                     "X-TTS-Provider": "elevenlabs",
                     "X-TTS-Voice": voice_id,
                 }
+                from starlette.background import BackgroundTask
                 return StreamingResponse(
                     stream_and_cache(),
                     media_type="audio/mpeg",
                     headers=resp_headers,
+                    background=BackgroundTask(_tts_archive_audio, cloned_cache_path, cache_provider,
+                                              voice_id, lang, text, settings=voice_settings, version=voice_version),
                 )
 
             # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
@@ -7861,7 +7925,8 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
 
     # ── Nødfallback: Google Cloud TTS, i egen cache-nøkkel ────────────────
     # Ferdige MP3-filer kan fortsatt serveres selv om provider eller nøkkel er nede.
-    if os.path.exists(google_cache_path):
+    if await _tts_cached_audio(google_cache_path, "google", _GOOGLE_TTS_VOICES[lang], lang, text,
+                               legacy_path=google_cache_path):
         return _stream_mp3_file(
             google_cache_path,
             request,
