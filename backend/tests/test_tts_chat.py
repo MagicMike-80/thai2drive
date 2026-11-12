@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import server  # noqa: E402
 
+AUDIO = (Path(__file__).resolve().parents[1] / "public_assets" / "flashcard_flip.mp3").read_bytes()
 
 @pytest.fixture
 def tts_client(monkeypatch, tmp_path):
@@ -46,7 +47,7 @@ def test_all_languages_use_michael_clone_and_eleven_v3_first(
     def handle(request):
         requests.append(request)
         assert request.url.host == "api.elevenlabs.io"
-        return httpx.Response(200, content=b"ID3-michael-audio")
+        return httpx.Response(200, content=AUDIO)
 
     original_client = httpx.AsyncClient
     monkeypatch.setattr(
@@ -56,7 +57,7 @@ def test_all_languages_use_michael_clone_and_eleven_v3_first(
     response = tts_client.get("/api/tts", params={"text": "Test voice", "lang": lang})
 
     assert response.status_code == 200
-    assert response.content == b"ID3-michael-audio"
+    assert response.content == AUDIO
     assert response.headers["x-tts-provider"] == "elevenlabs"
     assert len(set(server._DEFAULT_ELEVENLABS_VOICE_IDS.values())) == 1
     assert response.headers["x-tts-voice"] == server._DEFAULT_ELEVENLABS_VOICE_IDS[locale]
@@ -81,7 +82,7 @@ def test_google_is_used_only_after_elevenlabs_failure(monkeypatch, tts_client):
             return httpx.Response(503, text="temporarily unavailable")
         assert request.url.host == "texttospeech.googleapis.com"
         return httpx.Response(
-            200, json={"audioContent": base64.b64encode(b"ID3-google-audio").decode()}
+            200, json={"audioContent": base64.b64encode(AUDIO).decode()}
         )
 
     original_client = httpx.AsyncClient
@@ -92,6 +93,6 @@ def test_google_is_used_only_after_elevenlabs_failure(monkeypatch, tts_client):
     response = tts_client.get("/api/tts", params={"text": "Fallback test", "lang": "th"})
 
     assert response.status_code == 200
-    assert response.content == b"ID3-google-audio"
+    assert response.content == AUDIO
     assert response.headers["x-tts-provider"] == "google"
     assert hosts == ["api.elevenlabs.io", "texttospeech.googleapis.com"]
