@@ -7992,7 +7992,17 @@ var _teacherAudioToken = 0;
 var _teacherWatchdog = null;
 var _pendingTtsFallback = null;
 
+function _clearSpeechWatchdogs() {
+  if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+  if (window._ttsWatchdog) clearTimeout(window._ttsWatchdog);
+  if (window._teacherWatchdogTimer) clearTimeout(window._teacherWatchdogTimer);
+  _teacherWatchdog = null;
+  window._ttsWatchdog = null;
+  window._teacherWatchdogTimer = null;
+}
+
 function _finishSpeechPlayback() {
+  _clearSpeechWatchdogs();
   _teacherTtsPlaying = false;
   _teacherActiveText = '';
   ttsPlaying = false;
@@ -8018,6 +8028,9 @@ function _consumeTtsFallback() {
     utterance.onend = _finishSpeechPlayback;
     utterance.onerror = _finishSpeechPlayback;
     window.speechSynthesis.speak(utterance);
+    // The MP3 remains paused during browser speech; its loading timeout must
+    // not cancel the replacement utterance while it is still being read.
+    _clearSpeechWatchdogs();
     return true;
   } catch (error) {
     console.warn('Browser speech fallback unavailable:', error);
@@ -8067,6 +8080,7 @@ function _unlockAudioPlayback(activeEl) {
 
 function stopAllSpeech() {
   _teacherAudioToken += 1;
+  _clearSpeechWatchdogs();
   _pendingTtsFallback = null;
   if ('speechSynthesis' in window) {
     try { window.speechSynthesis.cancel(); } catch (e) {}
@@ -12034,6 +12048,7 @@ function speakText(text) {
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
+      if (playToken !== _teacherAudioToken) return;
       console.error('Teacher audio playback failed on iOS:', err);
       if (_consumeTtsFallback()) return;
       if (playToken === _teacherAudioToken) {
