@@ -6857,6 +6857,10 @@ async def upload_sign_image(
     }
 
 
+from maintenance_control import create_maintenance  # noqa: E402
+_maintenance_router, _maintenance_middleware = create_maintenance(db, verify_token)
+app.middleware("http")(_maintenance_middleware)
+app.include_router(_maintenance_router)
 app.include_router(api_router)
 
 # ==================== PUBLIC WEBSITE (landing + legal) ====================

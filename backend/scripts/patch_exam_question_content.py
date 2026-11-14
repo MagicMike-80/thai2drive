@@ -1,7 +1,7 @@
 """One-time MongoDB correction for the railway image and two held questions.
 
-Run from the repository root. The default prints the proposed changes without
-writing; pass --apply only after reviewing the three matching records.
+Run from the repository root. The default prints proposed changes. --apply
+verifies only; an intentional repair additionally requires --allow-quiz-write.
 """
 
 import argparse
@@ -57,7 +57,8 @@ def verify_questions(collection) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="Write the three reviewed corrections")
+    parser.add_argument("--apply", action="store_true", help="Verify the three records; explicit write override is also required for repair")
+    parser.add_argument("--allow-quiz-write", action="store_true", help="Permit the reviewed repairs when used with --apply")
     args = parser.parse_args()
     if not (BACKEND_DIR / "sign_images" / "135_0.jpg").is_file():
         raise FileNotFoundError("backend/sign_images/135_0.jpg")
@@ -69,6 +70,12 @@ def main() -> None:
     client = MongoClient(mongo_url, serverSelectionTimeoutMS=5000)
     try:
         collection = client[db_name].questions
+        # The existing deployment uses --apply. It must fail on drift and never
+        # write, even when the environment name is missing or unexpected.
+        if args.apply and not args.allow_quiz_write:
+            verify_questions(collection)
+            print("Exam content verified read-only: 3/3 records")
+            return
         changes = patch_questions(collection, apply=args.apply)
         for change in changes:
             print(f"{change['id']}: {change['field']} {change['previous']!r} -> {change['new']!r}")

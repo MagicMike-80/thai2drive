@@ -5302,6 +5302,7 @@ a { color:inherit; text-decoration:none; }
             <div class="settings-profile-name" id="settName">–</div>
             <div class="settings-profile-email" id="settEmail">–</div>
             <div class="settings-profile-badges account-badges" id="settBadges"></div>
+            <button type="button" id="ownerMaintenanceButton" style="display:none;margin-top:12px" onclick="toggleOwnerMaintenance()"></button>
           </div>
         </div>
 
@@ -5832,6 +5833,22 @@ a { color:inherit; text-decoration:none; }
 
 <div class="toast" id="toast"></div>
 
+<div id="maintenanceOverlay" role="status" aria-live="polite" style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#060d1b;padding:24px;text-align:center;color:#eef6ff">
+  <div style="max-width:480px"><h1 id="maintenanceHeading"></h1><p id="maintenanceMessage" style="line-height:1.6"></p>
+    <div style="display:flex;justify-content:center;gap:12px;margin-top:20px">
+      <button type="button" onclick="setLang('no')" data-label-key="lang_label_no" aria-label="">🇳🇴</button><button type="button" onclick="setLang('th')" data-label-key="lang_label_th" aria-label="">🇹🇭</button><button type="button" onclick="setLang('en')" data-label-key="lang_label_en" aria-label="">🇬🇧</button>
+    </div>
+    <button type="button" onclick="document.getElementById('maintenanceLogin').hidden=false" data-key="maintenance_login_open" style="margin-top:20px"></button>
+    <form id="maintenanceLogin" hidden onsubmit="maintenanceOwnerLogin(event)" style="margin-top:16px">
+      <label for="maintenanceEmail" data-key="maintenance_email"></label>
+      <input id="maintenanceEmail" type="email" autocomplete="username" required>
+      <label for="maintenancePassword" data-key="maintenance_password"></label>
+      <input id="maintenancePassword" type="password" autocomplete="current-password" required>
+      <button type="submit" data-key="maintenance_login"></button>
+      <p id="maintenanceLoginError" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
 <script>
 // ════════════════════════════════════════════
 //  STATE
@@ -5983,6 +6000,18 @@ var UI = {
   studybook_edit_title_en: {th:'ชื่อเรื่อง (EN)', no:'Tittel (EN)', en:'Title (EN)'},
   studybook_edit_content_en: {th:'เนื้อหา (EN - HTML)', no:'Innhold (EN - HTML)', en:'Content (EN - HTML)'},
   settings_title:        {th:'การตั้งค่า', no:'Innstillinger', en:'Settings'},
+  maintenance_title: {th:'พักปรับปรุงชั่วคราว', no:'Vi tar en liten vedlikeholdspause', en:'We are taking a short maintenance break'},
+  maintenance_message: {th:'ขณะนี้เรากำลังปรับปรุง Thai2Drive กรุณากลับมาใหม่อีกครั้ง ขอบคุณที่รอเรา', no:'Vi jobber med Thai2Drive akkurat nå. Kom gjerne tilbake litt senere. Takk for tålmodigheten.', en:'We are working on Thai2Drive right now. Please come back a little later. Thank you for your patience.'},
+  maintenance_wait: {th:'กำลังตรวจสอบสถานะ กรุณารอสักครู่', no:'Kontrollerer status. Vent litt.', en:'Checking the status. Please wait.'},
+  maintenance_pause: {th:'พักการเข้าถึงของผู้เรียน', no:'Sett kundetilgang på pause', en:'Pause customer access'},
+  maintenance_open: {th:'เปิดการเข้าถึงของผู้เรียนอีกครั้ง', no:'Åpne kundetilgang', en:'Reopen customer access'},
+  maintenance_confirm: {th:'พักการเข้าถึงของผู้เรียนทั้งหมดจนกว่าคุณจะเปิดอีกครั้งหรือไม่', no:'Sett all kundetilgang på pause til du åpner igjen?', en:'Pause all customer access until you reopen it?'},
+  maintenance_error: {th:'ไม่สามารถตรวจสอบสถานะได้ กรุณาลองอีกครั้ง', no:'Kunne ikke kontrollere status. Prøv igjen.', en:'Could not check the status. Please try again.'},
+  maintenance_login_open: {th:'เข้าสู่ระบบเจ้าของ', no:'Eierinnlogging', en:'Owner sign in'},
+  maintenance_email: {th:'อีเมล', no:'E-post', en:'Email'},
+  maintenance_password: {th:'รหัสผ่าน', no:'Passord', en:'Password'},
+  maintenance_login: {th:'เข้าสู่ระบบ', no:'Logg inn', en:'Sign in'},
+  maintenance_login_error: {th:'เข้าสู่ระบบไม่ได้ กรุณาตรวจสอบข้อมูลและลองอีกครั้ง', no:'Kunne ikke logge inn. Kontroller opplysningene og prøv igjen.', en:'Could not sign in. Check your details and try again.'},
   update_title:          {th:'อัปเดต', no:'Oppdater', en:'Update'},
   fk_img_alt:            {th:'ภาพประกอบการแซง', no:'Forbikjøring illustrasjon', en:'Overtaking illustration'},
   email_placeholder:     {th:'ชื่อ@อีเมล.com', no:'navn@epost.no', en:'name@email.com'},
@@ -6884,6 +6913,71 @@ function catName(raw) {
   return pickStrict(entry) || missingText();
 }
 
+var maintenanceState = {active:false, owner:false, known:false};
+function renderMaintenance() {
+  var overlay = document.getElementById('maintenanceOverlay');
+  var show = !maintenanceState.known || (maintenanceState.active && !maintenanceState.owner);
+  overlay.style.display = show ? 'flex' : 'none';
+  document.getElementById('maintenanceHeading').textContent = maintenanceState.known ? t('maintenance_title') : '';
+  document.getElementById('maintenanceMessage').textContent = maintenanceState.known ? t('maintenance_message') : t('maintenance_wait');
+  var button = document.getElementById('ownerMaintenanceButton');
+  button.style.display = maintenanceState.owner ? 'inline-block' : 'none';
+  button.textContent = t(maintenanceState.active ? 'maintenance_open' : 'maintenance_pause');
+}
+async function refreshMaintenance() {
+  try {
+    var currentToken = token || _ls.get('admin_token');
+    var r = await fetch('/api/maintenance/status', {cache:'no-store', headers:currentToken ? {Authorization:'Bearer ' + currentToken} : {}});
+    if (!r.ok) throw new Error('status');
+    var state = await r.json();
+    maintenanceState = {active:state.active === true, owner:state.owner === true, known:true};
+    renderMaintenance();
+  } catch (_) {
+    maintenanceState.known = false;
+    renderMaintenance();
+    document.getElementById('maintenanceMessage').textContent = t('maintenance_error');
+  }
+}
+async function toggleOwnerMaintenance() {
+  await refreshMaintenance();
+  if (!maintenanceState.known || !maintenanceState.owner) return;
+  var next = !maintenanceState.active;
+  if (next && !confirm(t('maintenance_confirm'))) return;
+  var button = document.getElementById('ownerMaintenanceButton');
+  button.disabled = true;
+  try {
+    var ownerToken = token || _ls.get('admin_token');
+    var r = await fetch('/api/admin/maintenance', {method:'POST', cache:'no-store', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + ownerToken}, body:JSON.stringify({active:next, confirmed:next})});
+    if (!r.ok) throw new Error('change');
+  } catch (_) { toast(t('maintenance_error')); }
+  await refreshMaintenance();
+  button.disabled = false;
+}
+async function maintenanceOwnerLogin(event) {
+  event.preventDefault();
+  var form = document.getElementById('maintenanceLogin');
+  var password = document.getElementById('maintenancePassword');
+  var error = document.getElementById('maintenanceLoginError');
+  var submit = form.querySelector('button[type="submit"]');
+  submit.disabled = true; error.textContent = '';
+  try {
+    var response = await fetch('/api/auth/login', {method:'POST', cache:'no-store', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:document.getElementById('maintenanceEmail').value.trim(), password:password.value})});
+    if (!response.ok) throw new Error('login');
+    var login = await response.json();
+    if (!login.token) throw new Error('login');
+    var check = await fetch('/api/maintenance/status', {cache:'no-store', headers:{Authorization:'Bearer ' + login.token}});
+    if (!check.ok || !(await check.json()).owner) throw new Error('owner');
+    token = login.token; user = login.user;
+    _ls.set('t2d_token', token);
+    deviceId = user && (user._id || user.id) || null;
+    password.value = '';
+    form.hidden = true;
+    await refreshMaintenance();
+    enterApp();
+  } catch (_) { error.textContent = t('maintenance_login_error'); }
+  finally { password.value = ''; submit.disabled = false; }
+}
+
 var PREMIUM_PRICING = {
   monthly: { amount:99, display:'99 kr', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
   three_months: { amount:249, display:'249 kr', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
@@ -6896,6 +6990,9 @@ var PREMIUM_PRICING = {
 (async function init() {
   applyThemeFromStorage();
   applyUILang();
+  renderMaintenance();
+  await refreshMaintenance();
+  setInterval(refreshMaintenance, 15000);
   loadPremiumPricing();
   // Init top bar + innloggingsskjermens språkknapper
   ['TH','NO','EN'].forEach(function(l) {
@@ -12232,6 +12329,7 @@ function setLang(lang) {
     if (authBtn) authBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   applyUILang();
+  renderMaintenance();
   _msOnLangChange();
   // Reset signs cache so it reloads in new language
   signsLoaded = false;
@@ -15459,6 +15557,8 @@ async def flipp_flopp_page(lang: str):
     if not page.is_file():
         return HTMLResponse(status_code=404, content="Not found")
     content = page.read_text(encoding="utf-8").replace("__FLIPP_FLOPP_LANG__", lang).replace("__FLIPP_FLOPP_HTML_LANG__", "nb" if lang == "no" else lang)
+    from maintenance_control import standalone_guard_script
+    content = content.replace("<head>", "<head>" + standalone_guard_script(lang), 1)
     content = content.replace(
         "<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">",
         "<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"

@@ -837,7 +837,8 @@ def support():
 # ─────────────────────────── LÆRINGSBOK (members only) ───────────────────────────
 @website_router.get("/bok", response_class=HTMLResponse)
 def laeringsbok():
-    body = """
+    from maintenance_control import standalone_guard_script
+    body = standalone_guard_script('no', book=True) + """
 <div id="bok-app">
   <!-- LOGIN SCREEN -->
   <div id="bok-login" style="display:none;min-height:80vh;align-items:center;justify-content:center;padding:24px">
