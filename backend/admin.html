@@ -193,6 +193,11 @@
 </header>
 
 <main id="app">
+  <section id="maintenance-owner" style="display:none; margin:16px 0; padding:16px; border:1px solid #ff9933; border-radius:12px">
+    <strong>Vedlikeholdsmodus</strong>
+    <p id="maintenance-owner-status" aria-live="polite"></p>
+    <button type="button" id="maintenance-owner-button" onclick="toggleMaintenance()" disabled>Henter status …</button>
+  </section>
   <div class="stats" id="stats"></div>
 
   <!-- Tabs -->
@@ -414,6 +419,38 @@ const API = '/api';
 let token = localStorage.getItem('admin_token') || '';
 let currentPage = 0;
 const PAGE_SIZE = 12;
+let maintenanceActive = false;
+
+async function refreshMaintenance() {
+  const section = document.getElementById('maintenance-owner');
+  const button = document.getElementById('maintenance-owner-button');
+  try {
+    const r = await fetch('/api/maintenance/status', {cache:'no-store', headers:{Authorization:'Bearer ' + token}});
+    if (!r.ok) throw new Error('status');
+    const state = await r.json();
+    section.style.display = state.owner ? 'block' : 'none';
+    if (!state.owner) return;
+    maintenanceActive = state.active;
+    document.getElementById('maintenance-owner-status').textContent = state.active ? 'Kundetilgang er pauset.' : 'Kundetilgang er åpen.';
+    button.textContent = state.active ? 'Åpne kundetilgang' : 'Sett kundetilgang på pause';
+    button.disabled = false;
+  } catch (_) {
+    button.disabled = true;
+    document.getElementById('maintenance-owner-status').textContent = 'Kunne ikke hente status. Prøv igjen.';
+  }
+}
+
+async function toggleMaintenance() {
+  await refreshMaintenance();
+  if (document.getElementById('maintenance-owner').style.display === 'none' || document.getElementById('maintenance-owner-button').disabled) return;
+  const next = !maintenanceActive;
+  if (next && !confirm('Sett hele kundetilgangen på pause? Kundene vil se en vedlikeholdsmelding til du åpner igjen.')) return;
+  document.getElementById('maintenance-owner-button').disabled = true;
+  try {
+    await api('/admin/maintenance', {method:'POST', body:JSON.stringify({active:next, confirmed:next})});
+  } catch (_) { toast('Kunne ikke endre status. Kontroller status før du prøver igjen.', false); }
+  await refreshMaintenance();
+}
 
 function toast(msg, good = true) {
   const t = document.getElementById('toast');
@@ -600,9 +637,12 @@ async function showApp(email) {
   document.getElementById('app').style.display = 'block';
   document.getElementById('app-header').style.display = 'flex';
   document.getElementById('user-email').textContent = email;
+  await refreshMaintenance();
   await loadStats();
   await loadQuestions();
 }
+
+setInterval(function() { if (token && document.getElementById('app').style.display === 'block') refreshMaintenance(); }, 15000);
 
 async function loadStats() {
   const s = await api('/admin/stats');

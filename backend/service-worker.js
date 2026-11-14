@@ -47,7 +47,9 @@ self.addEventListener('fetch', (event) => {
 
   // App and game pages change independently from the offline shell. Always
   // fetch the latest learner-facing interface instead of serving stale HTML.
-  if (/^\/(?:no|th|en)\/(?:app|flipp-flopp)\/?$/.test(url.pathname)) {
+  if (/^\/(?:no|th|en)\/(?:app|flipp-flopp)\/?$/.test(url.pathname) ||
+      /^\/(?:app|web)(?:\/(?:no|th|en))?\/?$/.test(url.pathname) ||
+      /^\/bok\/?$/.test(url.pathname)) {
     return;
   }
 
