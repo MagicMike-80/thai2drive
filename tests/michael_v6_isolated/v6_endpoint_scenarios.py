@@ -128,10 +128,13 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.hints = {"no": "Se på fargen som er nevnt i oppgaven.",
                           "en": "Look at the colour named in the question.",
                           "th": "ลองดูสีที่ระบุไว้ในโจทย์ครับ"}
+            self.alternatives = {"no": "Sammenlign fargene en om gangen.",
+                                 "en": "Compare the colours one by one.",
+                                 "th": "ลองเปรียบเทียบสีทีละตัวเลือกครับ"}
             guidance = {"question_digest": policy._content_digest(self.question), "reviewer": "synthetic-test-only",
                 "approval_reference": "synthetic-test-only", "reviewed_at": "2026-01-01T00:00:00Z",
                 "reviewed_languages": ["no", "th", "en"], "confirmation": self.confirmation,
-                "options": {lang: {option["id"]: {"hint": self.hints[lang], "alternative": self.hints[lang]}
+                "options": {lang: {option["id"]: {"hint": self.hints[lang], "alternative": self.alternatives[lang]}
                                    for option in self.question["options"] if option["id"] != self.question["correctOptionId"]}
                             for lang in ("no", "th", "en")}}
             self.extra_patches = [patch.object(tc, "_v6_access_authorizer", None),
@@ -204,12 +207,15 @@ def run_suite(tc, policy, mongo_client_class=None):
                     record = records[0]
                     self.assertEqual(len(record["events"]), 1)
                     self.assertEqual(record["level"], 1)
+                    second_wrong = await self.call(lang, "answer", wrong, v6_event_id="synthetic-second-wrong-0002")
+                    self.assertEqual(second_wrong["suggestions"][0]["v6_feedback"], "incorrect")
+                    self.assertEqual(second_wrong["reply"], self.alternatives[lang])
                     correct = await self.call(lang, "answer", right, v6_event_id="synthetic-correct-event-0002")
                     self.assertEqual(correct["suggestions"][0]["v6_feedback"], "correct")
                     self.assertEqual(correct["reply"], self.confirmation[lang])
                     record = await self.collection.find_one({"_id": record["_id"]})
                     self.assertEqual(record["level"], 0)
-                    self.assertEqual(len(record["events"]), 2)
+                    self.assertEqual(len(record["events"]), 3)
                     self.assertEqual(len(correct["suggestions"]), 1)
                     self.assertTrue((await self.call(lang, "hint"))["suggestions"])
                     self.assertTrue((await self.call(lang, "alternative"))["suggestions"])
