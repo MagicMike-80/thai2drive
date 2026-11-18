@@ -262,6 +262,25 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertFalse(tc._v6_initialize_premium_pilot())
             self.assertIsNone(tc._v6_access_authorizer)
 
+        async def test_existing_quiz_coach_without_context_does_not_use_v6(self):
+            async def empty_history(*args):
+                return []
+            async def empty_plan(*args):
+                return {}
+            async def unexpected_v6(*args):
+                raise AssertionError("Existing coach was routed to V6")
+            with patch.object(tc, "_load_session_history", empty_history), \
+                 patch.object(tc, "_load_study_plan", empty_plan), \
+                 patch.object(tc, "_v6_quiz_pilot", unexpected_v6):
+                for lang in ("no", "th", "en"):
+                    response = await self.client.post("/api/teacher/chat", json={
+                        "message": "synthetic", "language": lang, "mode": "quiz_coach"})
+                    self.assertEqual(response.status_code, 200)
+                    body = response.json()
+                    self.assertEqual(body["mode"], "quiz_coach")
+                    self.assertEqual(body["reply"], tc._V4_COPY[lang]["quiz_missing"])
+            self.assertEqual(await self.collection.count_documents({}), 0)
+
         async def test_atomic_concurrent_retries_and_student_isolation(self):
             scope = {"principal": "synthetic-user", "delivery_session": "synthetic-session",
                      "language": "no", "question_id": "synthetic-question"}
@@ -279,3 +298,4 @@ def run_suite(tc, policy, mongo_client_class=None):
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
     return unittest.TextTestRunner(verbosity=2).run(suite)
+
