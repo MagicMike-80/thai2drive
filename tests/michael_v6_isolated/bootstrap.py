@@ -153,9 +153,11 @@ def run_integration_after_review():
             raise RuntimeError("Test MongoDB port was already in use")
     dbpath = Path("/tmp/v6-mongodb")
     dbpath.mkdir(mode=0o700, exist_ok=False)
+    startup_log = open("/tmp/v6-mongod-startup.log", "wb")
     process = subprocess.Popen(["/usr/local/bin/mongod", "--bind_ip", "127.0.0.1", "--port", "27017",
-                                "--dbpath", str(dbpath), "--nounixsocket", "--quiet"],
-                               stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                                "--dbpath", str(dbpath), "--nounixsocket", "--quiet",
+                                "--wiredTigerCacheSizeGB", "0.25", "--logpath", "/tmp/v6-mongod.log"],
+                               stdin=subprocess.DEVNULL, stdout=startup_log, stderr=subprocess.STDOUT)
     try:
         client = MongoClient("mongodb://127.0.0.1:27017/?directConnection=true", serverSelectionTimeoutMS=500)
         for _ in range(30):
@@ -164,7 +166,10 @@ def run_integration_after_review():
                 break
             except Exception:
                 if process.poll() is not None:
-                    raise RuntimeError("Isolated MongoDB exited during startup")
+                    log = Path("/tmp/v6-mongod.log")
+                    log = log if log.exists() else Path("/tmp/v6-mongod-startup.log")
+                    detail = log.read_text(encoding="utf-8", errors="replace")[-4000:]
+                    raise RuntimeError(f"Isolated MongoDB exited ({process.returncode}): {detail}")
                 time.sleep(0.2)
         else:
             raise RuntimeError("Isolated MongoDB did not become ready")
@@ -182,6 +187,7 @@ def run_integration_after_review():
     finally:
         process.terminate()
         process.wait(timeout=10)
+        startup_log.close()
 
 
 def main():
@@ -194,3 +200,4 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"Isolation gate failed: {exc}", file=sys.stderr)
         raise SystemExit(1)
+
