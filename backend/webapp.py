@@ -8462,35 +8462,47 @@ async function enterGuest() {
   async function prepareGuest() {
     var previous = _ls.get('t2d_guest_device_id');
     var proof = _ls.get('t2d_guest_key');
-    _guestKey = null;
+    var firstVisit = !previous && !proof;
     if (previous && !previous.startsWith('web_guest_v6-')) return ensureGuestDeviceId();
     if (previous) {
       if (!proof || !/^[0-9a-f]{64}$/.test(proof)) throw new Error('Missing guest credential');
-      _guestKey = proof;
       return previous;
     }
-    if (!window.isSecureContext || !window.crypto || !crypto.getRandomValues) return ensureGuestDeviceId();
+    if (!window.isSecureContext || !window.crypto || !crypto.getRandomValues) {
+      if (firstVisit) return ensureGuestDeviceId();
+      throw new Error('Guest credential unavailable');
+    }
     if (!proof) {
       var bytes = crypto.getRandomValues(new Uint8Array(32));
       proof = Array.from(bytes, function(b) { return b.toString(16).padStart(2,'0'); }).join('');
       _ls.set('t2d_guest_key', proof);
       if (_ls.get('t2d_guest_key') !== proof) return ensureGuestDeviceId();
     }
-    var response = await fetch('/api/access/guest-session', {
-      method:'POST', cache:'no-store', headers:{'X-T2D-Guest-Key':proof}
-    });
-    if (!response.ok) throw new Error('Guest session unavailable');
-    var issued = await response.json();
-    if (!issued.ready) return ensureGuestDeviceId();
+    var issued;
+    try {
+      var response = await fetch('/api/access/guest-session', {
+        method:'POST', cache:'no-store', headers:{'X-T2D-Guest-Key':proof}
+      });
+      if (!response.ok) throw new Error('Guest session unavailable');
+      issued = await response.json();
+    } catch (error) {
+      if (firstVisit) return ensureGuestDeviceId();
+      throw error;
+    }
+    if (!issued.ready) {
+      if (firstVisit) return ensureGuestDeviceId();
+      throw new Error('Guest session unavailable');
+    }
     if (!/^web_guest_v6-[0-9a-f]{64}$/.test(issued.device_id)) throw new Error('Invalid guest session');
     _ls.set('t2d_guest_device_id', issued.device_id);
-    _guestKey = proof;
     return issued.device_id;
   }
   try {
-    deviceId = navigator.locks ? await navigator.locks.request('t2d-guest-session', prepareGuest) : await prepareGuest();
-  } catch (error) { toast(t('coach_unavailable')); return; }
+    var guestDevice = navigator.locks ? await navigator.locks.request('t2d-guest-session', prepareGuest) : await prepareGuest();
+  } catch (error) { if (!token) toast(t('generic_error')); return; }
   if (token) return;
+  deviceId = guestDevice;
+  _guestKey = guestDevice.startsWith('web_guest_v6-') ? _ls.get('t2d_guest_key') : null;
   enterApp();
 }
 

@@ -32,5 +32,29 @@ vm.runInContext(source.slice(start, end), context);
   context.fetch = async () => { throw new Error('offline'); };
   await context._refreshV6Availability();
   assert.equal(button.hidden, true, 'network errors fail closed');
+  const entry = source.slice(source.indexOf('function ensureGuestDeviceId()'), source.indexOf('function openGuestRegistration()'));
+  const storage = new Map();
+  const crypto = require('node:crypto').webcrypto;
+  let opened = 0, failed = 0;
+  const guest = {window:{isSecureContext:true,crypto}, crypto, navigator:{}, deviceId:null,
+    token:null, user:null, _guestKey:null, _ls:{get:k=>storage.get(k), set:(k,v)=>storage.set(k,v), remove:k=>storage.delete(k)},
+    fetch:async()=>{throw new Error('offline');}, enterApp:()=>opened++, t:k=>k, toast:()=>failed++};
+  vm.runInNewContext(entry, guest);
+  await guest.enterGuest();
+  assert.match(guest.deviceId, /^web_guest_(?!v6-)/, 'first visit retains ordinary guest access offline');
+  assert.equal(guest._guestKey, null);
+  assert.equal(opened, 1);
+  storage.delete('t2d_guest_device_id');
+  await guest.enterGuest();
+  assert.equal(failed, 1, 'existing proof cannot be exchanged for fresh quota while offline');
+  assert.equal(opened, 1);
+  guest.fetch = async () => {
+    guest.token = 'synthetic-account'; guest.deviceId = 'account-id';
+    return {ok:true, json:async()=>({ready:true, device_id:'web_guest_v6-'+'a'.repeat(64)})};
+  };
+  await guest.enterGuest();
+  assert.equal(guest.deviceId, 'account-id');
+  assert.equal(guest._guestKey, null);
+  assert.equal(opened, 1, 'a late guest handshake must not reopen the app as a guest');
   console.log('PASS V6 availability: closed by default, auth/language race and network failure');
 })().catch(error => { console.error(error); process.exitCode = 1; });
