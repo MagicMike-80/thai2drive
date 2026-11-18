@@ -188,10 +188,10 @@ def run_suite(tc, policy, mongo_client_class=None):
                     self.assertEqual(changed["suggestions"][0]["v6_feedback"], "unavailable")
                     self.assertNotIn(old["options"][0]["text"][lang], changed["reply"])
                     await self.questions.replace_one({"id": old["id"]}, dict(old))
-                    duplicate = await self.questions.insert_one(dict(old))
+                    inserted = await self.questions.insert_one(dict(old))
                     duplicate = await self.call(lang, "explain")
                     self.assertEqual(duplicate["suggestions"][0]["v6_feedback"], "unavailable")
-                    await self.questions.delete_one({"_id": duplicate.inserted_id})
+                    await self.questions.delete_one({"_id": inserted.inserted_id})
 
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
