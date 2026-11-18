@@ -36,6 +36,7 @@ def run_suite(tc, policy, mongo_client_class=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
     from fastapi import FastAPI
+    from backend.webapp import webapp_router
 
     class EndpointScenarios(unittest.IsolatedAsyncioTestCase):
         async def asyncSetUp(self):
@@ -105,6 +106,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                 self.token, self.question["id"], self.question, "synthetic-user")
             self.assertTrue(self.actor_binding)
             app = FastAPI()
+            app.include_router(webapp_router)
             app.include_router(tc.teacher_router, prefix="/api")
             self.client = httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://synthetic.invalid")
 
@@ -130,11 +132,47 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(response.status_code, 200)
             return response.json()
 
+        async def exercise_browser_delivery(self, lang):
+            # The driver lives in a separate network namespace. Its only way
+            # into this ASGI app is a bounded set of synthetic HTTP requests.
+            previous = {row["_id"] async for row in self.collection.find({}, {"_id": 1})}
+            print("V6 " + json.dumps({"language": lang, "question": self.question["question"][lang],
+                "wrong": self.question["options"][1]["text"][lang], "right": self.question["options"][0]["text"][lang],
+                "hint": self.hints[lang], "alternative": self.alternatives[lang], "confirmation": self.confirmation[lang]}), flush=True)
+            page_path = f"/{lang}/app"
+            status_path = f"/api/teacher/v6/status?language={lang}"
+            allowed = {("GET", page_path), ("GET", status_path),
+                       ("POST", "/api/teacher/v6/text/start"), ("POST", "/api/teacher/chat")}
+            for _ in range(24):
+                line = sys.stdin.buffer.readline(16385)
+                self.assertTrue(line.endswith(b"\n") and len(line) <= 16384, "Incomplete browser request")
+                request = json.loads(line)
+                if request == {"finished": lang}:
+                    break
+                method, path = request["method"], request["path"]
+                self.assertIn((method, path), allowed)
+                headers = {}
+                if path != page_path:
+                    self.assertEqual(request["authorization"], "Bearer synthetic-bearer")
+                    headers["Authorization"] = request["authorization"]
+                response = await self.client.request(method, path, headers=headers, json=request.get("body"))
+                self.assertEqual(response.status_code, 200, path)
+                print("V6 " + json.dumps({"status": response.status_code, "type": response.headers["content-type"],
+                                          "body": response.text}, ensure_ascii=False), flush=True)
+            else:
+                self.fail("Browser did not complete the delivery within the request limit")
+            records = [r async for r in self.collection.find({}) if r["_id"] not in previous]
+            self.assertEqual(len(records), 1)
+            self.assertEqual(records[0]["level"], 0)
+            self.assertEqual([e["verdict"] for e in records[0]["events"]], ["incorrect", "incorrect", "correct"])
+            print(f"Chromium and MongoDB passed for {lang}", file=sys.stderr, flush=True)
+
         async def test_six_paths_all_languages(self):
             for lang in ("no", "th", "en"):
                 right = self.question["options"][0]["text"][lang]
                 wrong = self.question["options"][1]["text"][lang]
                 with self.subTest(language=lang):
+                    await self.exercise_browser_delivery(lang)
                     delivery = await self.client.post("/api/teacher/v6/text/start", json={"language": lang},
                         headers={"Authorization": "Bearer synthetic-bearer"})
                     self.assertEqual(delivery.status_code, 200)

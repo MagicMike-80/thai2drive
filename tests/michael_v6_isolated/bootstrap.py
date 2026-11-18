@@ -16,6 +16,8 @@ EXPECTED_ENV = {"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": "/tmp", "TMPDIR"
 ALLOWED_INPUT_FILES = {
     "backend/teacher_chat.py", "backend/michael_v6_policy.py", "backend/ai_learning.py",
     "backend/michael_greetings.py", "backend/media_catalog.py",
+    "backend/webapp.py", "backend/site_config.py", "backend/i18n_routing.py",
+    "backend/stopping_distance_web.py", "backend/studybook_web.py",
     "backend/learning_areas.json", "backend/regelbank.json",
     "tests/michael_v6_isolated/bootstrap.py", "tests/michael_v6_isolated/fake_services.py",
     "tests/michael_v6_isolated/v6_endpoint_scenarios.py",

@@ -9,6 +9,10 @@ on:
       - tests/michael_v6_isolated/**
       - backend/teacher_chat.py
       - backend/webapp.py
+      - backend/stopping_distance_web.py
+      - backend/studybook_web.py
+      - backend/i18n_routing.py
+      - backend/site_config.py
       - backend/michael_v6_policy.py
       - backend/ai_learning.py
       - backend/michael_greetings.py
@@ -33,6 +37,10 @@ jobs:
           sparse-checkout: |
             /backend/teacher_chat.py
             /backend/webapp.py
+            /backend/stopping_distance_web.py
+            /backend/studybook_web.py
+            /backend/i18n_routing.py
+            /backend/site_config.py
             /backend/michael_v6_policy.py
             /backend/ai_learning.py
             /backend/michael_greetings.py
@@ -54,8 +62,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          deps="$(mktemp -d)"
-          mkdir "$deps/home"
+          deps="$RUNNER_TEMP/v6-browser"
+          mkdir -p "$deps/home"
           curl --fail --silent --show-error --location \
             https://registry.npmjs.org/playwright-core/-/playwright-core-1.62.1.tgz -o "$deps/playwright.tgz"
           digest="$(openssl dgst -sha512 -binary "$deps/playwright.tgz" | openssl base64 -A)"
@@ -84,6 +92,8 @@ jobs:
           mkdir -p "$input"
           cp --parents \
             backend/teacher_chat.py backend/michael_v6_policy.py backend/ai_learning.py \
+            backend/webapp.py backend/studybook_web.py backend/stopping_distance_web.py \
+            backend/i18n_routing.py backend/site_config.py \
             backend/michael_greetings.py backend/media_catalog.py \
             backend/learning_areas.json backend/regelbank.json \
             tests/michael_v6_isolated/bootstrap.py tests/michael_v6_isolated/fake_services.py \
@@ -98,7 +108,7 @@ jobs:
           container="michael-v6-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           cleanup() { docker rm -f "$container" >/dev/null 2>&1 || true; }
           trap cleanup EXIT
-          docker create --name "$container" --network none --read-only \
+          docker create --interactive --name "$container" --network none --read-only \
             --user 65534:65534 --cap-drop ALL --security-opt no-new-privileges:true \
             --pids-limit 128 --memory 1g --cpus 2 \
             --tmpfs /tmp:rw,nosuid,nodev,noexec,size=512m \
@@ -113,5 +123,12 @@ jobs:
             python3 -I -B tests/michael_v6_isolated/inspect_container.py \
             "$RUNNER_TEMP/v6-inspection.json" "$input" "$image"
           # Only the inspected, network-isolated container may import the app.
-          docker start --attach "$container"
+          channel="$RUNNER_TEMP/v6-browser-requests"
+          mkfifo -m 600 "$channel"
+          deps="$RUNNER_TEMP/v6-browser"
+          timeout 180 docker start --attach --interactive "$container" < "$channel" | \
+            timeout 180 sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" --clear-groups \
+              --no-new-privs env -i PATH=/usr/bin:/bin LANG=C.UTF-8 HOME="$deps/home" \
+              V6_PLAYWRIGHT_PATH="$deps/package" V6_CHROME_PATH="$(command -v google-chrome)" \
+              "$(command -v node)" tests/michael_v6_isolated/browser_delivery.cjs > "$channel"
           test "$(docker inspect --format '{{.State.ExitCode}}' "$container")" = 0
