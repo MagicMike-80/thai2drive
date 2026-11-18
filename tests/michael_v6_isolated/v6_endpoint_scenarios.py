@@ -269,6 +269,21 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertFalse(tc._v6_initialize_premium_pilot())
             self.assertIsNone(tc._v6_access_authorizer)
 
+        async def test_stale_or_missing_guidance_blocks_delivery_and_fasit(self):
+            review = policy.APPROVED_GUIDANCE[self.question["id"]]
+            for bad_digest in ("0" * 64, None):
+                if bad_digest is None:
+                    policy.APPROVED_GUIDANCE.pop(self.question["id"], None)
+                else:
+                    review["question_digest"] = bad_digest
+                delivery = await self.client.post("/api/teacher/v6/text/start", json={"language": "no"},
+                    headers={"Authorization": "Bearer synthetic-bearer"})
+                self.assertFalse(delivery.json()["ready"])
+                response = await self.call("no", "explain")
+                self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
+                self.assertNotIn(self.question["options"][0]["text"]["no"], response["reply"])
+            self.assertEqual(await self.collection.count_documents({}), 0)
+
         async def test_existing_quiz_coach_without_context_does_not_use_v6(self):
             async def empty_history(*args):
                 return []
