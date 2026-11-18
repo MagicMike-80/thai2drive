@@ -33,7 +33,7 @@ def validate(record, source, image_id):
     if host.get("PidsLimit") != 128 or host.get("Memory") != 1073741824 or host.get("NanoCpus") != 2000000000:
         raise ValueError("Resource limits do not match")
     tmpfs = host.get("Tmpfs") or {}
-    if set(tmpfs) != {"/tmp"} or not {"rw", "nosuid", "nodev", "noexec", "size=128m"}.issubset(set(tmpfs["/tmp"].split(","))):
+    if set(tmpfs) != {"/tmp"} or not {"rw", "nosuid", "nodev", "noexec", "size=512m"}.issubset(set(tmpfs["/tmp"].split(","))):
         raise ValueError("Temporary filesystem does not match")
     mounts = record.get("Mounts") or []
     if len(mounts) != 1:

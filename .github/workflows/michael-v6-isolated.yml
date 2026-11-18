@@ -73,7 +73,7 @@ jobs:
           docker create --name "$container" --network none --read-only \
             --user 65534:65534 --cap-drop ALL --security-opt no-new-privileges:true \
             --pids-limit 128 --memory 1g --cpus 2 \
-            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=512m \
             --mount "type=bind,src=$input,dst=/sandbox/input,readonly" \
             --workdir /sandbox/input --entrypoint /usr/bin/env "$image" \
             -i PATH=/usr/local/bin:/usr/bin:/bin HOME=/tmp TMPDIR=/tmp LANG=C.UTF-8 \
@@ -86,4 +86,3 @@ jobs:
             "$RUNNER_TEMP/v6-inspection.json" "$input" "$image"
           # Only the inspected, network-isolated container may import the app.
           docker start --attach "$container"
-
