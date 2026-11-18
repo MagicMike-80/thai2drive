@@ -123,13 +123,23 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.db_patch = patch.object(tc, "_db", {"questions": self.questions, "users": Users(),
                                                       "michael_v6_guidance": self.collection})
             self.db_patch.start()
+            self.confirmation = {"no": "Riktig, svaret er blått.", "en": "Correct, the answer is blue.",
+                                 "th": "ถูกต้องครับ คำตอบคือสีน้ำเงิน"}
+            self.hints = {"no": "Se på fargen som er nevnt i oppgaven.",
+                          "en": "Look at the colour named in the question.",
+                          "th": "ลองดูสีที่ระบุไว้ในโจทย์ครับ"}
+            guidance = {"question_digest": policy._content_digest(self.question), "reviewer": "synthetic-test-only",
+                "approval_reference": "synthetic-test-only", "reviewed_at": "2026-01-01T00:00:00Z",
+                "reviewed_languages": ["no", "th", "en"], "confirmation": self.confirmation,
+                "options": {lang: {option["id"]: {"hint": self.hints[lang], "alternative": self.hints[lang]}
+                                   for option in self.question["options"] if option["id"] != self.question["correctOptionId"]}
+                            for lang in ("no", "th", "en")}}
             self.extra_patches = [patch.object(tc, "_v6_access_authorizer", None),
                 patch.object(tc, "_v6_text_delivery_authorizer", None),
                 patch.object(tc, "_v6_guidance_store", None),
                 patch.object(tc, "_v6_semantic_judge", None),
-                # The fixture is synthetic; this test does not certify content review.
-                patch.object(tc, "_v6_content_ready", lambda *args: True),
-                patch.object(policy, "APPROVED_GUIDANCE", {"synthetic-test-only": True})]
+                # The review record is synthetic; no actual content is approved.
+                patch.object(policy, "APPROVED_GUIDANCE", {self.question["id"]: guidance})]
             for item in self.extra_patches:
                 item.start()
             self.approvals_patch = patch.object(policy, "APPROVED_CONTENT_DIGESTS", {
@@ -186,9 +196,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                     existing_ids = {row["_id"] async for row in self.collection.find({})}
                     incorrect = await self.call(lang, "answer", wrong)
                     self.assertEqual(incorrect["suggestions"][0]["v6_feedback"], "incorrect")
-                    expected_hint = {"no": "prøv et annet alternativ", "en": "try another option",
-                                     "th": "ลองดูสถานการณ์อีกครั้ง"}
-                    self.assertIn(expected_hint[lang], incorrect["reply"])
+                    self.assertEqual(incorrect["reply"], self.hints[lang])
                     for _ in range(4):
                         self.assertTrue((await self.call(lang, "answer", wrong))["suggestions"])
                     records = [row async for row in self.collection.find({}) if row["_id"] not in existing_ids]
@@ -198,8 +206,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                     self.assertEqual(record["level"], 1)
                     correct = await self.call(lang, "answer", right, v6_event_id="synthetic-correct-event-0002")
                     self.assertEqual(correct["suggestions"][0]["v6_feedback"], "correct")
-                    confirmation = {"no": "Det er riktig.", "en": "That is correct.", "th": "ถูกต้องครับ"}
-                    self.assertEqual(correct["reply"], confirmation[lang])
+                    self.assertEqual(correct["reply"], self.confirmation[lang])
                     record = await self.collection.find_one({"_id": record["_id"]})
                     self.assertEqual(record["level"], 0)
                     self.assertEqual(len(record["events"]), 2)
