@@ -242,6 +242,17 @@ def run_suite(tc, policy, mongo_client_class=None):
                 self.assertEqual(wrong_session["suggestions"][0]["v6_feedback"], "unavailable")
             self.assertEqual(await self.collection.count_documents({}), 0)
 
+        async def test_revoked_access_denied_before_delivery_and_after_delivery(self):
+            headers = {"Authorization": "Bearer other-bearer"}
+            response = await self.client.post("/api/teacher/v6/text/start", json={"language": "no"}, headers=headers)
+            self.assertFalse(response.json()["ready"])
+            self.server._user_has_active_premium = lambda user: False
+            response = await self.call("no", "answer", self.question["options"][0]["text"]["no"])
+            self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
+            response = await self.call("no", "explain")
+            self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
+            self.assertEqual(await self.collection.count_documents({}), 0)
+
         async def test_atomic_concurrent_retries_and_student_isolation(self):
             scope = {"principal": "synthetic-user", "delivery_session": "synthetic-session",
                      "language": "no", "question_id": "synthetic-question"}
