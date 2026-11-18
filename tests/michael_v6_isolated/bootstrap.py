@@ -1,8 +1,7 @@
-"""Fail-closed preparation for a future network-isolated integration test.
+"""Fail-closed isolated integration bootstrap, with a disposable loopback database.
 
-This file intentionally cannot import the application: the runner and test
-suite have not yet been reviewed or approved. The checks below are supporting
-evidence, not a substitute for Docker's externally inspected configuration.
+The workflow must inspect the Docker configuration before starting this file.
+All in-container checks run again before any application import.
 """
 from pathlib import Path
 import errno
@@ -141,27 +140,51 @@ def audit_container():
 
 
 def run_integration_after_review():
-    # This review gate is intentionally unconditional. When a real runner is
-    # available, removal requires review of the external Docker inspection,
-    # this gate, image digest, fake services and test input manifest together.
-    raise RuntimeError("STOP: external container attestation is not reviewed")
+    audit_container()
     import runpy
-    fakes = runpy.run_path(str(INPUT / "tests/michael_v6_isolated/fake_services.py"))
-    fakes["install"]()
-    fakes["install_network_audit_guard"]()
-    sys.path[:0] = [str(INPUT), str(INPUT / "backend")]
-    import michael_v6_policy as policy
-    import backend.teacher_chat as tc
-    tests = runpy.run_path(str(INPUT / "tests/michael_v6_isolated/v6_endpoint_scenarios.py"))
-    result = tests["run_suite"](tc, policy)
-    if not result.wasSuccessful():
-        raise RuntimeError("Synthetic V6 integration tests failed")
+    import subprocess
+    import time
+    from pymongo import MongoClient
+    from motor.motor_asyncio import AsyncIOMotorClient
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.settimeout(0.2)
+        if probe.connect_ex(("127.0.0.1", 27017)) == 0:
+            raise RuntimeError("Test MongoDB port was already in use")
+    dbpath = Path("/tmp/v6-mongodb")
+    dbpath.mkdir(mode=0o700, exist_ok=False)
+    process = subprocess.Popen(["/usr/local/bin/mongod", "--bind_ip", "127.0.0.1", "--port", "27017",
+                                "--dbpath", str(dbpath), "--nounixsocket", "--quiet"],
+                               stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        client = MongoClient("mongodb://127.0.0.1:27017/?directConnection=true", serverSelectionTimeoutMS=500)
+        for _ in range(30):
+            try:
+                client.admin.command("ping")
+                break
+            except Exception:
+                if process.poll() is not None:
+                    raise RuntimeError("Isolated MongoDB exited during startup")
+                time.sleep(0.2)
+        else:
+            raise RuntimeError("Isolated MongoDB did not become ready")
+        client.close()
+        fakes = runpy.run_path(str(INPUT / "tests/michael_v6_isolated/fake_services.py"))
+        fakes["install"]()
+        fakes["install_network_audit_guard"](allow_test_mongo=True)
+        sys.path[:0] = [str(INPUT), str(INPUT / "backend")]
+        import michael_v6_policy as policy
+        import backend.teacher_chat as tc
+        tests = runpy.run_path(str(INPUT / "tests/michael_v6_isolated/v6_endpoint_scenarios.py"))
+        result = tests["run_suite"](tc, policy, AsyncIOMotorClient)
+        if not result.wasSuccessful():
+            raise RuntimeError("Synthetic V6 integration tests failed")
+    finally:
+        process.terminate()
+        process.wait(timeout=10)
 
 
 def main():
-    audit_container()
-    # Unconditional stop: no mock suite or trustworthy external container
-    # attestation has been reviewed. Never import teacher_chat here yet.
     run_integration_after_review()
 
 

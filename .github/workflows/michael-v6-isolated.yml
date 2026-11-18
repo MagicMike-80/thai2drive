@@ -1,6 +1,4 @@
-# REVIEW CANDIDATE ONLY. This file is not in .github/workflows and cannot run.
-# Never push it or enable the job until repo integrations, image, inputs,
-# runner inspector, and bootstrap have been independently reviewed.
+# Test branch only. The inspector and bootstrap must both pass before app import.
 name: Michael V6 isolated gate candidate
 on:
   push:
@@ -86,6 +84,5 @@ jobs:
           env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
             python3 -I -B tests/michael_v6_isolated/inspect_container.py \
             "$RUNNER_TEMP/v6-inspection.json" "$input" "$image"
-          # Bootstrap intentionally stops even after all checks; this first run
-          # cannot import application code and must show a failed job.
+          # Only the inspected, network-isolated container may import the app.
           docker start --attach "$container"

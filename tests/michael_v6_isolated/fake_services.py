@@ -52,9 +52,16 @@ def install():
                         "dotenv": dotenv, "litellm": litellm, "smtplib": smtp})
 
 
-def install_network_audit_guard():
-    """Deny application network and child process operations in this process."""
+def install_network_audit_guard(*, allow_test_mongo=False):
+    """Deny external network and child processes; optionally allow loopback Mongo only."""
     def guard(event, args):
+        if allow_test_mongo and event in ("socket.connect", "socket.connect_ex"):
+            address = args[1] if len(args) > 1 else None
+            if isinstance(address, tuple) and len(address) >= 2 and address[:2] == ("127.0.0.1", 27017):
+                return
+        if allow_test_mongo and event == "socket.getaddrinfo":
+            if len(args) >= 2 and args[0] == "127.0.0.1" and str(args[1]) == "27017":
+                return
         if event in ("socket.connect", "socket.connect_ex", "socket.sendto",
                      "socket.getaddrinfo", "socket.gethostbyname", "os.system"):
             raise RuntimeError("Unexpected network or shell operation")
