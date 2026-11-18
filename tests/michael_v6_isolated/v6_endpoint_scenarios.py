@@ -366,12 +366,22 @@ def run_suite(tc, policy, mongo_client_class=None):
             draft = json.loads(Path(__file__).with_name("stop_sign_candidate_v1.json").read_text(encoding="utf-8"))
             self.assertEqual(draft["status"], "test_only_thai_review_pending")
             candidate = draft["question"]
+            guidance = draft["guidance_draft"]
+            self.assertEqual(guidance["question_digest"], policy._content_digest(candidate))
+            self.assertEqual(guidance["reviewed_languages"], [])
             self.assertNotIn(candidate["id"], policy.APPROVED_CONTENT_DIGESTS)
             self.assertIsNone(policy.issue_delivery_token(candidate))
             await self.questions.replace_one({"id": self.question["id"]}, dict(candidate))
             response = await self.client.post("/api/teacher/v6/text/start", json={"language": "th"},
                 headers=self.headers)
             self.assertFalse(response.json()["ready"])
+            with patch.dict(policy.APPROVED_CONTENT_DIGESTS, {candidate["id"]: guidance["question_digest"]}), \
+                 patch.dict(policy.APPROVED_GUIDANCE, {candidate["id"]: guidance}):
+                for language in ("no", "th", "en"):
+                    self.assertEqual(set(guidance["options"][language]), {"A", "C"})
+                    response = await self.client.post("/api/teacher/v6/text/start", json={"language": language},
+                                                      headers=self.headers)
+                    self.assertFalse(response.json()["ready"])
             self.assertEqual(await self.collection.count_documents({}), 0)
 
         async def test_existing_quiz_coach_without_context_does_not_use_v6(self):

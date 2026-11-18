@@ -2,6 +2,34 @@
   "fixture_version": 1,
   "status": "test_only_thai_review_pending",
   "approval": "Michael approved Norwegian situation, question and answer B for development on 2026-11-18; Thai review and multilingual approval pending.",
+  "guidance_draft": {
+    "question_digest": "b8cf89e2042c5deb7557078be09240ab5c60c46f35b49ec360f4dabf7e40d5ba",
+    "reviewed_languages": [],
+    "prompts": {
+      "no": {"hint": "Hva må bilen gjøre ved stopplinjen før du kjører inn i krysset?", "alternative": "Tenk deg at bilen står helt stille ved linjen. Hvem må du vike for før du kjører videre?"},
+      "th": {"hint": "ก่อนขับเข้าทางแยก คุณต้องทำอย่างไรเมื่อถึงเส้นหยุด?", "alternative": "ลองนึกว่าคุณหยุดรถสนิทที่เส้นหยุดแล้ว ก่อนขับต่อคุณต้องให้ทางรถที่มาจากทางใดบ้าง?"},
+      "en": {"hint": "What must the car do at the stop line before you enter the junction?", "alternative": "Imagine your car has come to a complete stop at the line. Who must you give way to before moving off?"}
+    },
+    "options": {
+      "no": {
+        "A": {"hint": "Du har funnet en luke. Hva krever stoppskiltet selv om det er plass?", "alternative": "Se for deg hjulene ved stopplinjen. Hva er forskjellen mellom å rulle sakte og å stå helt stille?"},
+        "C": {"hint": "Du har sett bilen fra høyre. Hva må du også ta hensyn til på venstre side?", "alternative": "Se krysset fra bilen som kommer fra venstre. Hvis føreren må bremse når du kjører ut, har du da veket for bilen?"}
+      },
+      "th": {
+        "A": {"hint": "แม้จะมีช่องว่างพอให้ขับออกไป ป้ายหยุดกำหนดให้คุณทำอะไรก่อน?", "alternative": "ลองนึกถึงล้อรถตรงเส้นหยุด ล้อที่ยังหมุนช้า ๆ ต่างจากล้อที่หยุดนิ่งอย่างไร?"},
+        "C": {"hint": "คุณเห็นรถที่มาจากทางขวาแล้ว ยังต้องสังเกตอะไรทางซ้ายด้วย?", "alternative": "ลองมองจากมุมของคนขับรถที่มาจากทางซ้าย ถ้าเขาต้องเบรกเพราะคุณขับออกไป ถือว่าคุณให้ทางเขาแล้วหรือยัง?"}
+      },
+      "en": {
+        "A": {"hint": "You have spotted a gap. What does the stop sign require even when there is room?", "alternative": "Picture the wheels at the stop line. How is rolling slowly different from being completely still?"},
+        "C": {"hint": "You have noticed the vehicle on the right. What else do you need to check on your left?", "alternative": "Imagine you are the driver coming from the left. If you have to brake when another car pulls out, has that driver given way to you?"}
+      }
+    },
+    "confirmation": {
+      "no": "Riktig. Du stanser helt foran og inntil stopplinjen og lar trafikken fra begge retninger passere før du kjører ut når det er trygt.",
+      "th": "ถูกต้องครับ คุณหยุดรถสนิทก่อนถึงและชิดเส้นหยุด ให้ทางรถที่มาจากทั้งสองทิศทาง แล้วจึงขับออกไปเมื่อปลอดภัย",
+      "en": "Correct. You come to a complete stop immediately before and close to the stop line, give way to traffic from both directions and move off when it is safe."
+    }
+  },
   "question": {
     "id": "test-only-v6-stop-sign-v1",
     "active": true,
