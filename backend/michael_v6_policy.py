@@ -148,6 +148,47 @@ def reviewed_confirmation(question_id, question_digest, language):
     return value.strip() if isinstance(value, str) and 0 < len(value.strip()) <= 500 else None
 
 
+def reviewed_prompt(question_id, question_digest, language, intent):
+    """Question-level guidance for a learner who has not chosen an option."""
+    if intent not in ("hint", "alternative"):
+        return None
+    item = _reviewed_guidance_item(question_id, question_digest, language)
+    prompts = item.get("prompts") if item else None
+    prompts = prompts.get(language) if isinstance(prompts, dict) else None
+    value = prompts.get(intent) if isinstance(prompts, dict) else None
+    return value.strip() if isinstance(value, str) and 0 < len(value.strip()) <= 500 else None
+
+
+def _answer_phrase_index(item, question, language):
+    """Whole, reviewed equivalents only. An ambiguous mapping disables the item."""
+    if "answer_phrases" not in item:
+        return {}
+    groups = item["answer_phrases"]
+    variants = groups.get(language) if isinstance(groups, dict) else None
+    options = {option["id"] for option in question["options"]}
+    if not isinstance(variants, dict) or not variants.keys() <= options:
+        return None
+    phrases = {}
+    for option_id, answers in variants.items():
+        if not isinstance(answers, list) or len(answers) > 32:
+            return None
+        for answer in answers:
+            phrase = _normalise(answer)
+            if (not 2 <= len(phrase) <= 500 or "?" in phrase or phrase in phrases
+                    or assess_student_answer(question, language, phrase) != "unknown"):
+                return None
+            phrases[phrase] = option_id
+    return phrases
+
+
+def reviewed_answer_option(question_id, question_digest, question, language, answer):
+    item = _reviewed_guidance_item(question_id, question_digest, language)
+    if not item or not isinstance(question, dict) or not isinstance(question.get("options"), list):
+        return None
+    phrases = _answer_phrase_index(item, question, language)
+    return phrases.get(_normalise(answer)) if phrases else None
+
+
 def reviewed_guidance_covers_question(question_id, question_digest, question, language_check):
     """Fail closed unless every option and reviewed response covers all UI languages."""
     if not callable(language_check) or not isinstance(question, dict):
@@ -170,6 +211,15 @@ def reviewed_guidance_covers_question(question_id, question_digest, question, la
             confirmation = reviewed_confirmation(question_id, question_digest, lang)
             if not confirmation or not language_check(confirmation, lang):
                 return False
+            item = _reviewed_guidance_item(question_id, question_digest, lang)
+            phrases = _answer_phrase_index(item, question, lang)
+            if phrases is None or any(not language_check(phrase, lang) for phrase in phrases):
+                return False
+            if "prompts" in item:
+                for intent in ("hint", "alternative"):
+                    prompt = reviewed_prompt(question_id, question_digest, lang, intent)
+                    if not prompt or not language_check(prompt, lang):
+                        return False
             for option in options:
                 if option["id"] != correct_id:
                     for level in (1, 2):

@@ -23,8 +23,9 @@ from unittest.mock import patch
 def synthetic_question():
     return {
         "id": "v6-synthetic-only", "active": True,
-        "question": {"no": "Hvilken farge er angitt?", "en": "Which colour is named?",
-                     "th": "สีใดที่ระบุไว้?"},
+        "question": {"no": "Du ser en blå sirkel. Hvilken farge har sirkelen?",
+                     "en": "You see a blue circle. What colour is the circle?",
+                     "th": "คุณเห็นวงกลมสีน้ำเงิน วงกลมนี้มีสีอะไร?"},
         "options": [
             {"id": "A", "text": {"no": "Blå", "en": "Blue", "th": "สีน้ำเงิน"}},
             {"id": "B", "text": {"no": "Rød", "en": "Red", "th": "สีแดง"}},
@@ -103,9 +104,18 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.alternatives = {"no": "Sammenlign fargene en om gangen.",
                                  "en": "Compare the colours one by one.",
                                  "th": "ลองเปรียบเทียบสีทีละตัวเลือกครับ"}
+            self.right_phrases = {"no": "Sirkelen er blå", "en": "The circle is blue", "th": "วงกลมนี้เป็นสีน้ำเงิน"}
+            self.wrong_phrases = {"no": "Sirkelen er rød", "en": "The circle is red", "th": "วงกลมนี้เป็นสีแดง"}
+            self.first_prompt = {"no": "Hvilket ord beskriver sirkelen i første setning?",
+                                 "en": "Which word describes the circle in the first sentence?",
+                                 "th": "คำใดในประโยคแรกบอกสีของวงกลม?"}
             guidance = {"question_digest": policy._content_digest(self.question), "reviewer": "synthetic-test-only",
                 "approval_reference": "synthetic-test-only", "reviewed_at": "2026-01-01T00:00:00Z",
                 "reviewed_languages": ["no", "th", "en"], "confirmation": self.confirmation,
+                "answer_phrases": {lang: {"A": [self.right_phrases[lang]], "B": [self.wrong_phrases[lang]]}
+                                   for lang in self.confirmation},
+                "prompts": {lang: {"hint": self.first_prompt[lang], "alternative": self.alternatives[lang]}
+                            for lang in self.confirmation},
                 "options": {lang: {option["id"]: {"hint": self.hints[lang], "alternative": self.alternatives[lang]}
                                    for option in self.question["options"] if option["id"] != self.question["correctOptionId"]}
                             for lang in ("no", "th", "en")}}
@@ -160,7 +170,8 @@ def run_suite(tc, policy, mongo_client_class=None):
             # into this ASGI app is a bounded set of synthetic HTTP requests.
             previous = {row["_id"] async for row in self.collection.find({}, {"_id": 1})}
             print("V6 " + json.dumps({"language": lang, "bearer": self.bearer, "question": self.question["question"][lang],
-                "wrong": self.question["options"][1]["text"][lang], "right": self.question["options"][0]["text"][lang],
+                "wrong": self.question["options"][1]["text"][lang], "wrongPhrase": self.wrong_phrases[lang],
+                "rightPhrase": self.right_phrases[lang], "firstPrompt": self.first_prompt[lang],
                 "hint": self.hints[lang], "alternative": self.alternatives[lang], "confirmation": self.confirmation[lang]}), flush=True)
             page_path = f"/{lang}/app"
             status_path = f"/api/teacher/v6/status?language={lang}"
@@ -187,7 +198,8 @@ def run_suite(tc, policy, mongo_client_class=None):
             records = [r async for r in self.collection.find({}) if r["_id"] not in previous]
             self.assertEqual(len(records), 1)
             self.assertEqual(records[0]["level"], 0)
-            self.assertEqual([e["verdict"] for e in records[0]["events"]], ["incorrect", "incorrect", "correct"])
+            self.assertEqual([(e["verdict"], e["level"]) for e in records[0]["events"]],
+                             [("unknown", 0), ("incorrect", 1), ("incorrect", 2), ("correct", 0)])
             print(f"Chromium and MongoDB passed for {lang}", file=sys.stderr, flush=True)
 
         async def test_six_paths_all_languages(self):

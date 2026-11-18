@@ -61,12 +61,26 @@ async function run(browser, lang) {
     await page.locator('#v6TextPilotBtn:not([hidden])').click();
     const chat = page.locator('#teacherMessages');
     await chat.getByText(item.question, {exact:true}).waitFor();
-    for (const [choice, expected] of [[item.wrong, item.hint], [item.wrong, item.alternative],
-                                      [item.right, item.confirmation]]) {
-      await chat.getByRole('button', {name:choice, exact:true}).click();
-      await chat.locator('.tm-bubble.assistant').filter({hasText:expected}).waitFor();
+    async function typeAnswer(text) {
+      await page.locator('#teacherInput').fill(text);
+      const replied = page.waitForResponse(response => new URL(response.url()).pathname === '/api/teacher/chat');
+      await page.locator('#teacherSendBtn').click();
+      const response = await (await replied).json();
       await page.waitForFunction(() => !_teacherTyping);
+      return response.suggestions[0].v6_feedback;
     }
+    const examples = {no:['Gi meg et hint', 'Blå eller rød'], en:['Give me a hint', 'Blue or red'],
+                      th:['ขอคำใบ้', 'สีน้ำเงินหรือสีแดง']};
+    assert.equal(await typeAnswer(examples[lang][0]), 'guidance');
+    await chat.getByText(item.firstPrompt, {exact:true}).waitFor();
+    assert.equal(await typeAnswer(examples[lang][1]), 'unknown');
+    assert.equal(await typeAnswer(item.wrongPhrase), 'incorrect');
+    await chat.locator('.tm-bubble.assistant').filter({hasText:item.hint}).waitFor();
+    await chat.getByRole('button', {name:item.wrong, exact:true}).click();
+    await chat.locator('.tm-bubble.assistant').filter({hasText:item.alternative}).waitFor();
+    await page.waitForFunction(() => !_teacherTyping);
+    assert.equal(await typeAnswer(item.rightPhrase), 'correct');
+    await chat.locator('.tm-bubble.assistant').filter({hasText:item.confirmation}).waitFor();
     assert.equal(await chat.locator('.teacher-chip').count(), 0);
     await pending;
   } finally {

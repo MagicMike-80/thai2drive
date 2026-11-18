@@ -5509,7 +5509,9 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             reply += "\n" + question["explanation"].strip()
     elif req.v6_intent in ("start", "hint", "alternative"):
         feedback = "guidance"
-        reply = text[req.v6_intent]
+        prompt = policy.reviewed_prompt(req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id),
+                                        req.language, req.v6_intent)
+        reply = prompt or text[req.v6_intent]
         show_choices = True
     else:
         store = globals().get("_v6_guidance_store")
@@ -5528,7 +5530,13 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
                     mode="v6_quiz_pilot", reply=text["unavailable"],
                     suggestions=[{"v6_feedback": "unavailable", "question": ""}])
             answer = req.v6_answer_text or req.message
-            verdict = policy.assess_student_answer(question["question"], req.language, answer)
+            option_id = policy.matched_option_id(question["question"], req.language, answer)
+            if option_id is None:
+                option_id = policy.reviewed_answer_option(req.v6_question_id,
+                    policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id), question["question"], req.language, answer)
+            verdict = "unknown"
+            if option_id:
+                verdict = "correct" if option_id == question["question"]["correctOptionId"] else "incorrect"
             semantic_judge = globals().get("_v6_semantic_judge")
             if verdict == "unknown" and callable(semantic_judge):
                 verdict = await policy.propose_semantic_assessment(question, req.language, answer, semantic_judge)
@@ -5549,7 +5557,6 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
         feedback = verdict
         reply = text[{"confirm": "correct", "hint": "wrong", "alternative": "alternative", "clarify": "unknown"}[action]]
         if verdict == "incorrect":
-            option_id = policy.matched_option_id(question["question"], req.language, answer)
             reviewed = policy.reviewed_option_guidance(
                 req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id),
                 req.language, option_id, level,
