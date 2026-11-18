@@ -9146,15 +9146,15 @@ async function loadAccessStatus() {
 async function consumeQuestionAccess(q) {
   if (isPremium()) return true;
   try {
-    accessState = await api('POST', '/api/access/consume', {
-      device_id: deviceId,
-      question_id: String((q && (q.id || q._id || q.question_id)) || ''),
     var eventId = deviceId + ':' + String((q && (q.id || q._id || q.question_id)) || qIdx) + ':' + qIdx + ':' + (quizStartedAt || '');
     if (q && q._v6_text_delivery) {
       var textSession = _v6DeliverySession(q._v6_text_delivery, appLang);
       if (!textSession) return false;
       eventId = 'v6:' + textSession.slice(3, -(appLang.length + 1));
     }
+    accessState = await api('POST', '/api/access/consume', {
+      device_id: deviceId,
+      question_id: String((q && (q.id || q._id || q.question_id)) || ''),
       mode: isExamMode ? 'exam' : 'practice',
       category: (q && q.category) || currentCat || '',
       event_id: eventId
@@ -10961,14 +10961,14 @@ function buildAiHtml(isOk, expl) {
       + '<span class="quiz-ai-verdict-icon">✅</span>'
       + '<span>' + verdictText + '</span>'
       + '</div>';
-  }
-
-  if (!isOk && expl) {
     var currentV6Question = questions[qIdx];
     if (currentV6Question && currentV6Question.michael_v6_token) {
       html += '<button type="button" class="ask-michael-btn ai-block" onclick="askMichaelAboutThis(\'v6_review\')">'
         + escH(t('ask_michael')) + '</button>';
     }
+  }
+
+  if (!isOk && expl) {
     // 2a ── Wrong: topic-targeted label + key insight (safety numbers bolded)
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">📌</div>'
@@ -12414,11 +12414,11 @@ var _teacherQuizHasUserMsg    = false;
 var _quizCoachSessionId       = null;
 var _quizCoachConversationId  = null;
 var _quizCoachAbort           = null;
+// Scoped to one server-issued V6 delivery and the quiz chat session.
+var _teacherV6Context         = null;
 
 function _quizCoachContext() {
   var q = questions[qIdx];
-// Scoped to one server-issued V6 delivery and the quiz chat session.
-var _teacherV6Context         = null;
   var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
   if (!q || !lastAns || lastAns.is_correct !== false) return null;
   var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
@@ -12531,10 +12531,10 @@ function switchTeacherSession(type) {
 
   if (_teacherActiveSessionType === type) return;
 
+  if (_teacherRequestOwner) _cancelTeacherRequestView();
   if (_teacherActiveSessionType === 'normal') {
     _teacherNormalHtml = msgs.innerHTML;
     _teacherNormalHasUserMsg = _teacherHasUserMsg;
-  if (_teacherRequestOwner) _cancelTeacherRequestView();
   } else {
     _teacherQuizHtml = msgs.innerHTML;
     _teacherQuizHasUserMsg = _teacherHasUserMsg;
@@ -12560,9 +12560,6 @@ function _displayedAnswerText(answerId) {
   return txt ? txt.textContent.trim() : '';
 }
 
-function askMichaelAboutThis(mode) {
-  var isHint = (mode === 'hint');
-  if (!isHint) _msResetHint();
 function _v6DeliverySession(token, language) {
   if (typeof token !== 'string' || token.length > 2048 || !/^(?:no|th|en)$/.test(language)) return null;
   try {
@@ -12606,14 +12603,17 @@ async function startV6TextPilot() {
   }
 }
 
+function askMichaelAboutThis(mode) {
+  var isHint = (mode === 'hint');
+  if (!isHint) _msResetHint();
   var q = questions[qIdx];
   if (!q) return;
+  var v6Session = q.michael_v6_token ? _v6DeliverySession(q.michael_v6_token, appLang) : null;
+  if (q.michael_v6_token && !v6Session) { toast(t('coach_unavailable')); return; }
 
   // The existing flow starts after a wrong answer. A signed V6 delivery may
   // also review the learner's actual correct choice.
   var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
-  var v6Session = q.michael_v6_token ? _v6DeliverySession(q.michael_v6_token, appLang) : null;
-  if (q.michael_v6_token && !v6Session) { toast(t('coach_unavailable')); return; }
   var v6CorrectReview = mode === 'v6_review' && q.michael_v6_token && lastAns && lastAns.is_correct === true;
   if (!lastAns || (lastAns.is_correct !== false && !v6CorrectReview)) return;
   if (v6CorrectReview && lastAns.question_id !== String(q.id || q._id || q.question_id || '')) return;
@@ -12662,15 +12662,15 @@ async function startV6TextPilot() {
     ? _msHint.sid
     : 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36));
   _teacherQuizConversationId = _teacherQuizSessionId;
-  if (isHint) {
-    if (_msHint.qId !== rawQid) _msHint = { qId: rawQid, count: 0, sid: null };
-    _msHint.count++;
   _teacherV6Context = (q.michael_v6_token && rawQid) ? {
     questionId: rawQid,
     deliveryToken: q.michael_v6_token,
     sessionId: _teacherQuizSessionId,
     language: appLang
   } : null;
+  if (isHint) {
+    if (_msHint.qId !== rawQid) _msHint = { qId: rawQid, count: 0, sid: null };
+    _msHint.count++;
     _msHint.sid = _teacherQuizSessionId;
     _msBumpHintDots();
   }
@@ -13470,9 +13470,6 @@ function discussSignWithMichael(signId) {
   teacherSend(p, p);
 }
 
-function resetTeacherForLanguage() {
-  _teacherSessionId = null;
-  _teacherConversationId = null;
 function _cancelTeacherRequestView() {
   _teacherRequestOwner = null;
   _teacherTyping = false;
@@ -13481,16 +13478,19 @@ function _cancelTeacherRequestView() {
   if (sendBtn) sendBtn.disabled = false;
 }
 
-  _teacherHasUserMsg = false;
+function resetTeacherForLanguage() {
   _cancelTeacherRequestView();
+  _teacherSessionId = null;
+  _teacherConversationId = null;
+  _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
   _teacherActiveSessionType = 'normal';
   _teacherQuizSessionId = null;
   _teacherQuizConversationId = null;
+  _teacherV6Context = null;
   _teacherNormalHtml = '';
   _teacherQuizHtml = '';
   _teacherNormalHasUserMsg = false;
-  _teacherV6Context = null;
   _teacherQuizHasUserMsg = false;
   var input = document.getElementById('teacherInput');
   if (input) input.value = '';
@@ -13652,9 +13652,6 @@ function _buildAssistantContent(text, container) {
   });
 }
 
-async function loadTeacher() {
-  var tNameEl = document.getElementById('teacherNameLbl');
-  if (tNameEl) tNameEl.textContent = t('teacher_name');
 async function _refreshV6Availability() {
   var button = document.getElementById('v6TextPilotBtn');
   if (!button) return;
@@ -13671,8 +13668,11 @@ async function _refreshV6Availability() {
   } catch (_) { /* The default remains hidden when status cannot be verified. */ }
 }
 
-  var tContactBtn = document.getElementById('contactHumanBtn');
+async function loadTeacher() {
   _refreshV6Availability();
+  var tNameEl = document.getElementById('teacherNameLbl');
+  if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tContactBtn = document.getElementById('contactHumanBtn');
   if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   var tInput = document.getElementById('teacherInput');
@@ -14594,14 +14594,14 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg && _teacherUploadedImage) msg = t('teacher_image_prompt');
   if (!msg || _teacherTyping) return;
-  _teacherClearMediaCards();
-  stopAllSpeech();   // T2D-AUDIO-FIX: kill previous sign/TTS audio
-
   if (_teacherActiveSessionType === 'quiz' && _teacherV6Context &&
       (_teacherV6Context.sessionId !== _teacherQuizSessionId || _teacherV6Context.language !== appLang)) {
     toast(t('coach_unavailable'));
     return;
   }
+  _teacherClearMediaCards();
+  stopAllSpeech();   // T2D-AUDIO-FIX: kill previous sign/TTS audio
+
   // Intercept in-app navigation chips
   var clean = msg.replace(/^[\S]{1,2}\s+/, '').trim().toLowerCase();
   var isV6Choice = customMode === 'v6_quiz_pilot' && v6Intent === 'answer' &&
@@ -14625,9 +14625,6 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
   );
 
   if (input && !overrideMsg) input.value = '';
-  _teacherTyping = true;
-  _teacherHideSuggestions();
-  _teacherRemoveChips();  // clear old reply chips
   var requestOwner = {};
   _teacherRequestOwner = requestOwner;
   var sentToken = token, sentLanguage = appLang, sentType = _teacherActiveSessionType;
@@ -14637,6 +14634,9 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
       _teacherActiveSessionType === sentType && (sentType !== 'quiz' || _teacherV6Context === sentContext) &&
       (!sentContext || _teacherQuizSessionId === sentContext.sessionId);
   }
+  _teacherTyping = true;
+  _teacherHideSuggestions();
+  _teacherRemoveChips();  // clear old reply chips
 
   var sendBtn = document.getElementById('teacherSendBtn');
   if (sendBtn) sendBtn.disabled = true;
@@ -14656,9 +14656,6 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
       explain_level: _teacherExplainLevel || 1,
       user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
     };
-    if (customMode || isWeakTopic) {
-      if (chatPayload.mode !== 'v6_quiz_pilot') chatPayload.mode = customMode || 'weak_topics';
-    }
     if (_teacherActiveSessionType === 'quiz' && _teacherV6Context &&
         _teacherV6Context.sessionId === activeSessionId && _teacherV6Context.language === appLang) {
       chatPayload.mode = 'v6_quiz_pilot';
@@ -14692,6 +14689,9 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
         chatPayload.v6_event_id = pendingV6.id;
       }
     }
+    if (customMode || isWeakTopic) {
+      if (chatPayload.mode !== 'v6_quiz_pilot') chatPayload.mode = customMode || 'weak_topics';
+    }
     if (_teacherUploadedDoc && _teacherUploadedDoc.document_id) {
       chatPayload.document_id = _teacherUploadedDoc.document_id;
       chatPayload.document_context = _teacherUploadedDoc.extracted_text;
@@ -14699,20 +14699,17 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
     if (_teacherUploadedImage && _teacherUploadedImage.data) {
       chatPayload.image_data = _teacherUploadedImage.data;
     }
-    var res = await fetch('/api/teacher/chat', {
-      method: 'POST',
-      headers: teacherHeaders,
     var teacherHeaders = { 'Content-Type': 'application/json' };
     if (chatPayload.mode === 'v6_quiz_pilot' && typeof token === 'string' && token) {
       teacherHeaders.Authorization = 'Bearer ' + token;
     }
+    var res = await fetch('/api/teacher/chat', {
+      method: 'POST',
+      headers: teacherHeaders,
       body: JSON.stringify(chatPayload)
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
-    var convId = data.conversation_id || data.session_id;
-    if (data.session_id) {
-      if (_teacherActiveSessionType === 'quiz') {
     if (!stillCurrent()) return;
     var committedV6Feedback = data && data.mode === 'v6_quiz_pilot' && Array.isArray(data.suggestions) &&
       data.suggestions[0] && ['correct', 'incorrect', 'unknown'].includes(data.suggestions[0].v6_feedback);
@@ -14723,6 +14720,9 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
       sessionStorage.removeItem(_teacherV6Context.pendingAnswer.key);
       _teacherV6Context.pendingAnswer = null;
     }
+    var convId = data.conversation_id || data.session_id;
+    if (data.session_id) {
+      if (_teacherActiveSessionType === 'quiz') {
         _teacherQuizSessionId = data.session_id;
       } else {
         _teacherSessionId = data.session_id;
@@ -14739,9 +14739,6 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
     var responseText = data.reply || t('teacher_error');
     var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
     var assistantBubble = _teacherAppendBubble('assistant', visibleText);
-    await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
-    var renderedSignIds = _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
-    var extraSignIds = (data.sign_ids || []).filter(function(id) { return renderedSignIds.indexOf(id) === -1; });
     var v6Meta = data.mode === 'v6_quiz_pilot' && Array.isArray(data.suggestions) ? data.suggestions[0] : null;
     var sameV6Session = _teacherV6Context && _teacherV6Context.sessionId === activeSessionId &&
       _teacherV6Context.deliveryToken === chatPayload.v6_delivery_token && _teacherV6Context.language === appLang;
@@ -14788,6 +14785,9 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
       });
       assistantBubble.appendChild(choicesRow);
     }
+    await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
+    var renderedSignIds = _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
+    var extraSignIds = (data.sign_ids || []).filter(function(id) { return renderedSignIds.indexOf(id) === -1; });
     if (extraSignIds.length) {
       await _teacherAppendSignCards(extraSignIds, assistantBubble);
     }
@@ -14795,10 +14795,10 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
     _teacherScrollToAnswerStart(assistantBubble);
     if (_teacherUploadedImage) _teacherClearDoc();
   } catch(e) {
+    if (!stillCurrent()) return;
     _teacherHideTyping();
     var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));
     _teacherScrollToAnswerStart(errorBubble);
-    if (!stillCurrent()) return;
   } finally {
     if (_teacherRequestOwner === requestOwner) {
       var focusInput = stillCurrent() && !overrideMsg;
