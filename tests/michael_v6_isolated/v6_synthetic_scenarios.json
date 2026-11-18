@@ -1,0 +1,60 @@
+{
+  "fixture_version": 1,
+  "purpose": "Kunstig kontroll av samtalestyring; ingen av disse oppgavene uttrykker trafikkregler.",
+  "questions": [
+    {
+      "id": "v6-synthetic-blue",
+      "active": true,
+      "question": {
+        "no": "Testoppgave: Hvilket alternativ nevner en blå bil?",
+        "th": "โจทย์ทดสอบ: ตัวเลือกใดกล่าวถึงรถสีน้ำเงิน?",
+        "en": "Test question: Which option mentions a blue car?"
+      },
+      "options": [
+        {"id": "A", "text": {"no": "En rød bil", "th": "รถสีแดง", "en": "A red car"}},
+        {"id": "B", "text": {"no": "En blå bil", "th": "รถสีน้ำเงิน", "en": "A blue car"}},
+        {"id": "C", "text": {"no": "En hvit bil", "th": "รถสีขาว", "en": "A white car"}}
+      ],
+      "correctOptionId": "B",
+      "explanation": {
+        "no": "Alternativet nevner en blå bil.",
+        "th": "ตัวเลือกนี้กล่าวถึงรถสีน้ำเงิน",
+        "en": "The option mentions a blue car."
+      }
+    },
+    {
+      "id": "v6-synthetic-white",
+      "active": true,
+      "question": {
+        "no": "Testoppgave: Hvilket alternativ nevner en hvit bil?",
+        "th": "โจทย์ทดสอบ: ตัวเลือกใดกล่าวถึงรถสีขาว?",
+        "en": "Test question: Which option mentions a white car?"
+      },
+      "options": [
+        {"id": "A", "text": {"no": "En rød bil", "th": "รถสีแดง", "en": "A red car"}},
+        {"id": "B", "text": {"no": "En blå bil", "th": "รถสีน้ำเงิน", "en": "A blue car"}},
+        {"id": "C", "text": {"no": "En hvit bil", "th": "รถสีขาว", "en": "A white car"}}
+      ],
+      "correctOptionId": "C",
+      "explanation": {
+        "no": "Alternativet nevner en hvit bil.",
+        "th": "ตัวเลือกนี้กล่าวถึงรถสีขาว",
+        "en": "The option mentions a white car."
+      }
+    }
+  ],
+  "languages": {
+    "no": {"correct": "En blå bil", "wrong": "En rød bil", "stuck": "Jeg står fast. Kan du hjelpe meg?", "answer_request": "Hva er fasiten?", "different_method": "Kan du forklare på en annen måte?", "ambiguous": "Den der", "second_correct": "En hvit bil"},
+    "th": {"correct": "รถสีน้ำเงิน", "wrong": "รถสีแดง", "stuck": "ผมคิดไม่ออก ช่วยผมหน่อยได้ไหมครับ?", "answer_request": "ขอเฉลยได้ไหมครับ?", "different_method": "ช่วยอธิบายอีกวิธีได้ไหมครับ?", "ambiguous": "คันนั้น", "second_correct": "รถสีขาว"},
+    "en": {"correct": "A blue car", "wrong": "A red car", "stuck": "I'm stuck. Can you help me?", "answer_request": "What is the answer?", "different_method": "Can you explain it another way?", "ambiguous": "That one", "second_correct": "A white car"}
+  },
+  "scenarios": [
+    {"id": "correct_first", "messages": ["correct"], "expected": ["confirm_correct"]},
+    {"id": "wrong_then_correct", "messages": ["wrong", "correct"], "expected": ["hint_without_answer", "confirm_correct"]},
+    {"id": "repeated_wrong", "messages": ["wrong", "wrong", "wrong", "wrong"], "expected": ["hint_without_answer", "hint_without_answer", "hint_without_answer", "hint_without_answer"]},
+    {"id": "stuck", "messages": ["stuck"], "expected": ["help_without_false_assessment"]},
+    {"id": "explicit_answer", "messages": ["answer_request"], "expected": ["correct_answer_with_explanation"]},
+    {"id": "different_method", "messages": ["different_method"], "expected": ["alternative_explanation"]},
+    {"id": "ambiguous_answer", "messages": ["ambiguous"], "expected": ["clarify_without_assessment"]}
+  ]
+}

@@ -8,6 +8,7 @@ on:
       - .github/workflows/michael-v6-isolated.yml
       - tests/michael_v6_isolated/**
       - backend/teacher_chat.py
+      - backend/webapp.py
       - backend/michael_v6_policy.py
       - backend/ai_learning.py
       - backend/michael_greetings.py
@@ -31,6 +32,7 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /backend/teacher_chat.py
+            /backend/webapp.py
             /backend/michael_v6_policy.py
             /backend/ai_learning.py
             /backend/michael_greetings.py
@@ -38,6 +40,31 @@ jobs:
             /backend/learning_areas.json
             /backend/regelbank.json
             /tests/michael_v6_isolated/
+      - name: Validate the web sender with synthetic inputs and no network
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_bin="$(command -v node)"
+          for test in test_v6_availability test_v6_text_event test_v6_web_intent; do
+            sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" --clear-groups \
+              --no-new-privs env -i PATH=/usr/bin:/bin LANG=C.UTF-8 \
+              "$node_bin" "tests/michael_v6_isolated/$test.cjs"
+          done
+      - name: Check delayed replies in isolated Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          deps="$(mktemp -d)"
+          mkdir "$deps/home"
+          curl --fail --silent --show-error --location \
+            https://registry.npmjs.org/playwright-core/-/playwright-core-1.62.1.tgz -o "$deps/playwright.tgz"
+          digest="$(openssl dgst -sha512 -binary "$deps/playwright.tgz" | openssl base64 -A)"
+          test "$digest" = 'wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw=='
+          tar -xzf "$deps/playwright.tgz" -C "$deps"
+          sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" --clear-groups \
+            --no-new-privs env -i PATH=/usr/bin:/bin LANG=C.UTF-8 HOME="$deps/home" \
+            V6_PLAYWRIGHT_PATH="$deps/package" V6_CHROME_PATH="$(command -v google-chrome)" \
+            "$(command -v node)" tests/michael_v6_isolated/test_v6_browser_dom.cjs
       - name: Build candidate image on runner
         shell: bash
         run: |
@@ -87,3 +114,4 @@ jobs:
             "$RUNNER_TEMP/v6-inspection.json" "$input" "$image"
           # Only the inspected, network-isolated container may import the app.
           docker start --attach "$container"
+          test "$(docker inspect --format '{{.State.ExitCode}}' "$container")" = 0

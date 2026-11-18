@@ -32,63 +32,6 @@ def synthetic_question():
     }
 
 
-class Cursor:
-    def __init__(self, items):
-        self.items = items
-        self.maximum = None
-
-    def limit(self, maximum):
-        self.maximum = maximum
-        return self
-
-    async def to_list(self, length):
-        return copy.deepcopy(self.items[:min(length, self.maximum)])
-
-
-class Questions:
-    def __init__(self, rows):
-        self.rows = rows
-        self.queries = []
-
-    def find(self, query):
-        self.queries.append(query)
-        parts = query.get("$and") if isinstance(query, dict) else None
-        if not isinstance(parts, list) or len(parts) != 2:
-            raise AssertionError("Availability filter must be conjoined with question id")
-        allowed, identifier = parts
-        if allowed != {"active": {"$ne": False}, "id": {"$nin": ["v6-held"]}}:
-            raise AssertionError("Unexpected synthetic availability filter")
-        if set(identifier) != {"id"}:
-            raise AssertionError("Unexpected question-id query")
-        return Cursor([row for row in self.rows if row.get("id") == identifier["id"]
-                       and row.get("active") is not False and row.get("id") != "v6-held"])
-
-
-class Users:
-    def find(self, query, projection):
-        if projection != {"_id": 0, "password_hash": 0}:
-            raise AssertionError("Unexpected synthetic user projection")
-        return Cursor([{"id": query["id"], "synthetic_premium": query["id"] == "synthetic-user"}])
-
-
-class SyntheticProgress:
-    """In-memory test double; it does not prove Mongo atomicity."""
-    def __init__(self):
-        self.records = {}
-
-    async def record_answer(self, scope, event_id, answer, verdict):
-        key = tuple(scope[name] for name in ("principal", "delivery_session", "language", "question_id"))
-        record = self.records.setdefault(key, {"level": 0, "events": {}})
-        if event_id in record["events"]:
-            old_answer, old_level, old_verdict = record["events"][event_id]
-            return (old_level, old_verdict) if old_answer == answer else None
-        level = record["level"]
-        level = min(2, level + 1) if verdict == "incorrect" else 0 if verdict == "correct" else level
-        record["level"] = level
-        record["events"][event_id] = (answer, level, verdict)
-        return level, verdict
-
-
 def run_suite(tc, policy, mongo_client_class=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
@@ -97,7 +40,6 @@ def run_suite(tc, policy, mongo_client_class=None):
     class EndpointScenarios(unittest.IsolatedAsyncioTestCase):
         async def asyncSetUp(self):
             self.question = synthetic_question()
-            self.questions = Questions([copy.deepcopy(self.question)])
             self.server = types.ModuleType("server")
             self.server.AVAILABLE_QUESTION_FILTER = {
                 "active": {"$ne": False}, "id": {"$nin": ["v6-held"]}}
@@ -121,9 +63,14 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.mongo = mongo_client_class("mongodb://127.0.0.1:27017/?directConnection=true",
                                             serverSelectionTimeoutMS=3000)
             await self.mongo.admin.command("ping")
-            self.collection = self.mongo["michael_v6_synthetic"]["test_" + uuid.uuid4().hex]
-            self.db_patch = patch.object(tc, "_db", {"questions": self.questions, "users": Users(),
-                                                      "michael_v6_guidance": self.collection})
+            test_db = self.mongo["michael_v6_synthetic_" + uuid.uuid4().hex]
+            self.questions = test_db.questions
+            self.users = test_db.users
+            self.collection = test_db.michael_v6_guidance
+            await self.questions.insert_one(dict(self.question))
+            await self.users.insert_many([{"id": "synthetic-user", "synthetic_premium": True},
+                                          {"id": "other-user", "synthetic_premium": True}])
+            self.db_patch = patch.object(tc, "_db", test_db)
             self.db_patch.start()
             self.confirmation = {"no": "Riktig, svaret er blått.", "en": "Correct, the answer is blue.",
                                  "th": "ถูกต้องครับ คำตอบคือสีน้ำเงิน"}
@@ -236,14 +183,15 @@ def run_suite(tc, policy, mongo_client_class=None):
                     self.assertEqual(forged["suggestions"][0]["v6_feedback"], "unavailable")
                     self.assertNotIn(self.question["options"][0]["text"][lang], forged["reply"])
                     old = copy.deepcopy(self.question)
-                    self.questions.rows[0]["correctOptionId"] = "B"
+                    await self.questions.update_one({"id": old["id"]}, {"$set": {"correctOptionId": "B"}})
                     changed = await self.call(lang, "explain")
                     self.assertEqual(changed["suggestions"][0]["v6_feedback"], "unavailable")
                     self.assertNotIn(old["options"][0]["text"][lang], changed["reply"])
-                    self.questions.rows = [copy.deepcopy(old), copy.deepcopy(old)]
+                    await self.questions.replace_one({"id": old["id"]}, dict(old))
+                    duplicate = await self.questions.insert_one(dict(old))
                     duplicate = await self.call(lang, "explain")
                     self.assertEqual(duplicate["suggestions"][0]["v6_feedback"], "unavailable")
-                    self.questions.rows = [old]
+                    await self.questions.delete_one({"_id": duplicate.inserted_id})
 
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
@@ -257,10 +205,11 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(await self.collection.count_documents({}), 0)
 
         async def test_revoked_access_denied_before_delivery_and_after_delivery(self):
+            await self.users.update_one({"id": "other-user"}, {"$set": {"synthetic_premium": False}})
             headers = {"Authorization": "Bearer other-bearer"}
             response = await self.client.post("/api/teacher/v6/text/start", json={"language": "no"}, headers=headers)
             self.assertFalse(response.json()["ready"])
-            self.server._user_has_active_premium = lambda user: False
+            await self.users.update_one({"id": "synthetic-user"}, {"$set": {"synthetic_premium": False}})
             response = await self.call("no", "answer", self.question["options"][0]["text"]["no"])
             self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
             response = await self.call("no", "explain")
@@ -298,7 +247,7 @@ def run_suite(tc, policy, mongo_client_class=None):
             candidate = draft["question"]
             self.assertNotIn(candidate["id"], policy.APPROVED_CONTENT_DIGESTS)
             self.assertIsNone(policy.issue_delivery_token(candidate))
-            self.questions.rows = [candidate]
+            await self.questions.replace_one({"id": self.question["id"]}, dict(candidate))
             response = await self.client.post("/api/teacher/v6/text/start", json={"language": "th"},
                 headers={"Authorization": "Bearer synthetic-bearer"})
             self.assertFalse(response.json()["ready"])

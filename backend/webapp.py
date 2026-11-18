@@ -5611,6 +5611,7 @@ a { color:inherit; text-decoration:none; }
           <button type="button" class="teacher-hub-btn" onclick="discussSignWithMichael('311_0')">🚸 <span data-key="hub_sign_311">Skilt 311</span></button>
           <button type="button" class="teacher-hub-btn" onclick="openSafetyCheck()">🔧 <span data-key="hub_safety">Sikkerhetskontroll</span></button>
           <button type="button" class="teacher-hub-btn" onclick="openSituationFlashcard()">🚦 <span data-key="hub_situation">Trafikksituasjon</span></button>
+          <button type="button" class="teacher-hub-btn" id="v6TextPilotBtn" hidden onclick="startV6TextPilot()" data-key="v6_text_practice"></button>
           <button type="button" class="teacher-hub-btn" onclick="showTab('signs')">🪧 <span data-key="hub_all_signs">Skiltkatalog</span></button>
           <button type="button" class="teacher-hub-btn" onclick="showTab('studybook')">📖 <span data-key="hub_studybook">Studiebok</span></button>
           <button type="button" class="teacher-hub-btn" onclick="showTab('library')">🎬 <span data-key="hub_videos">Video & Podkast</span></button>
@@ -6127,6 +6128,7 @@ var UI = {
   teacher_show_example:{th:'ดูตัวอย่าง', no:'Vis eksempel', en:'Show example'},
   teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
   teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
+  v6_text_practice:{th:'ฝึกคำถามกับไมเคิล', no:'Øv på et spørsmål med Michael', en:'Practise a question with Michael'},
   teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์', no:'Se norsk fagord', en:'Show Norwegian term'},
   quiz_terms_label:{th:'คำศัพท์สำคัญ', no:'Fagord', en:'Key terms'},
   quiz_term_explain:{th:'แตะเพื่อดูคำอธิบาย', no:'Trykk for forklaring', en:'Tap for an explanation'},
@@ -8559,6 +8561,7 @@ function logout() {
   if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
+  resetTeacherForLanguage();
   document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'none';
   document.getElementById('topSettingsBtn').style.display = 'none';
@@ -9146,9 +9149,15 @@ async function consumeQuestionAccess(q) {
     accessState = await api('POST', '/api/access/consume', {
       device_id: deviceId,
       question_id: String((q && (q.id || q._id || q.question_id)) || ''),
+    var eventId = deviceId + ':' + String((q && (q.id || q._id || q.question_id)) || qIdx) + ':' + qIdx + ':' + (quizStartedAt || '');
+    if (q && q._v6_text_delivery) {
+      var textSession = _v6DeliverySession(q._v6_text_delivery, appLang);
+      if (!textSession) return false;
+      eventId = 'v6:' + textSession.slice(3, -(appLang.length + 1));
+    }
       mode: isExamMode ? 'exam' : 'practice',
       category: (q && q.category) || currentCat || '',
-      event_id: deviceId + ':' + String((q && (q.id || q._id || q.question_id)) || qIdx) + ':' + qIdx + ':' + (quizStartedAt || '')
+      event_id: eventId
     });
     return true;
   } catch(e) {
@@ -10955,6 +10964,11 @@ function buildAiHtml(isOk, expl) {
   }
 
   if (!isOk && expl) {
+    var currentV6Question = questions[qIdx];
+    if (currentV6Question && currentV6Question.michael_v6_token) {
+      html += '<button type="button" class="ask-michael-btn ai-block" onclick="askMichaelAboutThis(\'v6_review\')">'
+        + escH(t('ask_michael')) + '</button>';
+    }
     // 2a ── Wrong: topic-targeted label + key insight (safety numbers bolded)
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">📌</div>'
@@ -12403,6 +12417,8 @@ var _quizCoachAbort           = null;
 
 function _quizCoachContext() {
   var q = questions[qIdx];
+// Scoped to one server-issued V6 delivery and the quiz chat session.
+var _teacherV6Context         = null;
   var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
   if (!q || !lastAns || lastAns.is_correct !== false) return null;
   var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
@@ -12518,6 +12534,7 @@ function switchTeacherSession(type) {
   if (_teacherActiveSessionType === 'normal') {
     _teacherNormalHtml = msgs.innerHTML;
     _teacherNormalHasUserMsg = _teacherHasUserMsg;
+  if (_teacherRequestOwner) _cancelTeacherRequestView();
   } else {
     _teacherQuizHtml = msgs.innerHTML;
     _teacherQuizHasUserMsg = _teacherHasUserMsg;
@@ -12546,12 +12563,60 @@ function _displayedAnswerText(answerId) {
 function askMichaelAboutThis(mode) {
   var isHint = (mode === 'hint');
   if (!isHint) _msResetHint();
+function _v6DeliverySession(token, language) {
+  if (typeof token !== 'string' || token.length > 2048 || !/^(?:no|th|en)$/.test(language)) return null;
+  try {
+    var parts = token.split('.');
+    if (parts.length !== 2 || !/^[A-Za-z0-9_-]+$/.test(parts[0])) return null;
+    var encoded = parts[0].replace(/-/g, '+').replace(/_/g, '/');
+    while (encoded.length % 4) encoded += '=';
+    var payload = JSON.parse(atob(encoded));
+    if (payload.v !== 1 || typeof payload.nonce !== 'string' || !/^[A-Za-z0-9_-]{16,64}$/.test(payload.nonce)) return null;
+    return 'v6_' + payload.nonce + '_' + language;
+  } catch (error) { return null; }
+}
+
+// The entry button remains hidden until the server-side delivery and access
+// gates have been reviewed and enabled. No V6 question is fabricated locally.
+async function startV6TextPilot() {
+  var startLanguage = appLang;
+  var startToken = token;
+  var startContext = _teacherV6Context;
+  if (!startToken || _teacherTyping) return;
+  try {
+    var data = await api('POST', '/api/teacher/v6/text/start', {language:startLanguage});
+    if (token !== startToken || appLang !== startLanguage || _teacherV6Context !== startContext || _teacherTyping) return;
+    if (!data || !data.ready || !data.question_id || !data.actor_binding ||
+        _v6DeliverySession(data.delivery_token, startLanguage) !== data.session_id) {
+      toast(t('coach_unavailable'));
+      return;
+    }
+    _teacherQuizHtml = '';
+    _teacherQuizHasUserMsg = false;
+    switchTeacherSession('quiz');
+    _teacherQuizSessionId = data.session_id;
+    _teacherQuizConversationId = data.session_id;
+    _teacherV6Context = {questionId:data.question_id, deliveryToken:data.delivery_token,
+      actorBinding:data.actor_binding, sessionId:data.session_id, language:startLanguage,
+      textPilot:true, consumptionConfirmed:false, consumptionPending:false};
+    showTab('teacher', 'quiz');
+    teacherSend(t('v6_text_practice'), t('v6_text_practice'), 'v6_quiz_pilot', 'start');
+  } catch (error) {
+    if (token === startToken && appLang === startLanguage && _teacherV6Context === startContext) toast(t('coach_unavailable'));
+  }
+}
+
   var q = questions[qIdx];
   if (!q) return;
 
-  // Safety guard: only allowed after a confirmed wrong answer
+  // The existing flow starts after a wrong answer. A signed V6 delivery may
+  // also review the learner's actual correct choice.
   var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
-  if (!lastAns || lastAns.is_correct !== false) return;
+  var v6Session = q.michael_v6_token ? _v6DeliverySession(q.michael_v6_token, appLang) : null;
+  if (q.michael_v6_token && !v6Session) { toast(t('coach_unavailable')); return; }
+  var v6CorrectReview = mode === 'v6_review' && q.michael_v6_token && lastAns && lastAns.is_correct === true;
+  if (!lastAns || (lastAns.is_correct !== false && !v6CorrectReview)) return;
+  if (v6CorrectReview && lastAns.question_id !== String(q.id || q._id || q.question_id || '')) return;
 
   var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
 
@@ -12593,13 +12658,19 @@ function askMichaelAboutThis(mode) {
 
   // Generate a fresh language-scoped session ID for this question.
   // Normal Michael chat history uses _teacherSessionId and is not touched.
-  _teacherQuizSessionId = reuseHintSession
+  _teacherQuizSessionId = v6Session || (reuseHintSession
     ? _msHint.sid
-    : 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
+    : 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36));
   _teacherQuizConversationId = _teacherQuizSessionId;
   if (isHint) {
     if (_msHint.qId !== rawQid) _msHint = { qId: rawQid, count: 0, sid: null };
     _msHint.count++;
+  _teacherV6Context = (q.michael_v6_token && rawQid) ? {
+    questionId: rawQid,
+    deliveryToken: q.michael_v6_token,
+    sessionId: _teacherQuizSessionId,
+    language: appLang
+  } : null;
     _msHint.sid = _teacherQuizSessionId;
     _msBumpHintDots();
   }
@@ -12638,7 +12709,16 @@ function askMichaelAboutThis(mode) {
   showTab('teacher', 'quiz');
 
   // Trigger send using the hidden payload, but display the clean message in the bubble!
-  teacherSend(hiddenPayload, userDisplayMsg);
+  if (_teacherV6Context) {
+    if (v6CorrectReview) {
+      if (!userAnsText) { toast(t('coach_unavailable')); return; }
+      teacherSend(userAnsText, userAnsText, 'v6_quiz_pilot', 'answer');
+    } else {
+      teacherSend(userDisplayMsg, userDisplayMsg, 'v6_quiz_pilot', isHint ? 'hint' : 'explain');
+    }
+  } else {
+    teacherSend(hiddenPayload, userDisplayMsg);
+  }
 }
 
 // ═══ Michael-skolen: konge/tjener-chip, HAV-lys, hint-trapp, kultur, ord for dagen, blikkrutine ═══
@@ -13393,15 +13473,24 @@ function discussSignWithMichael(signId) {
 function resetTeacherForLanguage() {
   _teacherSessionId = null;
   _teacherConversationId = null;
-  _teacherHasUserMsg = false;
-  _teacherWelcomeLang = null;
+function _cancelTeacherRequestView() {
+  _teacherRequestOwner = null;
   _teacherTyping = false;
+  _teacherHideTyping();
+  var sendBtn = document.getElementById('teacherSendBtn');
+  if (sendBtn) sendBtn.disabled = false;
+}
+
+  _teacherHasUserMsg = false;
+  _cancelTeacherRequestView();
+  _teacherWelcomeLang = null;
   _teacherActiveSessionType = 'normal';
   _teacherQuizSessionId = null;
   _teacherQuizConversationId = null;
   _teacherNormalHtml = '';
   _teacherQuizHtml = '';
   _teacherNormalHasUserMsg = false;
+  _teacherV6Context = null;
   _teacherQuizHasUserMsg = false;
   var input = document.getElementById('teacherInput');
   if (input) input.value = '';
@@ -13566,7 +13655,24 @@ function _buildAssistantContent(text, container) {
 async function loadTeacher() {
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
+async function _refreshV6Availability() {
+  var button = document.getElementById('v6TextPilotBtn');
+  if (!button) return;
+  button.hidden = true;
+  if (!token) return;
+  var checkedToken = token, checkedLanguage = appLang;
+  try {
+    var response = await fetch('/api/teacher/v6/status?language=' + encodeURIComponent(checkedLanguage), {
+      cache:'no-store', headers:{Authorization:'Bearer ' + checkedToken}
+    });
+    if (!response.ok) return;
+    var result = await response.json();
+    if (token === checkedToken && appLang === checkedLanguage && result && result.available === true) button.hidden = false;
+  } catch (_) { /* The default remains hidden when status cannot be verified. */ }
+}
+
   var tContactBtn = document.getElementById('contactHumanBtn');
+  _refreshV6Availability();
   if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   if (typeof _syncTeacherToolbar === 'function') _syncTeacherToolbar();
   var tInput = document.getElementById('teacherInput');
@@ -14473,7 +14579,17 @@ async function contactHumanMichael() {
   }
 }
 
-async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
+function _v6ClassifyIntent(message) {
+  var text = String(message || '').trim().replace(/[.!?]+$/, '').trim().toLowerCase();
+  if (/^(?:fasit|vis svaret|gi meg svaret|hva er fasiten|hva er svaret|kan du gi meg fasiten|the answer|show (?:me )?the answer|what is the answer|what's the answer|เฉลย|บอกคำตอบ|ขอเฉลยได้ไหมครับ|ขอเฉลยได้ไหมคะ)$/.test(text)) return 'explain';
+  if (/^(?:hint|et hint|gi meg et hint|kan du gi meg et hint|jeg står fast|jeg står fast\. kan du hjelpe meg|jeg vet ikke|i am stuck|i'm stuck|i'm stuck\. can you help me|i don't know|give me a hint|ขอคำใบ้|ขอคำใบ้หน่อย|ไม่รู้|คิดไม่ออก|ไม่เข้าใจ|ผมคิดไม่ออก ช่วยผมหน่อยได้ไหมครับ)$/.test(text)) return 'hint';
+  if (/^(?:forklar på en annen måte|kan du forklare på en annen måte|en annen metode|explain another way|another way|can you explain it another way|อธิบายอีกวิธี|อธิบายแบบอื่น|ช่วยอธิบายอีกวิธีได้ไหมครับ)$/.test(text)) return 'alternative';
+  return 'answer';
+}
+
+var _teacherRequestOwner = null;
+
+async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg && _teacherUploadedImage) msg = t('teacher_image_prompt');
@@ -14481,14 +14597,21 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   _teacherClearMediaCards();
   stopAllSpeech();   // T2D-AUDIO-FIX: kill previous sign/TTS audio
 
+  if (_teacherActiveSessionType === 'quiz' && _teacherV6Context &&
+      (_teacherV6Context.sessionId !== _teacherQuizSessionId || _teacherV6Context.language !== appLang)) {
+    toast(t('coach_unavailable'));
+    return;
+  }
   // Intercept in-app navigation chips
   var clean = msg.replace(/^[\S]{1,2}\s+/, '').trim().toLowerCase();
-  if (clean === 'åpne studiebok' || clean === 'åpne bok' || clean === 'เปิดหนังสือเรียน' || clean === 'open study book') {
+  var isV6Choice = customMode === 'v6_quiz_pilot' && v6Intent === 'answer' &&
+    _teacherActiveSessionType === 'quiz' && !!_teacherV6Context;
+  if (!isV6Choice && (clean === 'åpne studiebok' || clean === 'åpne bok' || clean === 'เปิดหนังสือเรียน' || clean === 'open study book')) {
     if (input && !overrideMsg) input.value = '';
     showTab('studybook');
     return;
   }
-  if (clean === 'min statistikk' || clean === 'สถิติของฉัน' || clean === 'my statistics') {
+  if (!isV6Choice && (clean === 'min statistikk' || clean === 'สถิติของฉัน' || clean === 'my statistics')) {
     if (input && !overrideMsg) input.value = '';
     showTab('history');
     return;
@@ -14505,6 +14628,15 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   _teacherTyping = true;
   _teacherHideSuggestions();
   _teacherRemoveChips();  // clear old reply chips
+  var requestOwner = {};
+  _teacherRequestOwner = requestOwner;
+  var sentToken = token, sentLanguage = appLang, sentType = _teacherActiveSessionType;
+  var sentContext = sentType === 'quiz' ? _teacherV6Context : null;
+  function stillCurrent() {
+    return _teacherRequestOwner === requestOwner && token === sentToken && appLang === sentLanguage &&
+      _teacherActiveSessionType === sentType && (sentType !== 'quiz' || _teacherV6Context === sentContext) &&
+      (!sentContext || _teacherQuizSessionId === sentContext.sessionId);
+  }
 
   var sendBtn = document.getElementById('teacherSendBtn');
   if (sendBtn) sendBtn.disabled = true;
@@ -14525,7 +14657,40 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
       user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
     };
     if (customMode || isWeakTopic) {
-      chatPayload.mode = customMode || 'weak_topics';
+      if (chatPayload.mode !== 'v6_quiz_pilot') chatPayload.mode = customMode || 'weak_topics';
+    }
+    if (_teacherActiveSessionType === 'quiz' && _teacherV6Context &&
+        _teacherV6Context.sessionId === activeSessionId && _teacherV6Context.language === appLang) {
+      chatPayload.mode = 'v6_quiz_pilot';
+      chatPayload.v6_question_id = _teacherV6Context.questionId;
+      chatPayload.v6_delivery_token = _teacherV6Context.deliveryToken;
+      if (_teacherV6Context.actorBinding) chatPayload.v6_actor_binding = _teacherV6Context.actorBinding;
+      chatPayload.v6_intent = v6Intent || _v6ClassifyIntent(msg);
+      if (chatPayload.v6_intent === 'answer') {
+        chatPayload.v6_answer_text = msg;
+        if (!globalThis.crypto || typeof globalThis.crypto.getRandomValues !== 'function' || !globalThis.crypto.subtle ||
+            typeof _teacherV6Context.deliveryToken !== 'string' || !_teacherV6Context.deliveryToken)
+          throw new Error('Secure event state unavailable');
+        var eventKey = 't2d_v6_pending:' + activeSessionId + ':' + appLang;
+        var hashKey = await globalThis.crypto.subtle.importKey('raw',
+          new TextEncoder().encode(_teacherV6Context.deliveryToken), {name:'HMAC', hash:'SHA-256'}, false, ['sign']);
+        var eventHashBytes = new Uint8Array(await globalThis.crypto.subtle.sign('HMAC', hashKey,
+          new TextEncoder().encode(activeSessionId + ':' + msg)));
+        var eventHash = Array.from(eventHashBytes, function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        if (!stillCurrent()) return;
+        var savedV6 = sessionStorage.getItem(eventKey);
+        var pendingV6 = savedV6 ? JSON.parse(savedV6) : null;
+        if (pendingV6 && (!/^v6_[a-f0-9]{32}$/.test(pendingV6.id) || !/^[a-f0-9]{64}$/.test(pendingV6.hash)))
+          throw new Error('Invalid event state');
+        if (!pendingV6 || pendingV6.hash !== eventHash) {
+          var eventBytes = new Uint8Array(16);
+          globalThis.crypto.getRandomValues(eventBytes);
+          pendingV6 = {hash:eventHash, id:'v6_' + Array.from(eventBytes, function(b) { return b.toString(16).padStart(2, '0'); }).join('')};
+        }
+        sessionStorage.setItem(eventKey, JSON.stringify(pendingV6));
+        _teacherV6Context.pendingAnswer = {key:eventKey, id:pendingV6.id};
+        chatPayload.v6_event_id = pendingV6.id;
+      }
     }
     if (_teacherUploadedDoc && _teacherUploadedDoc.document_id) {
       chatPayload.document_id = _teacherUploadedDoc.document_id;
@@ -14536,7 +14701,11 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     }
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: teacherHeaders,
+    var teacherHeaders = { 'Content-Type': 'application/json' };
+    if (chatPayload.mode === 'v6_quiz_pilot' && typeof token === 'string' && token) {
+      teacherHeaders.Authorization = 'Bearer ' + token;
+    }
       body: JSON.stringify(chatPayload)
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -14544,6 +14713,16 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     var convId = data.conversation_id || data.session_id;
     if (data.session_id) {
       if (_teacherActiveSessionType === 'quiz') {
+    if (!stillCurrent()) return;
+    var committedV6Feedback = data && data.mode === 'v6_quiz_pilot' && Array.isArray(data.suggestions) &&
+      data.suggestions[0] && ['correct', 'incorrect', 'unknown'].includes(data.suggestions[0].v6_feedback);
+    if (committedV6Feedback && chatPayload.v6_event_id && _teacherV6Context && _teacherV6Context.pendingAnswer &&
+        _teacherV6Context.sessionId === activeSessionId && _teacherV6Context.language === appLang &&
+        _teacherV6Context.deliveryToken === chatPayload.v6_delivery_token &&
+        _teacherV6Context.pendingAnswer.id === chatPayload.v6_event_id) {
+      sessionStorage.removeItem(_teacherV6Context.pendingAnswer.key);
+      _teacherV6Context.pendingAnswer = null;
+    }
         _teacherQuizSessionId = data.session_id;
       } else {
         _teacherSessionId = data.session_id;
@@ -14563,6 +14742,52 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
     var renderedSignIds = _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
     var extraSignIds = (data.sign_ids || []).filter(function(id) { return renderedSignIds.indexOf(id) === -1; });
+    var v6Meta = data.mode === 'v6_quiz_pilot' && Array.isArray(data.suggestions) ? data.suggestions[0] : null;
+    var sameV6Session = _teacherV6Context && _teacherV6Context.sessionId === activeSessionId &&
+      _teacherV6Context.deliveryToken === chatPayload.v6_delivery_token && _teacherV6Context.language === appLang;
+    if (data.mode === 'v6_quiz_pilot' && assistantBubble && sameV6Session && v6Meta &&
+        typeof v6Meta.question === 'string' && v6Meta.question && data.suggestions.length > 1) {
+      var choicesRow = document.createElement('div');
+      choicesRow.className = 'tm-chips';
+      var questionText = document.createElement('div');
+      questionText.textContent = v6Meta.question;
+      choicesRow.appendChild(questionText);
+      var issuedSession = activeSessionId;
+      var issuedToken = chatPayload.v6_delivery_token;
+      data.suggestions.slice(1).forEach(function(choice) {
+        if (typeof choice !== 'string' || !choice) return;
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'teacher-chip';
+        button.textContent = choice;
+        button.onclick = async function() {
+          if (!_teacherV6Context || _teacherV6Context.sessionId !== issuedSession ||
+              _teacherV6Context.deliveryToken !== issuedToken || _teacherV6Context.language !== appLang) {
+            toast(t('coach_unavailable'));
+            return;
+          }
+          if (_teacherV6Context.textPilot && !_teacherV6Context.consumptionConfirmed) {
+            if (_teacherV6Context.consumptionPending) return;
+            _teacherV6Context.consumptionPending = true;
+            var consumptionOk = false;
+            try {
+              consumptionOk = await consumeQuestionAccess({id:_teacherV6Context.questionId,
+                _v6_text_delivery:_teacherV6Context.deliveryToken});
+            } finally {
+              if (_teacherV6Context && _teacherV6Context.sessionId === issuedSession) {
+                _teacherV6Context.consumptionPending = false;
+              }
+            }
+            if (!consumptionOk || !_teacherV6Context || _teacherV6Context.sessionId !== issuedSession ||
+                _teacherV6Context.deliveryToken !== issuedToken || _teacherV6Context.language !== appLang) return;
+            _teacherV6Context.consumptionConfirmed = true;
+          }
+          teacherSend(choice, choice, 'v6_quiz_pilot', 'answer');
+        };
+        choicesRow.appendChild(button);
+      });
+      assistantBubble.appendChild(choicesRow);
+    }
     if (extraSignIds.length) {
       await _teacherAppendSignCards(extraSignIds, assistantBubble);
     }
@@ -14573,12 +14798,15 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     _teacherHideTyping();
     var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));
     _teacherScrollToAnswerStart(errorBubble);
+    if (!stillCurrent()) return;
   } finally {
-    _teacherTyping = false;
-    if (sendBtn) sendBtn.disabled = false;
-    // Only re-focus input when user typed manually — not after a chip tap.
-    // On mobile, focus() re-opens the keyboard mid-read which feels like a freeze.
-    if (input && !overrideMsg) input.focus();
+    if (_teacherRequestOwner === requestOwner) {
+      var focusInput = stillCurrent() && !overrideMsg;
+      _teacherRequestOwner = null;
+      _teacherTyping = false;
+      if (sendBtn) sendBtn.disabled = false;
+      if (input && focusInput) input.focus();
+    }
   }
 }
 
