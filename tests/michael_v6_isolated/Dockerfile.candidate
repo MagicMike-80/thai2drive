@@ -1,0 +1,23 @@
+# Review candidate only. No application code is copied into this image.
+# Pin to the specific Linux/amd64 child manifest verified against Docker Registry.
+FROM mongo@sha256:c630c59342c1493d50345136df2af14a76b9e827dd5316bfabee07a0880a5f3a AS mongodb
+FROM python@sha256:e8c69d86735f6df3efa06b324694fe51f0422785f83a3bd463052636c2421944
+
+COPY --from=mongodb /usr/bin/mongod /usr/local/bin/mongod
+RUN apt-get update && apt-get install -y --no-install-recommends libcurl4 libssl3 \
+    && rm -rf /var/lib/apt/lists/* \
+    && ldd /usr/local/bin/mongod > /tmp/mongod-libs \
+    && ! grep -q 'not found' /tmp/mongod-libs
+
+COPY requirements-candidate.txt /tmp/requirements-candidate.txt
+# This build step needs network and is not the isolated test process. Every
+# third-party package is pinned to a wheel hash; this does not approve its code.
+RUN python -m pip install --no-cache-dir --disable-pip-version-check \
+    --index-url https://pypi.org/simple --only-binary=:all: --require-hashes \
+    -r /tmp/requirements-candidate.txt
+
+USER 65534:65534
+WORKDIR /sandbox/input
+# The runner must override the environment with env -i and independently
+# verify network=none, read-only mounts, privileges, caps and all mounts.
+ENTRYPOINT ["/usr/local/bin/python", "-I", "-B", "/sandbox/input/tests/michael_v6_isolated/bootstrap.py"]

@@ -28,7 +28,8 @@ from pathlib import Path
 from difflib import get_close_matches
 from typing import Optional, List, Literal
 
-from fastapi import APIRouter, Query, HTTPException
+from fastapi import APIRouter, Query, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 try:
@@ -5169,6 +5170,13 @@ class TeacherChatRequest(BaseModel):
     image_url: Optional[str] = Field(default=None, max_length=2048)
     image_data: Optional[str] = Field(default=None, max_length=5_600_000)
     explain_level: Optional[int] = Field(default=1, ge=1, le=3)
+    v6_question_id: Optional[str] = Field(default=None, max_length=128)
+    v6_delivery_token: Optional[str] = Field(default=None, max_length=2048)
+    v6_actor_binding: Optional[str] = Field(default=None, max_length=2048)
+    v6_intent: Optional[Literal["start", "answer", "hint", "alternative", "explain"]] = None
+    v6_answer_text: Optional[str] = Field(default=None, max_length=1000)
+    v6_hint_level: int = Field(default=0, ge=0, le=2)
+    v6_event_id: Optional[str] = Field(default=None, min_length=16, max_length=128)
 
 
 class TeacherChatResponse(BaseModel):
@@ -5183,11 +5191,351 @@ class TeacherChatResponse(BaseModel):
     deployment_id: Optional[str] = None
 
 
+class V6TextStartRequest(BaseModel):
+    language: Literal["no", "th", "en"]
+
+
+class V6TextStartResponse(BaseModel):
+    ready: bool = False
+    question_id: Optional[str] = None
+    delivery_token: Optional[str] = None
+    actor_binding: Optional[str] = None
+    session_id: Optional[str] = None
+    question: Optional[str] = None
+    choices: list[str] = Field(default_factory=list)
+
+
 async def _load_session_history(session_id: str) -> list[dict]:
     """Read every persisted turn, including earlier languages, in stable pair order."""
     return await _chat_col.find({"session_id": session_id}).sort(
         [("ts", 1), ("_id", 1)]
     ).to_list(length=_TEACHER_HISTORY_LIMIT)
+
+
+# Disabled until a reviewed access/usage integration is installed. A validator
+# must verify the actual requester and entitlement without double consumption.
+_v6_access_authorizer = None
+# Separate delivery gate. Must check existing access without consuming again.
+_v6_text_delivery_authorizer = None
+# Closed until reviewed persistent storage and an idempotent client are wired.
+_v6_guidance_store = None
+# Experimental semantic proposals remain off until independent safety evaluation.
+_v6_semantic_judge = None
+
+
+def _v6_globally_ready(policy):
+    """One fail-closed switch; configuration alone never supplies missing review."""
+    return bool(
+        os.environ.get("MICHAEL_V6_ENABLED", "").strip().lower() in ("1", "true")
+        and policy._signing_key() and policy._progress_key()
+        and policy.APPROVED_CONTENT_DIGESTS and policy.APPROVED_GUIDANCE
+        and callable(_v6_access_authorizer) and callable(_v6_text_delivery_authorizer)
+        and callable(getattr(_v6_guidance_store, "record_answer", None))
+        and callable(_v6_semantic_judge)
+    )
+
+
+def _v6_content_ready(policy, question_id, question):
+    """Require reviewed feedback and three localized versions of this exact item."""
+    explanations = question.get("explanations") if isinstance(question, dict) else None
+    if not isinstance(explanations, dict):
+        return False
+    for lang in ("no", "th", "en"):
+        explanation = explanations.get(lang)
+        if (not isinstance(explanation, str) or not explanation.strip()
+                or not _reply_matches_language_script(explanation, lang)):
+            return False
+    return policy.reviewed_guidance_covers_question(
+        question_id, policy.APPROVED_CONTENT_DIGESTS.get(question_id),
+        question.get("question") if isinstance(question, dict) else None,
+        _reply_matches_language_script,
+    )
+
+
+async def _v6_premium_test_authorizer(verified_user, req, session_id):
+    """Unwired premium-test adapter; no quota mutation or product decision."""
+    import sys
+    try:
+        import michael_v6_policy as policy
+    except ImportError:
+        from backend import michael_v6_policy as policy
+    server = sys.modules.get("server") or sys.modules.get("backend.server")
+    current_premium = getattr(server, "_user_has_active_premium", None)
+    user_id = verified_user.get("id") if isinstance(verified_user, dict) else None
+    if not callable(current_premium) or not isinstance(user_id, str):
+        return False
+    try:
+        return (current_premium(verified_user) is True
+                and policy.delivery_session_id(req.v6_delivery_token, req.language) == session_id
+                and policy.verify_actor_binding(req.v6_actor_binding, req.v6_delivery_token, user_id))
+    except Exception:
+        return False
+
+
+async def _v6_existing_preview_check(verified_user, request):
+    """Unwired premium test preview; other tiers await completed-event proof."""
+    import sys
+    server = sys.modules.get("server") or sys.modules.get("backend.server")
+    read_usage = getattr(server, "_get_access_usage", None)
+    make_policy = getattr(server, "_access_policy_payload", None)
+    premium_active = getattr(server, "_user_has_active_premium", None)
+    if not isinstance(verified_user, dict) or not isinstance(verified_user.get("id"), str) or not verified_user["id"]:
+        return False
+    if not callable(read_usage) or not callable(make_policy) or not callable(premium_active):
+        return False
+    try:
+        usage = await read_usage(verified_user, "")
+        status = make_policy(verified_user, usage)
+        return (premium_active(verified_user) is True and isinstance(status, dict)
+                and status.get("can_answer") is True)
+    except Exception:
+        return False
+
+
+async def _v6_existing_access_check(verified_user, req, session_id):
+    """Unwired preview/premium adapter; non-premium answers fail closed.
+
+    Existing access_events may be written before the quota update succeeds;
+    their presence alone is not a verified completed consumption. Do not use
+    them to authorize an answer or fasit until atomic completion is proven.
+    """
+    try:
+        import michael_v6_policy as policy
+    except ImportError:
+        from backend import michael_v6_policy as policy
+    user_id = verified_user.get("id") if isinstance(verified_user, dict) else None
+    if (not isinstance(user_id, str)
+            or policy.delivery_session_id(req.v6_delivery_token, req.language) != session_id
+            or not policy.verify_actor_binding(req.v6_actor_binding, req.v6_delivery_token, user_id)):
+        return False
+    if req.v6_intent == "start":
+        return await _v6_existing_preview_check(verified_user, None)
+    return await _v6_premium_test_authorizer(verified_user, req, session_id)
+
+
+async def _v6_verified_user(http_request):
+    """Use the existing JWT verifier and fresh user record; fail closed."""
+    if http_request is None:
+        return None
+    import sys
+    server = sys.modules.get("server") or sys.modules.get("backend.server")
+    secret = getattr(server, "JWT_SECRET", None)
+    verifier = getattr(server, "verify_token", None)
+    if not isinstance(secret, str) or not secret or secret == "fallback-secret-change-me" or not callable(verifier):
+        return None
+    authorization = http_request.headers.get("authorization", "")
+    scheme, separator, credential = authorization.partition(" ")
+    if not separator or scheme.lower() != "bearer" or not credential or len(credential) > 8192:
+        return None
+    try:
+        payload = verifier(credential)
+        subject = payload.get("sub") if isinstance(payload, dict) else None
+        if not isinstance(subject, str) or not subject or len(subject) > 256:
+            return None
+        users = await _db["users"].find({"id": subject}, {"_id": 0, "password_hash": 0}).limit(2).to_list(2)
+        if (len(users) != 1 or not isinstance(users[0], dict) or users[0].get("id") != subject
+                or users[0].get("disabled") or users[0].get("deleted_at")):
+            return None
+        return users[0]
+    except Exception:
+        return None
+
+
+@teacher_router.post("/teacher/v6/text/start", response_model=V6TextStartResponse)
+async def teacher_v6_text_start(req: V6TextStartRequest, request: Request):
+    """Disabled text entry point; no quota writes and no unapproved content."""
+    import sys
+    try:
+        import michael_v6_policy as policy
+    except ImportError:
+        from backend import michael_v6_policy as policy
+    if not _v6_globally_ready(policy):
+        return V6TextStartResponse()
+    user = await _v6_verified_user(request)
+    if not user:
+        return V6TextStartResponse()
+    try:
+        if (await _v6_text_delivery_authorizer(user, request)) is not True:
+            return V6TextStartResponse()
+        server = sys.modules.get("server") or sys.modules.get("backend.server")
+        available_filter = getattr(server, "AVAILABLE_QUESTION_FILTER", None)
+        if not isinstance(available_filter, dict) or not available_filter:
+            return V6TextStartResponse()
+        ids = list(policy.APPROVED_CONTENT_DIGESTS)
+        if len(ids) > 256:
+            return V6TextStartResponse()
+        secrets.SystemRandom().shuffle(ids)
+        for question_id in ids[:10]:
+            rows = await _db["questions"].find({"$and": [available_filter, {"id": question_id}]}).limit(2).to_list(2)
+            if len(rows) != 1 or not isinstance(rows[0], dict) or rows[0].get("id") != question_id:
+                continue
+            original = rows[0]
+            delivery = policy.issue_delivery_token(original)
+            question = policy.validated_question_content(original, req.language)
+            if (not delivery or not question or not question["question_text"].strip()
+                    or not _v6_content_ready(policy, question_id, question)):
+                continue
+            binding = policy.issue_verified_actor_binding(delivery, question_id, original, user.get("id"))
+            session = policy.delivery_session_id(delivery, req.language)
+            if not binding or not session:
+                continue
+            choices = [option["text"][req.language] for option in question["question"]["options"]]
+            secrets.SystemRandom().shuffle(choices)
+            return V6TextStartResponse(ready=True, question_id=question_id, delivery_token=delivery,
+                                       actor_binding=binding, session_id=session,
+                                       question=question["question_text"], choices=choices)
+    except Exception:
+        return V6TextStartResponse()
+    return V6TextStartResponse()
+
+
+@teacher_router.get("/teacher/v6/status")
+async def teacher_v6_status(request: Request, language: Literal["no", "th", "en"]):
+    """Expose only whether this requester can start a fully reviewed V6 item."""
+    result = await teacher_v6_text_start(V6TextStartRequest(language=language), request)
+    return JSONResponse({"available": bool(result.ready)}, headers={"Cache-Control": "no-store"})
+
+
+async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=None) -> TeacherChatResponse:
+    """Isolated opt-in quiz pilot: all factual output comes from the stored item.
+
+    Each request carries its own question id; no prior quiz context, client
+    answer key, LLM output, or shuffled option letters are used as authority.
+    """
+    import sys
+    try:
+        import michael_v6_policy as policy
+    except ImportError:
+        from backend import michael_v6_policy as policy
+    server = sys.modules.get("server") or sys.modules.get("backend.server")
+    available_filter = getattr(server, "AVAILABLE_QUESTION_FILTER", None)
+    question = (await policy.load_stored_question(
+        _db["questions"], available_filter, req.v6_question_id, req.language,
+        delivery_token=req.v6_delivery_token, require_delivery_token=True,
+    )) if _v6_globally_ready(policy) else None
+    if question and not _v6_content_ready(policy, req.v6_question_id, question):
+        question = None
+    authorized = False
+    expected_session = policy.delivery_session_id(req.v6_delivery_token, req.language) if question else None
+    if question and expected_session == session_id and callable(_v6_access_authorizer):
+        try:
+            verified_user = await _v6_verified_user(http_request)
+            if verified_user is not None:
+                authorized = (await _v6_access_authorizer(verified_user, req, session_id)) is True
+                if authorized:
+                    authorized = policy.verify_actor_binding(
+                        getattr(req, "v6_actor_binding", None), req.v6_delivery_token,
+                        verified_user.get("id") if isinstance(verified_user, dict) else None,
+                    )
+        except Exception:
+            authorized = False
+    text = {
+        "no": {
+            "unavailable": "Jeg kan ikke kontrollere denne oppgaven akkurat nå. Prøv igjen senere.",
+            "start": "Se på oppgaven og prøv å svare med teksten i alternativet.",
+            "hint": "Se nøye på situasjonen og alternativene. Hva tror du passer best?",
+            "alternative": "La oss se på alternativene ett om gangen. Hvilket passer til situasjonen?",
+            "wrong": "Ikke helt. Se nøye på situasjonen og prøv et annet alternativ.",
+            "unknown": "Jeg kan ikke vurdere dette sikkert. Kan du skrive teksten i ett av alternativene?",
+            "correct": "Det er riktig.",
+            "answer": "Riktig svar er: ",
+        },
+        "en": {
+            "unavailable": "I cannot check this question right now. Please try again later.",
+            "start": "Look at the question and answer with the text of an option.",
+            "hint": "Look carefully at the situation and the options. Which one do you think fits?",
+            "alternative": "Let's look at the options one at a time. Which one fits the situation?",
+            "wrong": "Not quite. Look carefully at the situation and try another option.",
+            "unknown": "I cannot assess that safely. Can you write the text of one option?",
+            "correct": "That is correct.",
+            "answer": "The correct answer is: ",
+        },
+        "th": {
+            "unavailable": "ผมยังตรวจสอบข้อนี้ไม่ได้ครับ ลองใหม่อีกครั้งภายหลังนะครับ",
+            "start": "ดูโจทย์แล้วลองตอบด้วยข้อความของตัวเลือกครับ",
+            "hint": "ลองดูสถานการณ์และตัวเลือกอย่างละเอียด คุณคิดว่าข้อไหนเหมาะสมครับ?",
+            "alternative": "ลองดูตัวเลือกทีละข้อครับ ข้อไหนเหมาะกับสถานการณ์นี้ครับ?",
+            "wrong": "ยังไม่ถูกครับ ลองดูสถานการณ์อีกครั้งแล้วเลือกคำตอบอื่นนะครับ",
+            "unknown": "ผมยังประเมินคำตอบนี้ไม่ได้แน่ชัด คุณช่วยพิมพ์ข้อความของตัวเลือกหนึ่งข้อได้ไหมครับ?",
+            "correct": "ถูกต้องครับ",
+            "answer": "คำตอบที่ถูกต้องคือ: ",
+        },
+    }[req.language]
+    show_choices = False
+    feedback = "unavailable"
+    if (not authorized or not question or not question["question_text"].strip() or not req.v6_intent
+            or not callable(getattr(globals().get("_v6_guidance_store"), "record_answer", None))):
+        reply = text["unavailable"]
+    elif req.v6_intent == "explain":
+        feedback = "explained"
+        reply = text["answer"] + question["correct_text"]
+        if question["explanation"].strip():
+            reply += "\n" + question["explanation"].strip()
+    elif req.v6_intent in ("start", "hint", "alternative"):
+        feedback = "guidance"
+        reply = text[req.v6_intent]
+        show_choices = True
+    else:
+        store = globals().get("_v6_guidance_store")
+        level = None
+        if store is None:
+            return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
+                mode="v6_quiz_pilot", reply=text["unavailable"],
+                suggestions=[{"v6_feedback": "unavailable", "question": ""}])
+        if store is not None:
+            event_id = getattr(req, "v6_event_id", None)
+            user_id = verified_user.get("id") if isinstance(verified_user, dict) else None
+            binding = getattr(req, "v6_actor_binding", None)
+            if (not isinstance(event_id, str) or not 16 <= len(event_id) <= 128
+                    or not policy.verify_actor_binding(binding, req.v6_delivery_token, user_id)):
+                return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
+                    mode="v6_quiz_pilot", reply=text["unavailable"],
+                    suggestions=[{"v6_feedback": "unavailable", "question": ""}])
+            answer = req.v6_answer_text or req.message
+            verdict = policy.assess_student_answer(question["question"], req.language, answer)
+            semantic_judge = globals().get("_v6_semantic_judge")
+            if verdict == "unknown" and callable(semantic_judge):
+                verdict = await policy.propose_semantic_assessment(question, req.language, answer, semantic_judge)
+            scope = {"principal": user_id, "delivery_session": session_id,
+                     "language": req.language, "question_id": req.v6_question_id}
+            try:
+                stored = await store.record_answer(scope, event_id, answer, verdict)
+            except Exception:
+                stored = None
+            if (not isinstance(stored, tuple) or len(stored) != 2
+                    or type(stored[0]) is not int or not 0 <= stored[0] <= 2
+                    or stored[1] not in ("correct", "incorrect", "unknown")):
+                return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
+                    mode="v6_quiz_pilot", reply=text["unavailable"],
+                    suggestions=[{"v6_feedback": "unavailable", "question": ""}])
+            level, verdict = stored
+        action = policy.next_action(verdict, verified_hint_level=level)
+        feedback = verdict
+        reply = text[{"confirm": "correct", "hint": "wrong", "alternative": "alternative", "clarify": "unknown"}[action]]
+        if verdict == "incorrect":
+            option_id = policy.matched_option_id(question["question"], req.language, answer)
+            reviewed = policy.reviewed_option_guidance(
+                req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id),
+                req.language, option_id, level,
+            )
+            if reviewed and _reply_matches_language_script(reviewed, req.language):
+                reply = reviewed
+        elif verdict == "correct":
+            reviewed = policy.reviewed_confirmation(
+                req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id), req.language,
+            )
+            if reviewed and _reply_matches_language_script(reviewed, req.language):
+                reply = reviewed
+        show_choices = action != "confirm"
+    choices = []
+    if show_choices:
+        import secrets as _v6_secrets
+        choices = [option["text"][req.language] for option in question["question"]["options"]]
+        _v6_secrets.SystemRandom().shuffle(choices)
+    return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
+                               mode="v6_quiz_pilot", reply=reply,
+                               suggestions=([{ "v6_feedback": feedback,
+                                               "question": question["question_text"] if show_choices else ""}, *choices]))
 
 
 def _history_messages(history: list[dict]) -> list[dict]:
@@ -5197,7 +5545,7 @@ def _history_messages(history: list[dict]) -> list[dict]:
 
 
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
-async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
+async def teacher_chat(req: TeacherChatRequest, request: Request = None) -> TeacherChatResponse:
     import time
     start_time = time.time()
     logger.info(
@@ -5211,6 +5559,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     
     session_id = req.session_id or req.conversation_id or f"ts_{uuid.uuid4().hex[:16]}"
     conversation_id = session_id
+    if req.mode == "v6_quiz_pilot":
+        return await _v6_quiz_pilot(req, session_id, request)
     user_msg = req.message.strip()
     # Pydantic's Literal["no", "th", "en"] already rejects anything else with a 422.
     requested_language = req.language
