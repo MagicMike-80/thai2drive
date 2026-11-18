@@ -2659,6 +2659,16 @@ async def get_categories():
 
 # ==================== ACCESS POLICY ====================
 
+def _v6_registered_quota_enabled():
+    return os.environ.get("MICHAEL_V6_REGISTERED_ENABLED", "").strip().lower() in ("1", "true")
+
+
+async def _consume_registered_quota(user, event, *, delivery=None):
+    from michael_v6_quota import consume_registered
+    return await consume_registered(db, user["id"], event, _oslo_day_key,
+                                    ACCESS_REGISTERED_DAILY_LIMIT, delivery=delivery)
+
+
 @api_router.get("/access/status")
 async def access_status(device_id: str, user: Optional[dict] = Depends(get_optional_user)):
     """Single access-policy contract for web and mobile.
@@ -2680,6 +2690,16 @@ async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depe
     """
     scope, key = _access_scope(user, data.device_id)
     event_id = data.event_id or str(uuid.uuid4())
+    if user and not _user_has_active_premium(user) and _v6_registered_quota_enabled():
+        event = {"device_id": data.device_id, "event_id": event_id, "question_id": data.question_id,
+                 "mode": data.mode, "category": data.category}
+        outcome = await _consume_registered_quota(user, event)
+        status = _access_policy_payload(user, await _get_access_usage(user, data.device_id))
+        if outcome == "limited":
+            raise HTTPException(status_code=402, detail=status)
+        if outcome == "conflict":
+            raise HTTPException(status_code=409, detail=status)
+        return {**status, "consumed": outcome == "consumed", "event_id": event_id}
     existing_event = await db.access_events.find_one({"event_id": event_id}, {"_id": 0})
     if existing_event:
         usage = await _get_access_usage(user, data.device_id)

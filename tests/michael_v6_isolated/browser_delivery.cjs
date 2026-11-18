@@ -17,9 +17,10 @@ function send(message) {
   process.stdout.write(JSON.stringify(message) + '\n');
 }
 
-async function run(browser, lang) {
+async function run(browser, lang, tier) {
   const item = await readMessage();
   assert.equal(item.language, lang);
+  assert.equal(item.tier, tier);
   const context = await browser.newContext({serviceWorkers:'block', viewport:{width:1280, height:960}});
   try {
     const page = await context.newPage();
@@ -93,7 +94,9 @@ async function run(browser, lang) {
   const browser = await chromium.launch({headless:true, executablePath:process.env.V6_CHROME_PATH,
     args:['--disable-background-networking', '--disable-quic', '--host-resolver-rules=MAP * ~NOTFOUND']});
   try {
-    for (const lang of ['no', 'th', 'en']) await run(browser, lang);
+    for (const lang of ['no', 'th', 'en']) {
+      for (const tier of ['premium', 'registered']) await run(browser, lang, tier);
+    }
   } finally {
     await browser.close();
     process.stdin.destroy();

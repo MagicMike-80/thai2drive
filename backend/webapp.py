@@ -12596,7 +12596,7 @@ async function startV6TextPilot() {
     _teacherQuizConversationId = data.session_id;
     _teacherV6Context = {questionId:data.question_id, deliveryToken:data.delivery_token,
       actorBinding:data.actor_binding, sessionId:data.session_id, language:startLanguage,
-      textPilot:true, consumptionConfirmed:false, consumptionPending:false};
+      textPilot:true, consumptionConfirmed:data.server_manages_quota === true, consumptionPending:false};
     showTab('teacher', 'quiz');
     teacherSend(t('v6_text_practice'), t('v6_text_practice'), 'v6_quiz_pilot', 'start');
   } catch (error) {

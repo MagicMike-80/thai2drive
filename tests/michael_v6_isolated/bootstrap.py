@@ -15,6 +15,7 @@ EXPECTED_ENV = {"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": "/tmp", "TMPDIR"
                 "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1", "MICHAEL_TEST_MODE": "synthetic"}
 ALLOWED_INPUT_FILES = {
     "backend/server.py", "backend/teacher_chat.py", "backend/michael_v6_policy.py", "backend/ai_learning.py",
+    "backend/michael_v6_quota.py",
     "backend/michael_greetings.py", "backend/media_catalog.py",
     "backend/webapp.py", "backend/site_config.py", "backend/i18n_routing.py",
     "backend/stopping_distance_web.py", "backend/studybook_web.py",
@@ -158,7 +159,8 @@ def run_integration_after_review():
     dbpath.mkdir(mode=0o700, exist_ok=False)
     startup_log = open("/tmp/v6-mongod-startup.log", "wb")
     process = subprocess.Popen(["/usr/local/bin/mongod", "--bind_ip", "127.0.0.1", "--port", "27017",
-                                "--dbpath", str(dbpath), "--nounixsocket", "--quiet",
+                                "--dbpath", str(dbpath), "--nounixsocket", "--quiet", "--replSet", "v6test",
+                                "--oplogSize", "32",
                                 "--wiredTigerCacheSizeGB", "0.25", "--logpath", "/tmp/v6-mongod.log"],
                                stdin=subprocess.DEVNULL, stdout=startup_log, stderr=subprocess.STDOUT)
     try:
@@ -176,6 +178,13 @@ def run_integration_after_review():
                 time.sleep(0.2)
         else:
             raise RuntimeError("Isolated MongoDB did not become ready")
+        client.admin.command("replSetInitiate", {"_id": "v6test", "members": [{"_id": 0, "host": "127.0.0.1:27017"}]})
+        for _ in range(60):
+            if client.admin.command("hello").get("isWritablePrimary"):
+                break
+            time.sleep(0.25)
+        else:
+            raise RuntimeError("Isolated replica set did not elect a primary")
         client.close()
         fakes = runpy.run_path(str(INPUT / "tests/michael_v6_isolated/fake_services.py"))
         fakes["install"]()

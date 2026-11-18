@@ -44,6 +44,7 @@ def run_suite(tc, policy, mongo_client_class=None):
     import jwt
     from fastapi import APIRouter, Depends, FastAPI, HTTPException
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+    from pydantic import BaseModel
     from backend.webapp import webapp_router
 
     # Execute the exact checked-out auth and policy handlers with their FastAPI
@@ -52,9 +53,10 @@ def run_suite(tc, policy, mongo_client_class=None):
     names = {"create_token", "verify_token", "get_current_user", "get_me", "_auth_user_payload",
              "_access_expires_at", "_user_trial_days_left", "_user_premium_status", "_paid_premium_active",
              "_user_has_active_trial", "_parse_iso_utc", "_user_has_active_premium", "_get_access_usage",
-             "_access_scope", "_oslo_day_key", "_access_policy_payload"}
+             "_access_scope", "_oslo_day_key", "_access_policy_payload", "access_consume", "get_optional_user",
+             "AccessConsumeRequest", "_consume_registered_quota", "_v6_registered_quota_enabled"}
     nodes = [node for node in ast.parse(server_path.read_bytes()).body
-             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name in names]
+             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name in names]
     if {node.name for node in nodes} != names or len(nodes) != len(names):
         raise RuntimeError("Cannot load unique auth and access handlers from server.py")
     auth_code = compile(ast.Module(body=nodes, type_ignores=[]), str(server_path), "exec")
@@ -68,7 +70,8 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.server.__dict__.update(jwt=jwt, JWT_SECRET=secrets.token_hex(32), JWT_ALGORITHM="HS256",
                 JWT_EXPIRE_HOURS=1, ACCESS_OSLO_TZ=ZoneInfo("Europe/Oslo"),
                 ACCESS_GUEST_TOTAL_LIMIT=5, ACCESS_REGISTERED_DAILY_LIMIT=10,
-                datetime=datetime, timezone=timezone, timedelta=timedelta, Optional=Optional,
+                datetime=datetime, timezone=timezone, timedelta=timedelta, Optional=Optional, os=os, uuid=uuid,
+                BaseModel=BaseModel,
                 HTTPAuthorizationCredentials=HTTPAuthorizationCredentials, HTTPException=HTTPException,
                 Depends=Depends, security=HTTPBearer(auto_error=False), api_router=APIRouter())
             exec(auth_code, self.server.__dict__)
@@ -165,11 +168,11 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(response.status_code, 200)
             return response.json()
 
-        async def exercise_browser_delivery(self, lang):
+        async def exercise_browser_delivery(self, lang, tier):
             # The driver lives in a separate network namespace. Its only way
             # into this ASGI app is a bounded set of synthetic HTTP requests.
             previous = {row["_id"] async for row in self.collection.find({}, {"_id": 1})}
-            print("V6 " + json.dumps({"language": lang, "bearer": self.bearer, "question": self.question["question"][lang],
+            print("V6 " + json.dumps({"language": lang, "tier": tier, "bearer": self.bearer, "question": self.question["question"][lang],
                 "wrong": self.question["options"][1]["text"][lang], "wrongPhrase": self.wrong_phrases[lang],
                 "rightPhrase": self.right_phrases[lang], "firstPrompt": self.first_prompt[lang],
                 "hint": self.hints[lang], "alternative": self.alternatives[lang], "confirmation": self.confirmation[lang]}), flush=True)
@@ -200,14 +203,23 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(records[0]["level"], 0)
             self.assertEqual([(e["verdict"], e["level"]) for e in records[0]["events"]],
                              [("unknown", 0), ("incorrect", 1), ("incorrect", 2), ("correct", 0)])
-            print(f"Chromium and MongoDB passed for {lang}", file=sys.stderr, flush=True)
+            print(f"Chromium and MongoDB passed for {lang} ({tier})", file=sys.stderr, flush=True)
 
         async def test_six_paths_all_languages(self):
             for lang in ("no", "th", "en"):
                 right = self.question["options"][0]["text"][lang]
                 wrong = self.question["options"][1]["text"][lang]
                 with self.subTest(language=lang):
-                    await self.exercise_browser_delivery(lang)
+                    await self.exercise_browser_delivery(lang, "premium")
+                    usage = self.server.db.access_usage
+                    selector = {"scope": "user", "key": "synthetic-user"}
+                    before = await usage.find_one(selector) or {}
+                    await self.users.update_one({"id": "synthetic-user"}, {"$set": {"is_premium": False}})
+                    with patch.dict(os.environ, {"MICHAEL_V6_REGISTERED_ENABLED": "1"}):
+                        await self.exercise_browser_delivery(lang, "registered")
+                    after = await usage.find_one(selector)
+                    self.assertEqual(after["daily_used"], before.get("daily_used", 0) + 1)
+                    await self.users.update_one({"id": "synthetic-user"}, {"$set": {"is_premium": True}})
                     delivery = await self.client.post("/api/teacher/v6/text/start", json={"language": lang},
                         headers=self.headers)
                     self.assertEqual(delivery.status_code, 200)
@@ -360,6 +372,33 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(len(rows), 2)
             self.assertEqual([len(row["events"]) for row in rows], [1, 1])
             self.assertEqual(len({row["actor_marker"] for row in rows}), 2)
+            # Exercise the last ordinary quiz slot and V6 answers against the
+            # same legacy counter. A retry must still work after the limit.
+            await self.users.update_one({"id": "synthetic-user"}, {"$set": {"is_premium": False}})
+            selector = {"scope": "user", "key": "synthetic-user"}
+            inserted = await self.server.db.access_usage.insert_one({
+                **selector, "day_key": self.server._oslo_day_key(), "daily_used": 9})
+            async def ordinary(event):
+                return await self.client.post("/api/access/consume", headers=self.headers, json={
+                    "device_id": "synthetic-device", "question_id": "ordinary-question", "event_id": event})
+            async def answer():
+                return await self.call("en", "answer", self.question["options"][0]["text"]["en"])
+            with patch.dict(os.environ, {"MICHAEL_V6_REGISTERED_ENABLED": "1"}):
+                regular, guided = await asyncio.gather(ordinary("last-slot"), answer())
+                self.assertIn(regular.status_code, (200, 402))
+                won_regular = regular.status_code == 200
+                self.assertEqual(guided["suggestions"][0]["v6_feedback"], "unavailable" if won_regular else "correct")
+                if won_regular:
+                    repeated = await ordinary("last-slot")
+                    self.assertEqual(repeated.status_code, 200)
+                    self.assertFalse(repeated.json()["consumed"])
+                else:
+                    self.assertEqual((await answer())["suggestions"][0]["v6_feedback"], "correct")
+                self.assertEqual((await ordinary("one-too-many")).status_code, 402)
+                self.assertEqual((await ordinary("v6:client-supplied")).status_code, 409)
+            self.assertEqual(await self.server.db.access_events.count_documents(selector), 1)
+            self.assertEqual(await self.server.db.access_usage.count_documents(selector), 1)
+            self.assertEqual((await self.server.db.access_usage.find_one({"_id": inserted.inserted_id}))["daily_used"], 10)
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
     return unittest.TextTestRunner(verbosity=2).run(suite)

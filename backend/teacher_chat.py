@@ -5197,6 +5197,7 @@ class V6TextStartRequest(BaseModel):
 
 class V6TextStartResponse(BaseModel):
     ready: bool = False
+    server_manages_quota: bool = False
     question_id: Optional[str] = None
     delivery_token: Optional[str] = None
     actor_binding: Optional[str] = None
@@ -5273,7 +5274,7 @@ async def _v6_premium_test_authorizer(verified_user, req, session_id):
 
 
 async def _v6_existing_preview_check(verified_user, request):
-    """Unwired premium test preview; other tiers await completed-event proof."""
+    """Check current entitlement and the remaining shared account quota."""
     import sys
     server = sys.modules.get("server") or sys.modules.get("backend.server")
     read_usage = getattr(server, "_get_access_usage", None)
@@ -5286,19 +5287,16 @@ async def _v6_existing_preview_check(verified_user, request):
     try:
         usage = await read_usage(verified_user, "")
         status = make_policy(verified_user, usage)
-        return (premium_active(verified_user) is True and isinstance(status, dict)
-                and status.get("can_answer") is True)
+        registered_enabled = getattr(server, "_v6_registered_quota_enabled", None)
+        return (isinstance(status, dict) and status.get("can_answer") is True
+                and (premium_active(verified_user) is True or
+                     (callable(registered_enabled) and registered_enabled() and status.get("tier") == "registered")))
     except Exception:
         return False
 
 
 async def _v6_existing_access_check(verified_user, req, session_id):
-    """Unwired preview/premium adapter; non-premium answers fail closed.
-
-    Existing access_events may be written before the quota update succeeds;
-    their presence alone is not a verified completed consumption. Do not use
-    them to authorize an answer or fasit until atomic completion is proven.
-    """
+    """Authorize a verified delivery and charge a registered account once."""
     try:
         import michael_v6_policy as policy
     except ImportError:
@@ -5310,7 +5308,28 @@ async def _v6_existing_access_check(verified_user, req, session_id):
         return False
     if req.v6_intent == "start":
         return await _v6_existing_preview_check(verified_user, None)
-    return await _v6_premium_test_authorizer(verified_user, req, session_id)
+    if await _v6_premium_test_authorizer(verified_user, req, session_id):
+        return True
+    import sys
+    import hashlib
+    server = sys.modules.get("server") or sys.modules.get("backend.server")
+    registered_enabled = getattr(server, "_v6_registered_quota_enabled", None)
+    consume = getattr(server, "_consume_registered_quota", None)
+    if not callable(registered_enabled) or not registered_enabled() or not callable(consume):
+        return False
+    if req.v6_intent not in ("hint", "alternative", "answer", "explain"):
+        return False
+    digest = hashlib.sha256(req.v6_delivery_token.encode("ascii")).hexdigest()
+    if req.v6_intent in ("hint", "alternative"):
+        if await _v6_existing_preview_check(verified_user, None):
+            return True
+        return await _db["access_events"].find_one({"scope": "user", "key": user_id,
+            "v6_delivery": digest, "question_id": req.v6_question_id}, {"_id": 1}) is not None
+    if req.v6_intent == "answer" and (not req.v6_event_id or not (req.v6_answer_text or req.message).strip()):
+        return False
+    outcome = await consume(verified_user, {"event_id": "v6:" + digest, "question_id": req.v6_question_id,
+                            "mode": "v6", "category": None, "device_id": None}, delivery=digest)
+    return outcome in ("consumed", "replayed")
 
 
 async def _v6_verified_user(http_request):
@@ -5417,7 +5436,7 @@ async def teacher_v6_text_start(req: V6TextStartRequest, request: Request):
                 continue
             choices = [option["text"][req.language] for option in question["question"]["options"]]
             secrets.SystemRandom().shuffle(choices)
-            return V6TextStartResponse(ready=True, question_id=question_id, delivery_token=delivery,
+            return V6TextStartResponse(ready=True, server_manages_quota=True, question_id=question_id, delivery_token=delivery,
                                        actor_binding=binding, session_id=session,
                                        question=question["question_text"], choices=choices)
     except Exception:
