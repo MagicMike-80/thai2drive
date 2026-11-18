@@ -42,7 +42,7 @@ const handler = source.slice(start, end);
         _teacherQuizConversationId: 'synthetic-session', _teacherExplainLevel: 1,
         _teacherV6Context: {questionId:'synthetic', deliveryToken:'synthetic-token',
           actorBinding:'synthetic-binding', sessionId:'synthetic-session', language:'no'},
-        appLang:'no', user:null, token:'synthetic-token', lastToast:'',
+        appLang:'no', user:null, token:'synthetic-token', _guestKey:null, lastToast:'',
         _teacherDeviceId: () => 'synthetic-device', t: key => key,
         toast: text => { window.lastToast = text; }, _teacherClearMediaCards: () => {},
         stopAllSpeech: () => {}, showTab: () => {}, _teacherHideSuggestions: () => {},

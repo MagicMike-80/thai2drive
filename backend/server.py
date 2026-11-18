@@ -2664,13 +2664,47 @@ def _v6_registered_quota_enabled():
 
 
 async def _consume_registered_quota(user, event, *, delivery=None):
-    from michael_v6_quota import consume_registered
-    return await consume_registered(db, user["id"], event, _oslo_day_key,
+    from michael_v6_quota import consume_quota
+    return await consume_quota(db, user["id"], event, _oslo_day_key,
                                     ACCESS_REGISTERED_DAILY_LIMIT, delivery=delivery)
 
 
+def _verified_guest_device(request):
+    if request is None or request.headers.get("authorization") or not request.headers.get("x-t2d-guest-key"):
+        return None
+    from michael_v6_quota import guest_device
+    return guest_device(request.headers.get("x-t2d-guest-key"))
+
+
+@api_router.post("/access/guest-session")
+async def guest_session(request: Request):
+    guest_id = _verified_guest_device(request) if _v6_guest_enabled() else None
+    return {"ready": guest_id is not None, "device_id": guest_id}
+
+
+def _v6_guest_enabled():
+    return os.environ.get("MICHAEL_V6_GUEST_ENABLED", "").strip().lower() in ("1", "true")
+
+
+async def _consume_guest_quota(device_id, event, *, delivery=None):
+    from michael_v6_quota import consume_quota
+    return await consume_quota(db, device_id, event, _oslo_day_key, ACCESS_GUEST_TOTAL_LIMIT,
+                               delivery=delivery, guest=True)
+
+
+def _check_guest_access_request(user, device_id, request):
+    if user:
+        return False
+    proof_id = _verified_guest_device(request)
+    if device_id.startswith("web_guest_v6-") or proof_id:
+        if device_id != proof_id:
+            raise HTTPException(status_code=403, detail="guest_session")
+        return True
+    return False
+
+
 @api_router.get("/access/status")
-async def access_status(device_id: str, user: Optional[dict] = Depends(get_optional_user)):
+async def access_status(device_id: str, user: Optional[dict] = Depends(get_optional_user), request: Request = None):
     """Single access-policy contract for web and mobile.
 
     Backend is the source of truth:
@@ -2678,11 +2712,12 @@ async def access_status(device_id: str, user: Optional[dict] = Depends(get_optio
     - registered: 10 answered questions per Oslo calendar day
     - premium/admin: unlimited
     """
+    _check_guest_access_request(user, device_id, request)
     usage = await _get_access_usage(user, device_id)
     return _access_policy_payload(user, usage)
 
 @api_router.post("/access/consume")
-async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depends(get_optional_user)):
+async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depends(get_optional_user), request: Request = None):
     """Consume one question answer if the learner has access.
 
     This endpoint is intentionally gentle but authoritative. The frontend may
@@ -2690,10 +2725,12 @@ async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depe
     """
     scope, key = _access_scope(user, data.device_id)
     event_id = data.event_id or str(uuid.uuid4())
-    if user and not _user_has_active_premium(user) and _v6_registered_quota_enabled():
+    secure_guest = _check_guest_access_request(user, data.device_id, request)
+    if secure_guest or (user and not _user_has_active_premium(user) and _v6_registered_quota_enabled()):
         event = {"device_id": data.device_id, "event_id": event_id, "question_id": data.question_id,
                  "mode": data.mode, "category": data.category}
-        outcome = await _consume_registered_quota(user, event)
+        outcome = (await _consume_guest_quota(data.device_id, event) if secure_guest
+                   else await _consume_registered_quota(user, event))
         status = _access_policy_payload(user, await _get_access_usage(user, data.device_id))
         if outcome == "limited":
             raise HTTPException(status_code=402, detail=status)

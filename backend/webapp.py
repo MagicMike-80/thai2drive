@@ -5862,6 +5862,7 @@ var _ls = {
   remove: function(k) { try { localStorage.removeItem(k); } catch(e) {} }
 };
 var token = _ls.get('t2d_token');
+var _guestKey = null;
 var user = null;
 var campaignClaimPending = new URLSearchParams(window.location.search || '').get('campaign') === 'free30';
 var deviceId = null;
@@ -8288,6 +8289,8 @@ async function saveStudiebokChapter() {
 async function api(method, url, body) {
   var opts = { method: method, headers: { 'Content-Type': 'application/json' }, cache: 'no-store' };
   if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (!token && _guestKey && /^\/api\/(access\/(status|consume)(\?|$)|teacher\/v6\/text\/start$)/.test(url))
+    opts.headers['X-T2D-Guest-Key'] = _guestKey;
   if (body) opts.body = JSON.stringify(body);
   var r = await fetch(url, opts);
   var data = await r.json().catch(function() { return {}; });
@@ -8452,11 +8455,42 @@ function ensureGuestDeviceId() {
   return guestId;
 }
 
-function enterGuest() {
+async function enterGuest() {
   _ls.remove('t2d_token');
   token = null;
   user = null;
-  deviceId = ensureGuestDeviceId();
+  async function prepareGuest() {
+    var previous = _ls.get('t2d_guest_device_id');
+    var proof = _ls.get('t2d_guest_key');
+    _guestKey = null;
+    if (previous && !previous.startsWith('web_guest_v6-')) return ensureGuestDeviceId();
+    if (previous) {
+      if (!proof || !/^[0-9a-f]{64}$/.test(proof)) throw new Error('Missing guest credential');
+      _guestKey = proof;
+      return previous;
+    }
+    if (!window.isSecureContext || !window.crypto || !crypto.getRandomValues) return ensureGuestDeviceId();
+    if (!proof) {
+      var bytes = crypto.getRandomValues(new Uint8Array(32));
+      proof = Array.from(bytes, function(b) { return b.toString(16).padStart(2,'0'); }).join('');
+      _ls.set('t2d_guest_key', proof);
+      if (_ls.get('t2d_guest_key') !== proof) return ensureGuestDeviceId();
+    }
+    var response = await fetch('/api/access/guest-session', {
+      method:'POST', cache:'no-store', headers:{'X-T2D-Guest-Key':proof}
+    });
+    if (!response.ok) throw new Error('Guest session unavailable');
+    var issued = await response.json();
+    if (!issued.ready) return ensureGuestDeviceId();
+    if (!/^web_guest_v6-[0-9a-f]{64}$/.test(issued.device_id)) throw new Error('Invalid guest session');
+    _ls.set('t2d_guest_device_id', issued.device_id);
+    _guestKey = proof;
+    return issued.device_id;
+  }
+  try {
+    deviceId = navigator.locks ? await navigator.locks.request('t2d-guest-session', prepareGuest) : await prepareGuest();
+  } catch (error) { toast(t('coach_unavailable')); return; }
+  if (token) return;
   enterApp();
 }
 
@@ -8562,6 +8596,7 @@ function logout() {
   if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
+  _guestKey = null;
   resetTeacherForLanguage();
   document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'none';
@@ -12580,10 +12615,11 @@ async function startV6TextPilot() {
   var startLanguage = appLang;
   var startToken = token;
   var startContext = _teacherV6Context;
-  if (!startToken || _teacherTyping) return;
+  var startGuest = _guestKey;
+  if ((!startToken && !startGuest) || _teacherTyping) return;
   try {
     var data = await api('POST', '/api/teacher/v6/text/start', {language:startLanguage});
-    if (token !== startToken || appLang !== startLanguage || _teacherV6Context !== startContext || _teacherTyping) return;
+    if (token !== startToken || _guestKey !== startGuest || appLang !== startLanguage || _teacherV6Context !== startContext || _teacherTyping) return;
     if (!data || !data.ready || !data.question_id || !data.actor_binding ||
         _v6DeliverySession(data.delivery_token, startLanguage) !== data.session_id) {
       toast(t('coach_unavailable'));
@@ -13657,15 +13693,16 @@ async function _refreshV6Availability() {
   var button = document.getElementById('v6TextPilotBtn');
   if (!button) return;
   button.hidden = true;
-  if (!token) return;
+  if (!token && !_guestKey) return;
   var checkedToken = token, checkedLanguage = appLang;
+  var checkedGuest = _guestKey;
   try {
     var response = await fetch('/api/teacher/v6/status?language=' + encodeURIComponent(checkedLanguage), {
-      cache:'no-store', headers:{Authorization:'Bearer ' + checkedToken}
+      cache:'no-store', headers:checkedToken ? {Authorization:'Bearer ' + checkedToken} : {'X-T2D-Guest-Key':checkedGuest}
     });
     if (!response.ok) return;
     var result = await response.json();
-    if (token === checkedToken && appLang === checkedLanguage && result && result.available === true) button.hidden = false;
+    if (token === checkedToken && _guestKey === checkedGuest && appLang === checkedLanguage && result && result.available === true) button.hidden = false;
   } catch (_) { /* The default remains hidden when status cannot be verified. */ }
 }
 
@@ -14628,10 +14665,10 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
   if (input && !overrideMsg) input.value = '';
   var requestOwner = {};
   _teacherRequestOwner = requestOwner;
-  var sentToken = token, sentLanguage = appLang, sentType = _teacherActiveSessionType;
+  var sentToken = token, sentGuest = _guestKey, sentLanguage = appLang, sentType = _teacherActiveSessionType;
   var sentContext = sentType === 'quiz' ? _teacherV6Context : null;
   function stillCurrent() {
-    return _teacherRequestOwner === requestOwner && token === sentToken && appLang === sentLanguage &&
+    return _teacherRequestOwner === requestOwner && token === sentToken && _guestKey === sentGuest && appLang === sentLanguage &&
       _teacherActiveSessionType === sentType && (sentType !== 'quiz' || _teacherV6Context === sentContext) &&
       (!sentContext || _teacherQuizSessionId === sentContext.sessionId);
   }
@@ -14703,6 +14740,8 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
     var teacherHeaders = { 'Content-Type': 'application/json' };
     if (chatPayload.mode === 'v6_quiz_pilot' && typeof token === 'string' && token) {
       teacherHeaders.Authorization = 'Bearer ' + token;
+    } else if (chatPayload.mode === 'v6_quiz_pilot' && _guestKey) {
+      teacherHeaders['X-T2D-Guest-Key'] = _guestKey;
     }
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',

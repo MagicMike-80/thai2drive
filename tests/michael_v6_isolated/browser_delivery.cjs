@@ -26,9 +26,10 @@ async function run(browser, lang, tier) {
     const page = await context.newPage();
     page.setDefaultTimeout(10000);
     page.on('pageerror', error => console.error('Web page error:', error.message));
-    await page.addInitScript(bearer => localStorage.setItem('t2d_token', bearer), item.bearer);
+    if (tier !== 'guest') await page.addInitScript(bearer => localStorage.setItem('t2d_token', bearer), item.bearer);
     const pagePath = '/' + lang + '/app';
     const appPaths = new Set([pagePath, '/api/auth/me', '/api/teacher/v6/status', '/api/teacher/v6/text/start', '/api/teacher/chat']);
+    if (tier === 'guest') appPaths.add('/api/access/guest-session');
     let pending = Promise.resolve();
     let releaseStatus;
     const initialVisibilityChecked = new Promise(resolve => { releaseStatus = resolve; });
@@ -40,7 +41,7 @@ async function run(browser, lang, tier) {
         pending = pending.then(async () => {
           if (url.pathname === '/api/teacher/v6/status') await initialVisibilityChecked;
           send({method:req.method(), path:url.pathname + url.search, authorization:req.headers().authorization,
-                body:req.method() === 'POST' ? req.postDataJSON() : null});
+                guestKey:req.headers()['x-t2d-guest-key'], body:req.postData() ? req.postDataJSON() : null});
           const reply = await readMessage();
           assert.equal(reply.status, 200);
           await route.fulfill({status:reply.status, contentType:reply.type, body:reply.body});
@@ -52,6 +53,7 @@ async function run(browser, lang, tier) {
       return route.abort();
     });
     await page.goto('http://127.0.0.1' + pagePath);
+    if (tier === 'guest') await page.locator('.auth-guest-btn').click();
     await page.locator('#bnTeacher').click();
     const entry = page.locator('#v6TextPilotBtn');
     try {
@@ -95,7 +97,7 @@ async function run(browser, lang, tier) {
     args:['--disable-background-networking', '--disable-quic', '--host-resolver-rules=MAP * ~NOTFOUND']});
   try {
     for (const lang of ['no', 'th', 'en']) {
-      for (const tier of ['premium', 'registered']) await run(browser, lang, tier);
+      for (const tier of ['premium', 'registered', 'guest']) await run(browser, lang, tier);
     }
   } finally {
     await browser.close();

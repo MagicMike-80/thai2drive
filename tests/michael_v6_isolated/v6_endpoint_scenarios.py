@@ -42,7 +42,7 @@ def run_suite(tc, policy, mongo_client_class=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
     import jwt
-    from fastapi import APIRouter, Depends, FastAPI, HTTPException
+    from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
     from backend.webapp import webapp_router
@@ -54,7 +54,9 @@ def run_suite(tc, policy, mongo_client_class=None):
              "_access_expires_at", "_user_trial_days_left", "_user_premium_status", "_paid_premium_active",
              "_user_has_active_trial", "_parse_iso_utc", "_user_has_active_premium", "_get_access_usage",
              "_access_scope", "_oslo_day_key", "_access_policy_payload", "access_consume", "get_optional_user",
-             "AccessConsumeRequest", "_consume_registered_quota", "_v6_registered_quota_enabled"}
+             "AccessConsumeRequest", "_consume_registered_quota", "_v6_registered_quota_enabled",
+             "_check_guest_access_request", "_consume_guest_quota", "_verified_guest_device", "guest_session",
+             "_v6_guest_enabled", "access_status"}
     nodes = [node for node in ast.parse(server_path.read_bytes()).body
              if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name in names]
     if {node.name for node in nodes} != names or len(nodes) != len(names):
@@ -71,7 +73,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                 JWT_EXPIRE_HOURS=1, ACCESS_OSLO_TZ=ZoneInfo("Europe/Oslo"),
                 ACCESS_GUEST_TOTAL_LIMIT=5, ACCESS_REGISTERED_DAILY_LIMIT=10,
                 datetime=datetime, timezone=timezone, timedelta=timedelta, Optional=Optional, os=os, uuid=uuid,
-                BaseModel=BaseModel,
+                BaseModel=BaseModel, Request=Request,
                 HTTPAuthorizationCredentials=HTTPAuthorizationCredentials, HTTPException=HTTPException,
                 Depends=Depends, security=HTTPBearer(auto_error=False), api_router=APIRouter())
             exec(auth_code, self.server.__dict__)
@@ -172,7 +174,7 @@ def run_suite(tc, policy, mongo_client_class=None):
             # The driver lives in a separate network namespace. Its only way
             # into this ASGI app is a bounded set of synthetic HTTP requests.
             previous = {row["_id"] async for row in self.collection.find({}, {"_id": 1})}
-            print("V6 " + json.dumps({"language": lang, "tier": tier, "bearer": self.bearer, "question": self.question["question"][lang],
+            print("V6 " + json.dumps({"language": lang, "tier": tier, "bearer": self.bearer if tier != "guest" else None, "question": self.question["question"][lang],
                 "wrong": self.question["options"][1]["text"][lang], "wrongPhrase": self.wrong_phrases[lang],
                 "rightPhrase": self.right_phrases[lang], "firstPrompt": self.first_prompt[lang],
                 "hint": self.hints[lang], "alternative": self.alternatives[lang], "confirmation": self.confirmation[lang]}), flush=True)
@@ -180,6 +182,8 @@ def run_suite(tc, policy, mongo_client_class=None):
             status_path = f"/api/teacher/v6/status?language={lang}"
             allowed = {("GET", page_path), ("GET", status_path), ("GET", "/api/auth/me"),
                        ("POST", "/api/teacher/v6/text/start"), ("POST", "/api/teacher/chat")}
+            if tier == "guest":
+                allowed.add(("POST", "/api/access/guest-session"))
             for _ in range(24):
                 line = sys.stdin.buffer.readline(16385)
                 self.assertTrue(line.endswith(b"\n") and len(line) <= 16384, "Incomplete browser request")
@@ -189,11 +193,19 @@ def run_suite(tc, policy, mongo_client_class=None):
                 method, path = request["method"], request["path"]
                 self.assertIn((method, path), allowed)
                 headers = {}
-                if path != page_path:
+                if tier == "guest" and path != page_path:
+                    self.assertNotIn("authorization", request)
+                    headers["X-T2D-Guest-Key"] = request["guestKey"]
+                elif path != page_path:
                     self.assertEqual(request["authorization"], self.headers["Authorization"])
                     headers["Authorization"] = request["authorization"]
                 response = await self.client.request(method, path, headers=headers, json=request.get("body"))
                 self.assertEqual(response.status_code, 200, path)
+                if path == "/api/access/guest-session":
+                    device = response.json()["device_id"]
+                    guest_headers = headers
+                if tier == "guest" and path == "/api/teacher/chat":
+                    last_chat = request["body"]
                 print("V6 " + json.dumps({"status": response.status_code, "type": response.headers["content-type"],
                                           "body": response.text}, ensure_ascii=False), flush=True)
             else:
@@ -203,6 +215,27 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(records[0]["level"], 0)
             self.assertEqual([(e["verdict"], e["level"]) for e in records[0]["events"]],
                              [("unknown", 0), ("incorrect", 1), ("incorrect", 2), ("correct", 0)])
+            if tier == "guest":
+                usage_path = "/api/access/status"
+                params = {"device_id": device}
+                first = await self.client.get(usage_path, params=params, headers=guest_headers)
+                self.assertEqual((first.json()["used"], first.json()["remaining"]), (1, 4))
+                for wrong_headers in ({}, {"X-T2D-Guest-Key":secrets.token_hex(32)}):
+                    foreign = await self.client.get(usage_path, params=params, headers=wrong_headers)
+                    self.assertEqual(foreign.status_code, 403)
+                    denied = await self.client.post("/api/teacher/chat", json=last_chat, headers=wrong_headers)
+                    self.assertEqual(denied.json()["suggestions"][0]["v6_feedback"], "unavailable")
+                async def ordinary(i):
+                    return await self.client.post("/api/access/consume", headers=guest_headers,
+                        json={**params, "event_id": "ordinary-" + str(i), "question_id":"synthetic"})
+                answers = await asyncio.gather(*(ordinary(i) for i in range(5)))
+                self.assertCountEqual([answer.status_code for answer in answers], [200, 200, 200, 200, 402])
+                accepted = next(i for i, answer in enumerate(answers) if answer.status_code == 200)
+                self.assertFalse((await ordinary(accepted)).json()["consumed"])
+                final = await self.client.get(usage_path, params=params, headers=guest_headers)
+                self.assertEqual((final.json()["used"], final.json()["remaining"]), (5, 0))
+                new_delivery = await self.client.post("/api/teacher/v6/text/start", json={"language":lang}, headers=guest_headers)
+                self.assertFalse(new_delivery.json()["ready"])
             print(f"Chromium and MongoDB passed for {lang} ({tier})", file=sys.stderr, flush=True)
 
         async def test_six_paths_all_languages(self):
@@ -219,6 +252,8 @@ def run_suite(tc, policy, mongo_client_class=None):
                         await self.exercise_browser_delivery(lang, "registered")
                     after = await usage.find_one(selector)
                     self.assertEqual(after["daily_used"], before.get("daily_used", 0) + 1)
+                    with patch.dict(os.environ, {"MICHAEL_V6_GUEST_ENABLED": "1"}):
+                        await self.exercise_browser_delivery(lang, "guest")
                     await self.users.update_one({"id": "synthetic-user"}, {"$set": {"is_premium": True}})
                     delivery = await self.client.post("/api/teacher/v6/text/start", json={"language": lang},
                         headers=self.headers)

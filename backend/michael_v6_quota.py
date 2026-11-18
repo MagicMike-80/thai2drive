@@ -1,13 +1,24 @@
 """Shared registered-account quota when the V6 registered pilot is enabled."""
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
 
 from pymongo.errors import DuplicateKeyError
 from pymongo.write_concern import WriteConcern
 
 
-async def consume_registered(db, user_id, event, day_key_for, daily_limit, *, delivery=None):
+GUEST_PREFIX = "web_guest_v6-"
+
+
+def guest_device(proof):
+    """A public guest ID cannot be used as its 256-bit browser credential."""
+    if not isinstance(proof, str) or not re.fullmatch(r"[0-9a-f]{64}", proof):
+        return None
+    return GUEST_PREFIX + hashlib.sha256(b"v6-guest\0" + bytes.fromhex(proof)).hexdigest()
+
+
+async def consume_quota(db, user_id, event, day_key_for, limit, *, delivery=None, guest=False):
     """Commit one ordinary answer or V6 delivery against the same Oslo-day counter.
 
     Legacy usage rows retain their Mongo ID. New rows have a deterministic ID,
@@ -17,15 +28,17 @@ async def consume_registered(db, user_id, event, day_key_for, daily_limit, *, de
         raise ValueError("Missing quota identity")
     if event["event_id"].startswith("v6:") != (delivery is not None):
         return "conflict"
-    selector = {"scope": "user", "key": user_id}
+    scope = "guest" if guest else "user"
+    prefix = "guest-session:" if guest else "registered:"
+    selector = {"scope": scope, "key": user_id}
     event_key = hashlib.sha256(json.dumps([user_id, event["event_id"]], separators=(",", ":")).encode()).hexdigest()
-    receipt_id = "registered:" + event_key
-    account_id = "registered:" + hashlib.sha256(user_id.encode()).hexdigest()
+    receipt_id = prefix + event_key
+    account_id = prefix + hashlib.sha256(user_id.encode()).hexdigest()
 
     async def commit(session):
         receipt = await db.access_events.find_one({"_id": receipt_id}, session=session)
         if receipt:
-            if (receipt.get("key") != user_id or receipt.get("scope") != "user"
+            if (receipt.get("key") != user_id or receipt.get("scope") != scope
                     or receipt["question_id"] != event["question_id"] or receipt.get("v6_delivery") != delivery):
                 return "conflict"
             return "replayed"
@@ -39,19 +52,22 @@ async def consume_registered(db, user_id, event, day_key_for, daily_limit, *, de
         usage = rows[0] if rows else {}
         now = datetime.now(timezone.utc)
         day = day_key_for(now)
-        used = usage.get("daily_used", 0) if usage.get("day_key") == day else 0
+        counter = "total_used" if guest else "daily_used"
+        used = usage.get(counter, 0) if guest or usage.get("day_key") == day else 0
         if type(used) is not int or used < 0:
             raise ValueError("Invalid registered quota")
-        if used >= daily_limit:
+        if used >= limit:
             return "limited"
         timestamp = now.isoformat()
-        fields = {**selector, "user_id": user_id, "day_key": day, "daily_used": used + 1,
-                  "updated_at": timestamp}
+        owner = None if guest else user_id
+        fields = {**selector, "user_id": owner, counter: used + 1, "updated_at": timestamp}
+        if not guest:
+            fields["day_key"] = day
         if event.get("device_id"):
             fields["device_id"] = event["device_id"]
         await db.access_usage.update_one({"_id": usage.get("_id", account_id), **selector},
             {"$set": fields, "$setOnInsert": {"created_at": timestamp}}, upsert=True, session=session)
-        await db.access_events.insert_one({**event, **selector, "_id": receipt_id, "user_id": user_id,
+        await db.access_events.insert_one({**event, **selector, "_id": receipt_id, "user_id": owner,
                                            "v6_delivery": delivery, "created_at": timestamp}, session=session)
         return "consumed"
 

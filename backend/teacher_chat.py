@@ -5285,6 +5285,10 @@ async def _v6_existing_preview_check(verified_user, request):
     if not callable(read_usage) or not callable(make_policy) or not callable(premium_active):
         return False
     try:
+        guest_id = verified_user.get("_v6_guest")
+        if guest_id:
+            status = make_policy(None, await read_usage(None, guest_id))
+            return status.get("tier") == "guest" and status.get("can_answer") is True
         usage = await read_usage(verified_user, "")
         status = make_policy(verified_user, usage)
         registered_enabled = getattr(server, "_v6_registered_quota_enabled", None)
@@ -5315,7 +5319,12 @@ async def _v6_existing_access_check(verified_user, req, session_id):
     server = sys.modules.get("server") or sys.modules.get("backend.server")
     registered_enabled = getattr(server, "_v6_registered_quota_enabled", None)
     consume = getattr(server, "_consume_registered_quota", None)
-    if not callable(registered_enabled) or not registered_enabled() or not callable(consume):
+    guest_id = verified_user.get("_v6_guest")
+    if guest_id:
+        consume = getattr(server, "_consume_guest_quota", None)
+    elif not callable(registered_enabled) or not registered_enabled():
+        return False
+    if not callable(consume):
         return False
     if req.v6_intent not in ("hint", "alternative", "answer", "explain"):
         return False
@@ -5323,12 +5332,12 @@ async def _v6_existing_access_check(verified_user, req, session_id):
     if req.v6_intent in ("hint", "alternative"):
         if await _v6_existing_preview_check(verified_user, None):
             return True
-        return await _db["access_events"].find_one({"scope": "user", "key": user_id,
+        return await _db["access_events"].find_one({"scope": "guest" if guest_id else "user", "key": guest_id or user_id,
             "v6_delivery": digest, "question_id": req.v6_question_id}, {"_id": 1}) is not None
     if req.v6_intent == "answer" and (not req.v6_event_id or not (req.v6_answer_text or req.message).strip()):
         return False
-    outcome = await consume(verified_user, {"event_id": "v6:" + digest, "question_id": req.v6_question_id,
-                            "mode": "v6", "category": None, "device_id": None}, delivery=digest)
+    outcome = await consume(guest_id or verified_user, {"event_id": "v6:" + digest, "question_id": req.v6_question_id,
+                            "mode": "v6", "category": None, "device_id": guest_id}, delivery=digest)
     return outcome in ("consumed", "replayed")
 
 
@@ -5343,6 +5352,13 @@ async def _v6_verified_user(http_request):
     if not isinstance(secret, str) or not secret or secret == "fallback-secret-change-me" or not callable(verifier):
         return None
     authorization = http_request.headers.get("authorization", "")
+    if not authorization:
+        guest_enabled = getattr(server, "_v6_guest_enabled", None)
+        if callable(guest_enabled) and guest_enabled():
+            guest_id = server._verified_guest_device(http_request)
+            if guest_id:
+                return {"id": "v6-guest/" + guest_id, "_v6_guest": guest_id}
+        return None
     scheme, separator, credential = authorization.partition(" ")
     if not separator or scheme.lower() != "bearer" or not credential or len(credential) > 8192:
         return None
@@ -5355,6 +5371,9 @@ async def _v6_verified_user(http_request):
         if (len(users) != 1 or not isinstance(users[0], dict) or users[0].get("id") != subject
                 or users[0].get("disabled") or users[0].get("deleted_at")):
             return None
+        if subject.startswith("v6-guest/"):
+            return None
+        users[0].pop("_v6_guest", None)
         return users[0]
     except Exception:
         return None

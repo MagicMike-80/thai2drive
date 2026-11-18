@@ -9,7 +9,7 @@ const end = source.indexOf('\nasync function loadTeacher()', start);
 assert(start >= 0 && end > start);
 const button = {hidden:false};
 let available = false, called = 0, mutate = () => {};
-const context = {document:{getElementById:() => button}, token:null, appLang:'no',
+const context = {document:{getElementById:() => button}, token:null, _guestKey:null, appLang:'no',
   fetch:async () => { called++; mutate(); return {ok:true, json:async () => ({available})}; }};
 vm.createContext(context);
 vm.runInContext(source.slice(start, end), context);

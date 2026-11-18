@@ -27,7 +27,7 @@ const context = {
   _teacherQuizConversationId: 'test-session', _teacherSessionId: 'normal',
   _teacherConversationId: 'normal', _teacherExplainLevel: 1,
   _teacherV6Context: { questionId: 'synthetic', deliveryToken: 'synthetic-token', sessionId: 'test-session', language: 'no' },
-  appLang: 'no', user: null, token: 'synthetic-login',
+  appLang: 'no', user: null, token: 'synthetic-login', _guestKey:null,
   _teacherDeviceId: () => 'synthetic-device', t: (key) => key,
   toast: () => {}, _teacherClearMediaCards: () => {}, stopAllSpeech: () => {},
   showTab: (tab) => calls.tabs.push(tab), _teacherHideSuggestions: () => {},
