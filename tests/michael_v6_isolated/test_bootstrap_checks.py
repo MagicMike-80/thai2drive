@@ -55,12 +55,15 @@ class BootstrapChecks(unittest.TestCase):
     def test_mounts_rejects_write_access_and_sockets(self):
         root = "1 0 0:1 / / ro - overlay overlay ro\n"
         input_mount = "2 1 0:2 / /sandbox/input ro - bind bind ro\n"
-        # Paths are checked only for known forbidden files; no app files imported.
-        gate.check_mounts(root + input_mount)
-        for mounts in (root, root.replace(" ro ", " rw ") + input_mount,
-                       root + input_mount + "3 1 0:3 / /var/run/docker.sock rw - bind bind rw\n"):
-            with self.subTest(mounts=mounts), self.assertRaises(RuntimeError):
-                gate.check_mounts(mounts)
+        with patch.object(Path, "exists", return_value=False):
+            gate.check_mounts(root + input_mount)
+            for mounts in (root, root.replace(" ro ", " rw ") + input_mount,
+                           root + input_mount + "3 1 0:3 / /var/run/docker.sock rw - bind bind rw\n"):
+                with self.subTest(mounts=mounts), self.assertRaises(RuntimeError):
+                    gate.check_mounts(mounts)
+        with patch.object(Path, "exists", lambda p: p.as_posix() == "/run/docker.sock"), \
+             self.assertRaisesRegex(RuntimeError, "forbidden path"):
+            gate.check_mounts(root + input_mount)
 
     def test_network_probe_requires_unreachable_tcp_and_dns(self):
         class FakeSocket:
@@ -100,7 +103,9 @@ class BootstrapChecks(unittest.TestCase):
             gate.ALLOWED_INPUT_FILES = expected
 
     def test_unverified_environment_stops_before_app_import(self):
-        with self.assertRaisesRegex(RuntimeError, "non-root Linux container"):
+        with patch.object(gate.sys, "platform", "linux"), \
+             patch.object(gate.os, "geteuid", return_value=0, create=True), \
+             self.assertRaisesRegex(RuntimeError, "non-root Linux container"):
             gate.run_integration_after_review()
 
 

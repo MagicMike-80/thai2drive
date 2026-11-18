@@ -22,6 +22,9 @@ on:
       - backend/media_catalog.py
       - backend/learning_areas.json
       - backend/regelbank.json
+      - backend/docs/1_JURIDISK_TRAFIKKFASIT_2026.md
+      - backend/docs/2_MICHAEL_PEDAGOGIKK_OG_GATELOGIKK_2026.md
+      - backend/docs/3_NORSK_THAI_FELLEORD_OG_KULTUR_2026.md
 permissions:
   contents: read
 jobs:
@@ -53,6 +56,9 @@ jobs:
             /backend/media_catalog.py
             /backend/learning_areas.json
             /backend/regelbank.json
+            /backend/docs/1_JURIDISK_TRAFIKKFASIT_2026.md
+            /backend/docs/2_MICHAEL_PEDAGOGIKK_OG_GATELOGIKK_2026.md
+            /backend/docs/3_NORSK_THAI_FELLEORD_OG_KULTUR_2026.md
             /tests/michael_v6_isolated/
       - name: Validate the web sender with synthetic inputs and no network
         shell: bash
@@ -103,6 +109,9 @@ jobs:
             backend/i18n_routing.py backend/site_config.py \
             backend/michael_greetings.py backend/media_catalog.py \
             backend/learning_areas.json backend/regelbank.json \
+            backend/docs/1_JURIDISK_TRAFIKKFASIT_2026.md \
+            backend/docs/2_MICHAEL_PEDAGOGIKK_OG_GATELOGIKK_2026.md \
+            backend/docs/3_NORSK_THAI_FELLEORD_OG_KULTUR_2026.md \
             tests/michael_v6_isolated/bootstrap.py tests/michael_v6_isolated/fake_services.py \
             tests/michael_v6_isolated/v6_endpoint_scenarios.py \
             tests/michael_v6_isolated/stop_sign_candidate_v1.json "$input"
