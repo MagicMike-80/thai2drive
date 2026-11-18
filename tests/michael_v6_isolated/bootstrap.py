@@ -19,6 +19,7 @@ ALLOWED_INPUT_FILES = {
     "backend/learning_areas.json", "backend/regelbank.json",
     "tests/michael_v6_isolated/bootstrap.py", "tests/michael_v6_isolated/fake_services.py",
     "tests/michael_v6_isolated/v6_endpoint_scenarios.py",
+    "tests/michael_v6_isolated/stop_sign_candidate_v1.json",
 }
 ALLOWED_MOUNTS = {
     "/", "/proc", "/dev", "/dev/pts", "/sys", "/sys/fs/cgroup", "/dev/mqueue",
@@ -200,4 +201,3 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"Isolation gate failed: {exc}", file=sys.stderr)
         raise SystemExit(1)
-

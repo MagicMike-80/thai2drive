@@ -1,0 +1,25 @@
+{
+  "fixture_version": 1,
+  "status": "test_only_thai_review_pending",
+  "approval": "Michael approved Norwegian situation, question and answer B for development on 2026-11-18; Thai review and multilingual approval pending.",
+  "question": {
+    "id": "test-only-v6-stop-sign-v1",
+    "active": true,
+    "question": {
+      "no": "Du nærmer deg et vegkryss med skilt 204 «Stopp» og en stopplinje. Det kommer kjøretøy fra begge retninger på den kryssende veien. Hva gjør du?",
+      "th": "คุณกำลังเข้าใกล้ทางแยกที่มีป้าย 204 «หยุด» และมีเส้นหยุด มีรถวิ่งมาจากทั้งสองทิศทางบนถนนที่ตัดกัน คุณควรทำอย่างไร?",
+      "en": "You approach a road junction with sign 204, “Stop”, and a stop line. Vehicles are approaching from both directions on the crossing road. What do you do?"
+    },
+    "options": [
+      {"id": "A", "text": {"no": "Jeg setter bare ned farten og kjører inn hvis jeg får plass.", "th": "ลดความเร็วเท่านั้น แล้วขับเข้าไปถ้ามีช่องว่าง", "en": "I only slow down and enter if there is a gap."}},
+      {"id": "B", "text": {"no": "Jeg stanser helt foran og inntil stopplinjen, viker for kjøretøyene på den kryssende veien og kjører videre når det er trygt.", "th": "หยุดรถให้สนิทก่อนถึงและชิดเส้นหยุด ให้ทางรถบนถนนที่ตัดกัน แล้วขับต่อเมื่อปลอดภัย", "en": "I stop completely immediately before and close to the stop line, give way to vehicles on the crossing road and continue when it is safe."}},
+      {"id": "C", "text": {"no": "Jeg stanser for kjøretøyet fra høyre, men kjører slik at kjøretøyet fra venstre må bremse for meg.", "th": "หยุดให้รถที่มาจากทางขวา แต่ขับออกไปจนรถที่มาจากทางซ้ายต้องเบรกให้ฉัน", "en": "I stop for the vehicle from the right but drive out so that the vehicle from the left has to brake for me."}}
+    ],
+    "correctOptionId": "B",
+    "explanation": {
+      "no": "Stoppskiltet krever at du stanser helt. Her stanser du foran og inntil stopplinjen og viker for kjørende trafikk i begge retninger på den kryssende veien.",
+      "th": "ป้ายหยุดกำหนดให้หยุดรถสนิท ในสถานการณ์นี้ให้หยุดก่อนถึงและชิดเส้นหยุด และให้ทางรถบนถนนที่ตัดกันจากทั้งสองทิศทาง",
+      "en": "The stop sign requires a complete stop. In this situation, stop immediately before and close to the stop line and give way to traffic travelling in both directions on the crossing road."
+    }
+  }
+}

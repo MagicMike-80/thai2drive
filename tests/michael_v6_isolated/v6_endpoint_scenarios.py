@@ -5,7 +5,9 @@ imports the app, loads credentials, or contacts a real service by itself.
 """
 import copy
 import asyncio
+import json
 import os
+from pathlib import Path
 import sys
 import types
 import unittest
@@ -290,6 +292,18 @@ def run_suite(tc, policy, mongo_client_class=None):
                 self.assertNotIn(self.question["options"][0]["text"]["no"], response["reply"])
             self.assertEqual(await self.collection.count_documents({}), 0)
 
+        async def test_unapproved_stop_sign_cannot_be_issued(self):
+            draft = json.loads(Path(__file__).with_name("stop_sign_candidate_v1.json").read_text(encoding="utf-8"))
+            self.assertEqual(draft["status"], "test_only_thai_review_pending")
+            candidate = draft["question"]
+            self.assertNotIn(candidate["id"], policy.APPROVED_CONTENT_DIGESTS)
+            self.assertIsNone(policy.issue_delivery_token(candidate))
+            self.questions.rows = [candidate]
+            response = await self.client.post("/api/teacher/v6/text/start", json={"language": "th"},
+                headers={"Authorization": "Bearer synthetic-bearer"})
+            self.assertFalse(response.json()["ready"])
+            self.assertEqual(await self.collection.count_documents({}), 0)
+
         async def test_existing_quiz_coach_without_context_does_not_use_v6(self):
             async def empty_history(*args):
                 return []
@@ -326,4 +340,3 @@ def run_suite(tc, policy, mongo_client_class=None):
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
     return unittest.TextTestRunner(verbosity=2).run(suite)
-

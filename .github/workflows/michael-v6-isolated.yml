@@ -60,7 +60,8 @@ jobs:
             backend/michael_greetings.py backend/media_catalog.py \
             backend/learning_areas.json backend/regelbank.json \
             tests/michael_v6_isolated/bootstrap.py tests/michael_v6_isolated/fake_services.py \
-            tests/michael_v6_isolated/v6_endpoint_scenarios.py "$input"
+            tests/michael_v6_isolated/v6_endpoint_scenarios.py \
+            tests/michael_v6_isolated/stop_sign_candidate_v1.json "$input"
       - name: Inspect and start network-isolated gate
         shell: bash
         run: |
