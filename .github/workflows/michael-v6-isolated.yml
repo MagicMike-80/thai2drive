@@ -15,6 +15,7 @@ on:
       - backend/i18n_routing.py
       - backend/site_config.py
       - backend/michael_v6_policy.py
+      - backend/tests/test_michael_v6*.py
       - backend/michael_v6_quota.py
       - backend/ai_learning.py
       - backend/michael_greetings.py
@@ -45,6 +46,7 @@ jobs:
             /backend/i18n_routing.py
             /backend/site_config.py
             /backend/michael_v6_policy.py
+            /backend/tests/test_michael_v6*.py
             /backend/michael_v6_quota.py
             /backend/ai_learning.py
             /backend/michael_greetings.py
@@ -137,3 +139,14 @@ jobs:
               V6_PLAYWRIGHT_PATH="$deps/package" V6_CHROME_PATH="$(command -v google-chrome)" \
               "$(command -v node)" tests/michael_v6_isolated/browser_delivery.cjs > "$channel"
           test "$(docker inspect --format '{{.State.ExitCode}}' "$container")" = 0
+      - name: Run existing offline V6 regression suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          offline=(sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)"
+            --clear-groups --no-new-privs env -i PATH=/usr/bin:/bin LANG=C.UTF-8)
+          "${offline[@]}" python3 -I -B -m unittest discover -s backend/tests -p 'test_michael_v6*.py' -v
+          # Each suite owns its process-wide synthetic modules and audit hooks.
+          for suite in tests/michael_v6_isolated/test_*.py; do
+            "${offline[@]}" python3 -I -B "$suite" -v
+          done
