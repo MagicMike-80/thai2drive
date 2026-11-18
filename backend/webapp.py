@@ -4664,6 +4664,7 @@ a { color:inherit; text-decoration:none; }
 .teacher-lvl-btn:hover, .teacher-slow-btn:hover, .teacher-hub-btn:hover {
   border-color:#00E5FF; color:#FFFFFF; box-shadow:0 0 10px rgba(0,229,255,.25);
 }
+#v6TextPilotBtn[hidden] { display:none; }
 .teacher-lvl-btn.active {
   background:rgba(37,99,235,.28); border-color:#00E5FF; color:#00E5FF;
   box-shadow:0 0 12px rgba(0,229,255,.28);

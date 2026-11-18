@@ -25,16 +25,19 @@ async function run(browser, lang) {
     const page = await context.newPage();
     page.setDefaultTimeout(10000);
     page.on('pageerror', error => console.error('Web page error:', error.message));
-    await page.addInitScript(() => localStorage.setItem('t2d_token', 'synthetic-bearer'));
+    await page.addInitScript(bearer => localStorage.setItem('t2d_token', bearer), item.bearer);
     const pagePath = '/' + lang + '/app';
-    const appPaths = new Set([pagePath, '/api/teacher/v6/status', '/api/teacher/v6/text/start', '/api/teacher/chat']);
+    const appPaths = new Set([pagePath, '/api/auth/me', '/api/teacher/v6/status', '/api/teacher/v6/text/start', '/api/teacher/chat']);
     let pending = Promise.resolve();
+    let releaseStatus;
+    const initialVisibilityChecked = new Promise(resolve => { releaseStatus = resolve; });
     await page.route('**/*', async route => {
       const req = route.request();
       const url = new URL(req.url());
       if (url.origin !== 'http://127.0.0.1') return route.abort();
       if (appPaths.has(url.pathname)) {
         pending = pending.then(async () => {
+          if (url.pathname === '/api/teacher/v6/status') await initialVisibilityChecked;
           send({method:req.method(), path:url.pathname + url.search, authorization:req.headers().authorization,
                 body:req.method() === 'POST' ? req.postDataJSON() : null});
           const reply = await readMessage();
@@ -43,15 +46,18 @@ async function run(browser, lang) {
         });
         return pending;
       }
-      if (url.pathname === '/api/auth/me') {
-        return route.fulfill({json:{id:'synthetic-user', name:'Test', is_premium:true}});
-      }
       if (url.pathname.includes('maintenance')) return route.fulfill({json:{active:false, owner:false}});
       if (url.pathname === '/api/teacher/welcome') return route.fulfill({json:{welcome:''}});
       return route.abort();
     });
     await page.goto('http://127.0.0.1' + pagePath);
     await page.locator('#bnTeacher').click();
+    const entry = page.locator('#v6TextPilotBtn');
+    try {
+      assert.equal(await entry.evaluate(button => getComputedStyle(button).display), 'none');
+    } finally {
+      releaseStatus();
+    }
     await page.locator('#v6TextPilotBtn:not([hidden])').click();
     const chat = page.locator('#teacherMessages');
     await chat.getByText(item.question, {exact:true}).waitFor();

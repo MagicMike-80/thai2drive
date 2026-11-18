@@ -4,6 +4,7 @@ The caller supplies already-imported, fully isolated modules. This module never
 imports the app, loads credentials, or contacts a real service by itself.
 """
 import copy
+import ast
 import asyncio
 import json
 import os
@@ -12,6 +13,10 @@ import sys
 import types
 import unittest
 import uuid
+from datetime import datetime, timedelta, timezone
+from typing import Optional
+from zoneinfo import ZoneInfo
+import secrets
 from unittest.mock import patch
 
 
@@ -35,8 +40,23 @@ def synthetic_question():
 def run_suite(tc, policy, mongo_client_class=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
-    from fastapi import FastAPI
+    import jwt
+    from fastapi import APIRouter, Depends, FastAPI, HTTPException
+    from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from backend.webapp import webapp_router
+
+    # Execute the exact checked-out auth and policy handlers with their FastAPI
+    # decorators. Leave unrelated server startup integrations outside this gate.
+    server_path = Path(__file__).resolve().parents[2] / "backend/server.py"
+    names = {"create_token", "verify_token", "get_current_user", "get_me", "_auth_user_payload",
+             "_access_expires_at", "_user_trial_days_left", "_user_premium_status", "_paid_premium_active",
+             "_user_has_active_trial", "_parse_iso_utc", "_user_has_active_premium", "_get_access_usage",
+             "_access_scope", "_oslo_day_key", "_access_policy_payload"}
+    nodes = [node for node in ast.parse(server_path.read_bytes()).body
+             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name in names]
+    if {node.name for node in nodes} != names or len(nodes) != len(names):
+        raise RuntimeError("Cannot load unique auth and access handlers from server.py")
+    auth_code = compile(ast.Module(body=nodes, type_ignores=[]), str(server_path), "exec")
 
     class EndpointScenarios(unittest.IsolatedAsyncioTestCase):
         async def asyncSetUp(self):
@@ -44,15 +64,16 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.server = types.ModuleType("server")
             self.server.AVAILABLE_QUESTION_FILTER = {
                 "active": {"$ne": False}, "id": {"$nin": ["v6-held"]}}
-            self.server.JWT_SECRET = "synthetic-signing-config"
-            self.server.verify_token = lambda credential: (
-                {"sub": "synthetic-user"} if credential == "synthetic-bearer" else
-                {"sub": "other-user"} if credential == "other-bearer" else None)
-            self.server._user_has_active_premium = lambda user: user.get("synthetic_premium") is True
-            async def synthetic_usage(user, device):
-                return {"synthetic": True}
-            self.server._get_access_usage = synthetic_usage
-            self.server._access_policy_payload = lambda user, usage: {"can_answer": user.get("synthetic_premium") is True}
+            self.server.__dict__.update(jwt=jwt, JWT_SECRET=secrets.token_hex(32), JWT_ALGORITHM="HS256",
+                JWT_EXPIRE_HOURS=1, ACCESS_OSLO_TZ=ZoneInfo("Europe/Oslo"),
+                ACCESS_GUEST_TOTAL_LIMIT=5, ACCESS_REGISTERED_DAILY_LIMIT=10,
+                datetime=datetime, timezone=timezone, timedelta=timedelta, Optional=Optional,
+                HTTPAuthorizationCredentials=HTTPAuthorizationCredentials, HTTPException=HTTPException,
+                Depends=Depends, security=HTTPBearer(auto_error=False), api_router=APIRouter())
+            exec(auth_code, self.server.__dict__)
+            self.bearer = self.server.create_token("synthetic-user", "student@example.invalid")
+            self.other_bearer = self.server.create_token("other-user", "other@example.invalid")
+            self.headers = {"Authorization": "Bearer " + self.bearer}
             self.env = patch.dict(os.environ, {"MICHAEL_V6_SIGNING_KEY": "synthetic-only-key-never-used-in-production",
                 "MICHAEL_V6_PROGRESS_KEY": "synthetic-progress-key-never-production", "MICHAEL_V6_ENABLED": "1",
                 "MICHAEL_V6_PREMIUM_PILOT": "1"}, clear=True)
@@ -65,12 +86,13 @@ def run_suite(tc, policy, mongo_client_class=None):
                                             serverSelectionTimeoutMS=3000)
             await self.mongo.admin.command("ping")
             test_db = self.mongo["michael_v6_synthetic_" + uuid.uuid4().hex]
+            self.server.db = test_db
             self.questions = test_db.questions
             self.users = test_db.users
             self.collection = test_db.michael_v6_guidance
             await self.questions.insert_one(dict(self.question))
-            await self.users.insert_many([{"id": "synthetic-user", "synthetic_premium": True},
-                                          {"id": "other-user", "synthetic_premium": True}])
+            await self.users.insert_many([{"id": "synthetic-user", "email": "student@example.invalid", "is_premium": True},
+                                          {"id": "other-user", "email": "other@example.invalid", "is_premium": True}])
             self.db_patch = patch.object(tc, "_db", test_db)
             self.db_patch.start()
             self.confirmation = {"no": "Riktig, svaret er blått.", "en": "Correct, the answer is blue.",
@@ -107,6 +129,7 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertTrue(self.actor_binding)
             app = FastAPI()
             app.include_router(webapp_router)
+            app.include_router(self.server.api_router, prefix="/api")
             app.include_router(tc.teacher_router, prefix="/api")
             self.client = httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://synthetic.invalid")
 
@@ -120,14 +143,14 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.server_patch.stop()
             self.env.stop()
 
-        async def call(self, lang, intent, answer=None, *, bearer="synthetic-bearer", **changes):
+        async def call(self, lang, intent, answer=None, *, bearer="current-student", **changes):
             payload = {"session_id": policy.delivery_session_id(self.token, lang), "mode": "v6_quiz_pilot",
                        "message": answer or "synthetic", "language": lang,
                        "v6_question_id": self.question["id"], "v6_delivery_token": self.token,
                        "v6_actor_binding": self.actor_binding, "v6_intent": intent, "v6_answer_text": answer,
                        "v6_event_id": "synthetic-event-default-0001"}
             payload.update(changes)
-            headers = {"Authorization": "Bearer " + bearer} if bearer is not None else {}
+            headers = self.headers if bearer == "current-student" else ({"Authorization": "Bearer " + bearer} if bearer else {})
             response = await self.client.post("/api/teacher/chat", json=payload, headers=headers)
             self.assertEqual(response.status_code, 200)
             return response.json()
@@ -136,12 +159,12 @@ def run_suite(tc, policy, mongo_client_class=None):
             # The driver lives in a separate network namespace. Its only way
             # into this ASGI app is a bounded set of synthetic HTTP requests.
             previous = {row["_id"] async for row in self.collection.find({}, {"_id": 1})}
-            print("V6 " + json.dumps({"language": lang, "question": self.question["question"][lang],
+            print("V6 " + json.dumps({"language": lang, "bearer": self.bearer, "question": self.question["question"][lang],
                 "wrong": self.question["options"][1]["text"][lang], "right": self.question["options"][0]["text"][lang],
                 "hint": self.hints[lang], "alternative": self.alternatives[lang], "confirmation": self.confirmation[lang]}), flush=True)
             page_path = f"/{lang}/app"
             status_path = f"/api/teacher/v6/status?language={lang}"
-            allowed = {("GET", page_path), ("GET", status_path),
+            allowed = {("GET", page_path), ("GET", status_path), ("GET", "/api/auth/me"),
                        ("POST", "/api/teacher/v6/text/start"), ("POST", "/api/teacher/chat")}
             for _ in range(24):
                 line = sys.stdin.buffer.readline(16385)
@@ -153,7 +176,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                 self.assertIn((method, path), allowed)
                 headers = {}
                 if path != page_path:
-                    self.assertEqual(request["authorization"], "Bearer synthetic-bearer")
+                    self.assertEqual(request["authorization"], self.headers["Authorization"])
                     headers["Authorization"] = request["authorization"]
                 response = await self.client.request(method, path, headers=headers, json=request.get("body"))
                 self.assertEqual(response.status_code, 200, path)
@@ -174,7 +197,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                 with self.subTest(language=lang):
                     await self.exercise_browser_delivery(lang)
                     delivery = await self.client.post("/api/teacher/v6/text/start", json={"language": lang},
-                        headers={"Authorization": "Bearer synthetic-bearer"})
+                        headers=self.headers)
                     self.assertEqual(delivery.status_code, 200)
                     body = delivery.json()
                     self.assertTrue(body["ready"])
@@ -233,7 +256,8 @@ def run_suite(tc, policy, mongo_client_class=None):
 
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
-                for bearer in (None, "invalid-bearer", "other-bearer"):
+                expired = jwt.encode({"sub": "synthetic-user", "exp": 1}, self.server.JWT_SECRET, algorithm="HS256")
+                for bearer in (None, "invalid-bearer", expired, self.other_bearer):
                     response = await self.call(lang, "explain", bearer=bearer)
                     self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
                     self.assertNotIn(self.question["options"][0]["text"][lang], response["reply"])
@@ -243,11 +267,11 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(await self.collection.count_documents({}), 0)
 
         async def test_revoked_access_denied_before_delivery_and_after_delivery(self):
-            await self.users.update_one({"id": "other-user"}, {"$set": {"synthetic_premium": False}})
-            headers = {"Authorization": "Bearer other-bearer"}
+            await self.users.update_one({"id": "other-user"}, {"$set": {"is_premium": False}})
+            headers = {"Authorization": "Bearer " + self.other_bearer}
             response = await self.client.post("/api/teacher/v6/text/start", json={"language": "no"}, headers=headers)
             self.assertFalse(response.json()["ready"])
-            await self.users.update_one({"id": "synthetic-user"}, {"$set": {"synthetic_premium": False}})
+            await self.users.update_one({"id": "synthetic-user"}, {"$set": {"is_premium": False}})
             response = await self.call("no", "answer", self.question["options"][0]["text"]["no"])
             self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
             response = await self.call("no", "explain")
@@ -272,7 +296,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                 else:
                     review["question_digest"] = bad_digest
                 delivery = await self.client.post("/api/teacher/v6/text/start", json={"language": "no"},
-                    headers={"Authorization": "Bearer synthetic-bearer"})
+                    headers=self.headers)
                 self.assertFalse(delivery.json()["ready"])
                 response = await self.call("no", "explain")
                 self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
@@ -287,7 +311,7 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertIsNone(policy.issue_delivery_token(candidate))
             await self.questions.replace_one({"id": self.question["id"]}, dict(candidate))
             response = await self.client.post("/api/teacher/v6/text/start", json={"language": "th"},
-                headers={"Authorization": "Bearer synthetic-bearer"})
+                headers=self.headers)
             self.assertFalse(response.json()["ready"])
             self.assertEqual(await self.collection.count_documents({}), 0)
 

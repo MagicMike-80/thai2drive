@@ -14,7 +14,7 @@ EXPECTED_ENV = {"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": "/tmp", "TMPDIR"
                 "LANG": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1",
                 "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1", "MICHAEL_TEST_MODE": "synthetic"}
 ALLOWED_INPUT_FILES = {
-    "backend/teacher_chat.py", "backend/michael_v6_policy.py", "backend/ai_learning.py",
+    "backend/server.py", "backend/teacher_chat.py", "backend/michael_v6_policy.py", "backend/ai_learning.py",
     "backend/michael_greetings.py", "backend/media_catalog.py",
     "backend/webapp.py", "backend/site_config.py", "backend/i18n_routing.py",
     "backend/stopping_distance_web.py", "backend/studybook_web.py",
