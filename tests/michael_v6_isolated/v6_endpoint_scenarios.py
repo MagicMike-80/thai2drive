@@ -104,6 +104,10 @@ def run_suite(tc, policy, mongo_client_class=None):
                 {"sub": "synthetic-user"} if credential == "synthetic-bearer" else
                 {"sub": "other-user"} if credential == "other-bearer" else None)
             self.server._user_has_active_premium = lambda user: user.get("synthetic_premium") is True
+            async def synthetic_usage(user, device):
+                return {"synthetic": True}
+            self.server._get_access_usage = synthetic_usage
+            self.server._access_policy_payload = lambda user, usage: {"can_answer": user.get("synthetic_premium") is True}
             self.env = patch.dict(os.environ, {"MICHAEL_V6_SIGNING_KEY": "synthetic-only-key-never-used-in-production",
                 "MICHAEL_V6_PROGRESS_KEY": "synthetic-progress-key-never-production", "MICHAEL_V6_ENABLED": "1"}, clear=True)
             self.env.start()
@@ -111,10 +115,8 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.server_patch.start()
             self.db_patch = patch.object(tc, "_db", {"questions": self.questions, "users": Users()})
             self.db_patch.start()
-            self.access_patch = patch.object(tc, "_v6_access_authorizer", tc._v6_premium_test_authorizer)
+            self.access_patch = patch.object(tc, "_v6_access_authorizer", tc._v6_existing_access_check)
             self.access_patch.start()
-            async def allow_delivery(user, request):
-                return user.get("synthetic_premium") is True
             async def synthetic_judge(*args):
                 return None
             if mongo_client_class is None:
@@ -124,7 +126,7 @@ def run_suite(tc, policy, mongo_client_class=None):
             await self.mongo.admin.command("ping")
             self.collection = self.mongo["michael_v6_synthetic"]["test_" + uuid.uuid4().hex]
             self.store = policy.MongoGuidanceStore(self.collection)
-            self.extra_patches = [patch.object(tc, "_v6_text_delivery_authorizer", allow_delivery),
+            self.extra_patches = [patch.object(tc, "_v6_text_delivery_authorizer", tc._v6_existing_preview_check),
                 patch.object(tc, "_v6_guidance_store", self.store),
                 patch.object(tc, "_v6_semantic_judge", synthetic_judge),
                 # The fixture is synthetic; this test does not certify content review.
@@ -257,3 +259,4 @@ def run_suite(tc, policy, mongo_client_class=None):
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
     return unittest.TextTestRunner(verbosity=2).run(suite)
+
