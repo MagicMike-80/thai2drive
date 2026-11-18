@@ -4,10 +4,12 @@ The caller supplies already-imported, fully isolated modules. This module never
 imports the app, loads credentials, or contacts a real service by itself.
 """
 import copy
+import asyncio
 import os
 import sys
 import types
 import unittest
+import uuid
 from unittest.mock import patch
 
 
@@ -85,7 +87,7 @@ class SyntheticProgress:
         return level, verdict
 
 
-def run_suite(tc, policy):
+def run_suite(tc, policy, mongo_client_class=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
     from fastapi import FastAPI
@@ -115,7 +117,13 @@ def run_suite(tc, policy):
                 return user.get("synthetic_premium") is True
             async def synthetic_judge(*args):
                 return None
-            self.store = SyntheticProgress()
+            if mongo_client_class is None:
+                raise RuntimeError("A verified loopback test MongoDB is required")
+            self.mongo = mongo_client_class("mongodb://127.0.0.1:27017/?directConnection=true",
+                                            serverSelectionTimeoutMS=3000)
+            await self.mongo.admin.command("ping")
+            self.collection = self.mongo["michael_v6_synthetic"]["test_" + uuid.uuid4().hex]
+            self.store = policy.MongoGuidanceStore(self.collection)
             self.extra_patches = [patch.object(tc, "_v6_text_delivery_authorizer", allow_delivery),
                 patch.object(tc, "_v6_guidance_store", self.store),
                 patch.object(tc, "_v6_semantic_judge", synthetic_judge),
@@ -138,6 +146,7 @@ def run_suite(tc, policy):
 
         async def asyncTearDown(self):
             await self.client.aclose()
+            self.mongo.close()
             self.approvals_patch.stop()
             for item in reversed(self.extra_patches):
                 item.stop()
@@ -173,6 +182,7 @@ def run_suite(tc, policy):
                     start = await self.call(lang, "start")
                     self.assertCountEqual(start["suggestions"][1:],
                                           [option["text"][lang] for option in self.question["options"]])
+                    existing_ids = {row["_id"] async for row in self.collection.find({})}
                     incorrect = await self.call(lang, "answer", wrong)
                     self.assertEqual(incorrect["suggestions"][0]["v6_feedback"], "incorrect")
                     expected_hint = {"no": "prøv et annet alternativ", "en": "try another option",
@@ -180,14 +190,18 @@ def run_suite(tc, policy):
                     self.assertIn(expected_hint[lang], incorrect["reply"])
                     for _ in range(4):
                         self.assertTrue((await self.call(lang, "answer", wrong))["suggestions"])
-                    key = ("synthetic-user", policy.delivery_session_id(self.token, lang), lang, self.question["id"])
-                    self.assertEqual(len(self.store.records[key]["events"]), 1)
-                    self.assertEqual(self.store.records[key]["level"], 1)
+                    records = [row async for row in self.collection.find({}) if row["_id"] not in existing_ids]
+                    self.assertEqual(len(records), 1)
+                    record = records[0]
+                    self.assertEqual(len(record["events"]), 1)
+                    self.assertEqual(record["level"], 1)
                     correct = await self.call(lang, "answer", right, v6_event_id="synthetic-correct-event-0002")
                     self.assertEqual(correct["suggestions"][0]["v6_feedback"], "correct")
                     confirmation = {"no": "Det er riktig.", "en": "That is correct.", "th": "ถูกต้องครับ"}
                     self.assertEqual(correct["reply"], confirmation[lang])
-                    self.assertEqual(self.store.records[key]["level"], 0)
+                    record = await self.collection.find_one({"_id": record["_id"]})
+                    self.assertEqual(record["level"], 0)
+                    self.assertEqual(len(record["events"]), 2)
                     self.assertEqual(len(correct["suggestions"]), 1)
                     self.assertTrue((await self.call(lang, "hint"))["suggestions"])
                     self.assertTrue((await self.call(lang, "alternative"))["suggestions"])
@@ -224,7 +238,22 @@ def run_suite(tc, policy):
                 wrong_session = await self.call(lang, "answer", self.question["options"][0]["text"][lang],
                                                 session_id="another-students-session")
                 self.assertEqual(wrong_session["suggestions"][0]["v6_feedback"], "unavailable")
-            self.assertEqual(self.store.records, {})
+            self.assertEqual(await self.collection.count_documents({}), 0)
+
+        async def test_atomic_concurrent_retries_and_student_isolation(self):
+            scope = {"principal": "synthetic-user", "delivery_session": "synthetic-session",
+                     "language": "no", "question_id": "synthetic-question"}
+            async def write():
+                return await self.store.record_answer(scope, "synthetic-event-concurrent-001", "synthetic", "incorrect")
+            results = await asyncio.gather(*(write() for _ in range(12)))
+            self.assertEqual(results, [(1, "incorrect")] * 12)
+            self.assertIsNone(await self.store.record_answer(scope, "synthetic-event-concurrent-001", "changed", "incorrect"))
+            other = dict(scope, principal="another-synthetic-user")
+            self.assertEqual(await self.store.record_answer(other, "synthetic-event-concurrent-001", "synthetic", "incorrect"), (1, "incorrect"))
+            rows = await self.collection.find({}).to_list(10)
+            self.assertEqual(len(rows), 2)
+            self.assertEqual([len(row["events"]) for row in rows], [1, 1])
+            self.assertEqual(len({row["actor_marker"] for row in rows}), 2)
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
     return unittest.TextTestRunner(verbosity=2).run(suite)

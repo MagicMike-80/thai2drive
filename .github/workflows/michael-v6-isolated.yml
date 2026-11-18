@@ -30,6 +30,16 @@ jobs:
           fetch-depth: 1
           submodules: false
           lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /backend/teacher_chat.py
+            /backend/michael_v6_policy.py
+            /backend/ai_learning.py
+            /backend/michael_greetings.py
+            /backend/media_catalog.py
+            /backend/learning_areas.json
+            /backend/regelbank.json
+            /tests/michael_v6_isolated/
       - name: Build candidate image on runner
         shell: bash
         run: |
