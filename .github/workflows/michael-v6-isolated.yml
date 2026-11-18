@@ -55,12 +55,12 @@ jobs:
           set -euo pipefail
           input="$RUNNER_TEMP/michael-v6-input"
           mkdir -p "$input"
-          git archive HEAD \
+          cp --parents \
             backend/teacher_chat.py backend/michael_v6_policy.py backend/ai_learning.py \
             backend/michael_greetings.py backend/media_catalog.py \
             backend/learning_areas.json backend/regelbank.json \
             tests/michael_v6_isolated/bootstrap.py tests/michael_v6_isolated/fake_services.py \
-            tests/michael_v6_isolated/v6_endpoint_scenarios.py | tar -x -C "$input"
+            tests/michael_v6_isolated/v6_endpoint_scenarios.py "$input"
       - name: Inspect and start network-isolated gate
         shell: bash
         run: |
@@ -86,3 +86,4 @@ jobs:
             "$RUNNER_TEMP/v6-inspection.json" "$input" "$image"
           # Only the inspected, network-isolated container may import the app.
           docker start --attach "$container"
+
