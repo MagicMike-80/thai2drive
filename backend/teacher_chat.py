@@ -5341,6 +5341,42 @@ async def _v6_verified_user(http_request):
         return None
 
 
+async def _v6_no_semantic_proposal(_messages):
+    """Unreviewed free text remains unknown until a safe assessor is enabled."""
+    return None
+
+
+def _v6_initialize_premium_pilot():
+    """Wire only the explicitly enabled authenticated pilot; otherwise stay closed.
+
+    Guest and free access require a separate verified consumption integration.
+    Content and feedback must still pass the independent exact-version gate.
+    """
+    global _v6_access_authorizer, _v6_text_delivery_authorizer, _v6_guidance_store, _v6_semantic_judge
+    _v6_access_authorizer = _v6_text_delivery_authorizer = _v6_guidance_store = _v6_semantic_judge = None
+    if os.environ.get("MICHAEL_V6_PREMIUM_PILOT", "").strip().lower() not in ("1", "true"):
+        return False
+    try:
+        try:
+            import michael_v6_policy as policy
+        except ImportError:
+            from backend import michael_v6_policy as policy
+        if not policy._signing_key() or not policy._progress_key():
+            return False
+        collection = _db["michael_v6_guidance"]
+        store = policy.MongoGuidanceStore(collection)
+    except Exception:
+        return False
+    _v6_access_authorizer = _v6_existing_access_check
+    _v6_text_delivery_authorizer = _v6_existing_preview_check
+    _v6_guidance_store = store
+    _v6_semantic_judge = _v6_no_semantic_proposal
+    return True
+
+
+_v6_initialize_premium_pilot()
+
+
 @teacher_router.post("/teacher/v6/text/start", response_model=V6TextStartResponse)
 async def teacher_v6_text_start(req: V6TextStartRequest, request: Request):
     """Disabled text entry point; no quota writes and no unapproved content."""

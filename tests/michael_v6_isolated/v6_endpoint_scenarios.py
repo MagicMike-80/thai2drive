@@ -109,26 +109,24 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.server._get_access_usage = synthetic_usage
             self.server._access_policy_payload = lambda user, usage: {"can_answer": user.get("synthetic_premium") is True}
             self.env = patch.dict(os.environ, {"MICHAEL_V6_SIGNING_KEY": "synthetic-only-key-never-used-in-production",
-                "MICHAEL_V6_PROGRESS_KEY": "synthetic-progress-key-never-production", "MICHAEL_V6_ENABLED": "1"}, clear=True)
+                "MICHAEL_V6_PROGRESS_KEY": "synthetic-progress-key-never-production", "MICHAEL_V6_ENABLED": "1",
+                "MICHAEL_V6_PREMIUM_PILOT": "1"}, clear=True)
             self.env.start()
             self.server_patch = patch.dict(sys.modules, {"server": self.server})
             self.server_patch.start()
-            self.db_patch = patch.object(tc, "_db", {"questions": self.questions, "users": Users()})
-            self.db_patch.start()
-            self.access_patch = patch.object(tc, "_v6_access_authorizer", tc._v6_existing_access_check)
-            self.access_patch.start()
-            async def synthetic_judge(*args):
-                return None
             if mongo_client_class is None:
                 raise RuntimeError("A verified loopback test MongoDB is required")
             self.mongo = mongo_client_class("mongodb://127.0.0.1:27017/?directConnection=true",
                                             serverSelectionTimeoutMS=3000)
             await self.mongo.admin.command("ping")
             self.collection = self.mongo["michael_v6_synthetic"]["test_" + uuid.uuid4().hex]
-            self.store = policy.MongoGuidanceStore(self.collection)
-            self.extra_patches = [patch.object(tc, "_v6_text_delivery_authorizer", tc._v6_existing_preview_check),
-                patch.object(tc, "_v6_guidance_store", self.store),
-                patch.object(tc, "_v6_semantic_judge", synthetic_judge),
+            self.db_patch = patch.object(tc, "_db", {"questions": self.questions, "users": Users(),
+                                                      "michael_v6_guidance": self.collection})
+            self.db_patch.start()
+            self.extra_patches = [patch.object(tc, "_v6_access_authorizer", None),
+                patch.object(tc, "_v6_text_delivery_authorizer", None),
+                patch.object(tc, "_v6_guidance_store", None),
+                patch.object(tc, "_v6_semantic_judge", None),
                 # The fixture is synthetic; this test does not certify content review.
                 patch.object(tc, "_v6_content_ready", lambda *args: True),
                 patch.object(policy, "APPROVED_GUIDANCE", {"synthetic-test-only": True})]
@@ -137,6 +135,8 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.approvals_patch = patch.object(policy, "APPROVED_CONTENT_DIGESTS", {
                 self.question["id"]: policy._content_digest(self.question)})
             self.approvals_patch.start()
+            self.assertTrue(tc._v6_initialize_premium_pilot())
+            self.store = tc._v6_guidance_store
             self.token = policy.issue_delivery_token(self.question)
             self.assertTrue(self.token)
             self.actor_binding = policy.issue_verified_actor_binding(
@@ -152,7 +152,6 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.approvals_patch.stop()
             for item in reversed(self.extra_patches):
                 item.stop()
-            self.access_patch.stop()
             self.db_patch.stop()
             self.server_patch.stop()
             self.env.stop()
@@ -253,6 +252,16 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(response["suggestions"][0]["v6_feedback"], "unavailable")
             self.assertEqual(await self.collection.count_documents({}), 0)
 
+        async def test_pilot_initialization_fails_closed(self):
+            os.environ["MICHAEL_V6_PREMIUM_PILOT"] = "0"
+            self.assertFalse(tc._v6_initialize_premium_pilot())
+            self.assertIsNone(tc._v6_guidance_store)
+            self.assertFalse(tc._v6_globally_ready(policy))
+            os.environ["MICHAEL_V6_PREMIUM_PILOT"] = "1"
+            os.environ["MICHAEL_V6_PROGRESS_KEY"] = os.environ["MICHAEL_V6_SIGNING_KEY"]
+            self.assertFalse(tc._v6_initialize_premium_pilot())
+            self.assertIsNone(tc._v6_access_authorizer)
+
         async def test_atomic_concurrent_retries_and_student_isolation(self):
             scope = {"principal": "synthetic-user", "delivery_session": "synthetic-session",
                      "language": "no", "question_id": "synthetic-question"}
@@ -270,4 +279,3 @@ def run_suite(tc, policy, mongo_client_class=None):
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
     return unittest.TextTestRunner(verbosity=2).run(suite)
-
