@@ -1,4 +1,5 @@
 """Owner-controlled maintenance gate shared by the web UI and backend."""
+import os
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -72,21 +73,41 @@ def standalone_guard_script(language, book=False):
 def create_maintenance(db, verify_token):
     router = APIRouter()
 
+    # When set, pin the sole owner to the account ID from the deployment.
+    # An invalid or empty setting must never fall back to email authorization.
+    configured_owner_id = os.environ.get("MAINTENANCE_OWNER_USER_ID")
+
     async def owner(credentials):
         if not credentials or credentials.scheme.lower() != "bearer":
-            return False
+            return None
         payload = verify_token(credentials.credentials)
-        if not payload or (payload.get("email") or "").strip().lower() != OWNER_EMAIL:
-            return False
-        user = await db.users.find_one({"id": payload.get("sub"), "email": OWNER_EMAIL},
-                                       {"_id": 0, "disabled": 1, "deleted_at": 1})
-        admin = await db.admin_users.find_one({"email": OWNER_EMAIL}, {"_id": 1})
-        return bool(user and not user.get("disabled") and not user.get("deleted_at") and admin)
+        if not payload:
+            return None
+        subject = payload.get("sub")
+        email = payload.get("email")
+        if not isinstance(subject, str) or not subject.strip() or not isinstance(email, str):
+            return None
+        email = email.strip().lower()
+        if not email:
+            return None
+        if configured_owner_id is None:
+            if email != OWNER_EMAIL:
+                return None
+        elif subject != configured_owner_id or not configured_owner_id.strip():
+            return None
+        user = await db.users.find_one({"id": subject, "email": email},
+                                       {"_id": 0, "id": 1, "disabled": 1, "deleted_at": 1})
+        if not user or user.get("disabled") or user.get("deleted_at"):
+            return None
+        if not await db.admin_users.find_one({"email": email}, {"_id": 1}):
+            return None
+        return {"actor": email, "actor_id": subject}
 
     async def require_owner(credentials: HTTPAuthorizationCredentials = Depends(_security)):
-        if not await owner(credentials):
+        actor = await owner(credentials)
+        if not actor:
             raise HTTPException(status_code=403, detail="Owner access required")
-        return True
+        return actor
 
     async def status():
         document = await db.system_settings.find_one({"_id": _ID}, {"active": 1})
@@ -96,7 +117,7 @@ def create_maintenance(db, verify_token):
     async def get_status(credentials: HTTPAuthorizationCredentials = Depends(_security)):
         try:
             active = await status()
-            is_owner = await owner(credentials) if credentials else False
+            is_owner = bool(await owner(credentials)) if credentials else False
         except Exception:
             raise HTTPException(status_code=503, detail="Maintenance status unavailable")
         return JSONResponse({"active": active, "owner": is_owner}, headers={"Cache-Control": "no-store"})
@@ -106,10 +127,10 @@ def create_maintenance(db, verify_token):
         confirmed: bool = False
 
     @router.post("/api/admin/maintenance")
-    async def change(body: Change, _: bool = Depends(require_owner)):
+    async def change(body: Change, actor: dict = Depends(require_owner)):
         if body.active and not body.confirmed:
             raise HTTPException(status_code=400, detail="Confirmation required")
-        event = {"active": body.active, "at": datetime.now(timezone.utc).isoformat(), "actor": OWNER_EMAIL}
+        event = {"active": body.active, "at": datetime.now(timezone.utc).isoformat(), **actor}
         await db.system_settings.update_one(
             {"_id": _ID}, {"$set": {"active": body.active},
                            "$push": {"events": {"$each": [event], "$slice": -1000}}}, upsert=True)
