@@ -391,7 +391,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                             result = await self.call(lang, intent, answer, v6_event_id=event_id)
                             self.assertEqual(result["suggestions"][0]["v6_feedback"], turn["grade"])
                             self.assertTrue(tc._reply_matches_language_script(result["reply"], lang))
-                            if turn.get("focus") and len(answer) > 1:
+                            if turn.get("focus") and policy.needs_stop_dialogue_model(answer):
                                 model.assert_awaited_once()
                             else:
                                 model.assert_not_awaited()
@@ -402,6 +402,7 @@ def run_suite(tc, policy, mongo_client_class=None):
                             focus = turn.get("focus")
                             if focus == "reason":
                                 self.assertIn(self.question["explanation"][lang], result["reply"])
+                                self.assertEqual(len(result["suggestions"]), 1)
                             if focus == "stopping":
                                 level = "alternative" if i == 1 else "hint"
                                 self.assertEqual(result["reply"], guidance["options"][lang]["A"][level])
@@ -419,6 +420,10 @@ def run_suite(tc, policy, mongo_client_class=None):
                     result = await self.call(lang, "answer", "???", v6_event_id=uuid.uuid4().hex)
                     self.assertEqual(result["suggestions"][0]["v6_feedback"], "unknown")
                     self.assertNotIn("Invented", result["reply"])
+                with patch.object(tc, "_completion_with_fallback", side_effect=TimeoutError):
+                    result = await self.call(lang, "answer", "???", v6_event_id=uuid.uuid4().hex)
+                    self.assertEqual(result["suggestions"][0]["v6_feedback"], "unknown")
+                    self.assertTrue(tc._reply_matches_language_script(result["reply"], lang))
 
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):

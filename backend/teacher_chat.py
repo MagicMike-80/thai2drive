@@ -5604,16 +5604,10 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
                     if verdict == "unknown":
                         history, event = await store.answer_context(scope, event_id)
                         topic = event.get("topic", "uncertain")
-                        if not event and len(history) < 128 and 1 < len(answer.strip()) <= 1500:
+                        if not event and len(history) < 128 and policy.needs_stop_dialogue_model(answer):
                             last = next((e["verdict"] for e in reversed(history) if e["verdict"] != "unknown"), None)
                             messages = policy.stop_dialogue_messages(question, req.language, answer, last)
-                            try:
-                                result = await asyncio.wait_for(_completion_with_fallback(messages), timeout=12)
-                                label = result.choices[0].message.content.strip().lower()
-                                if label in policy.STOP_TOPICS:
-                                    topic = label
-                            except Exception:
-                                pass
+                            topic = await policy.classify_stop_dialogue(messages, _completion_with_fallback) or "uncertain"
                     stored = await store.record_answer(scope, event_id, answer, verdict, option_id=option_id, topic=topic)
                     if stored and stored[1] == "unknown":
                         history, event = await store.answer_context(scope, event_id)
@@ -5648,6 +5642,9 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             if reviewed and _reply_matches_language_script(reviewed, req.language):
                 reply = reviewed
         show_choices = action != "confirm"
+        if verdict == "unknown" and req.v6_question_id == policy.STOP_SIGN_ID and topic != "uncertain":
+            last_grade = next((e["verdict"] for e in reversed(history) if e["verdict"] != "unknown"), None)
+            show_choices = last_grade != "correct"
     choices = []
     if show_choices:
         import secrets as _v6_secrets
