@@ -5440,11 +5440,16 @@ async def teacher_v6_text_start(req: V6TextStartRequest, request: Request):
             return V6TextStartResponse()
         secrets.SystemRandom().shuffle(ids)
         for question_id in ids[:10]:
-            rows = await _db["questions"].find({"$and": [available_filter, {"id": question_id}]}).limit(2).to_list(2)
+            stop = question_id == policy.STOP_SIGN_ID
+            if stop and not policy.pilot_account(user):
+                continue
+            collection = _db[policy.PILOT_COLLECTION if stop else "questions"]
+            selector = {"id": question_id, **({"_id": question_id, "pilot_open": True} if stop else {})}
+            rows = await collection.find({"$and": [available_filter, selector]}).limit(2).to_list(2)
             if len(rows) != 1 or not isinstance(rows[0], dict) or rows[0].get("id") != question_id:
                 continue
             original = rows[0]
-            delivery = policy.issue_delivery_token(original)
+            delivery = policy.issue_delivery_token(original, language=req.language)
             question = policy.validated_question_content(original, req.language)
             if (not delivery or not question or not question["question_text"].strip()
                     or not _v6_content_ready(policy, question_id, question)):
@@ -5454,7 +5459,10 @@ async def teacher_v6_text_start(req: V6TextStartRequest, request: Request):
             if not binding or not session:
                 continue
             choices = [option["text"][req.language] for option in question["question"]["options"]]
-            secrets.SystemRandom().shuffle(choices)
+            if stop:
+                choices = [f"{label}. {s}" for label, _, s in policy.stop_choices(question["question"], req.language, binding)]
+            else:
+                secrets.SystemRandom().shuffle(choices)
             return V6TextStartResponse(ready=True, server_manages_quota=True, question_id=question_id, delivery_token=delivery,
                                        actor_binding=binding, session_id=session,
                                        question=question["question_text"], choices=choices)
@@ -5483,8 +5491,11 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
         from backend import michael_v6_policy as policy
     server = sys.modules.get("server") or sys.modules.get("backend.server")
     available_filter = getattr(server, "AVAILABLE_QUESTION_FILTER", None)
+    stop = req.v6_question_id == policy.STOP_SIGN_ID
+    if stop and available_filter:
+        available_filter = {"$and": [available_filter, {"_id": policy.STOP_SIGN_ID, "pilot_open": True}]}
     question = (await policy.load_stored_question(
-        _db["questions"], available_filter, req.v6_question_id, req.language,
+        _db[policy.PILOT_COLLECTION if stop else "questions"], available_filter, req.v6_question_id, req.language,
         delivery_token=req.v6_delivery_token, require_delivery_token=True,
     )) if _v6_globally_ready(policy) else None
     if question and not _v6_content_ready(policy, req.v6_question_id, question):
@@ -5494,7 +5505,7 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
     if question and expected_session == session_id and callable(_v6_access_authorizer):
         try:
             verified_user = await _v6_verified_user(http_request)
-            if verified_user is not None:
+            if verified_user is not None and (not stop or policy.pilot_account(verified_user)):
                 authorized = (await _v6_access_authorizer(verified_user, req, session_id)) is True
                 if authorized:
                     authorized = policy.verify_actor_binding(
@@ -5587,6 +5598,9 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
                     suggestions=[{"v6_feedback": "unavailable", "question": ""}])
             answer = req.v6_answer_text or req.message
             option_id = policy.matched_option_id(question["question"], req.language, answer)
+            if stop and not option_id:
+                option_id = policy.shown_stop_option(policy.stop_choices(question["question"], req.language, binding),
+                                                     req.language, answer)
             if option_id is None:
                 option_id = policy.reviewed_answer_option(req.v6_question_id,
                     policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id), question["question"], req.language, answer)
@@ -5604,10 +5618,25 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
                     if verdict == "unknown":
                         history, event = await store.answer_context(scope, event_id)
                         topic = event.get("topic", "uncertain")
-                        if not event and len(history) < 128 and policy.needs_stop_dialogue_model(answer):
+                        if event:
+                            verdict, option_id = event["verdict"], event.get("option_id")
+                        elif len(history) < 128 and policy.needs_stop_dialogue_model(answer):
                             last = next((e["verdict"] for e in reversed(history) if e["verdict"] != "unknown"), None)
                             messages = policy.stop_dialogue_messages(question, req.language, answer, last)
                             topic = await policy.classify_stop_dialogue(messages, _completion_with_fallback) or "uncertain"
+                            mapping = {"sequence": ("correct", "B"), "claim_roll": ("incorrect", "A"),
+                                       "claim_right": ("incorrect", "C")}
+                            if topic in mapping:
+                                async def judge(messages):
+                                    response = await _completion_with_fallback(messages)
+                                    return response.choices[0].message.content
+                                try:
+                                    assessed = await asyncio.wait_for(policy.propose_semantic_assessment(
+                                        question, req.language, answer, judge), timeout=15)
+                                except asyncio.TimeoutError:
+                                    assessed = "unknown"
+                                if assessed == mapping[topic][0]:
+                                    verdict, option_id = mapping[topic]
                     stored = await store.record_answer(scope, event_id, answer, verdict, option_id=option_id, topic=topic)
                     if stored and stored[1] == "unknown":
                         history, event = await store.answer_context(scope, event_id)
@@ -5628,6 +5657,8 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
         reply = text[{"confirm": "correct", "hint": "wrong", "alternative": "alternative", "clarify": "unknown"}[action]]
         if verdict == "unknown" and req.v6_question_id == policy.STOP_SIGN_ID:
             reply = policy.stop_dialogue_reply(question, req.language, topic, history)
+            if topic in ("partial_stop", "partial_yield"):
+                feedback = "partial"
         elif verdict == "incorrect":
             reviewed = policy.reviewed_option_guidance(
                 req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id),
@@ -5641,6 +5672,8 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             )
             if reviewed and _reply_matches_language_script(reviewed, req.language):
                 reply = reviewed
+                if stop:
+                    reply += "\n" + policy.UNDERSTANDING_CHECK[req.language]
         show_choices = action != "confirm"
         if verdict == "unknown" and req.v6_question_id == policy.STOP_SIGN_ID and topic != "uncertain":
             last_grade = next((e["verdict"] for e in reversed(history) if e["verdict"] != "unknown"), None)
@@ -5649,7 +5682,11 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
     if show_choices:
         import secrets as _v6_secrets
         choices = [option["text"][req.language] for option in question["question"]["options"]]
-        _v6_secrets.SystemRandom().shuffle(choices)
+        if stop:
+            choices = [f"{label}. {s}" for label, _, s in policy.stop_choices(
+                question["question"], req.language, req.v6_actor_binding)]
+        else:
+            _v6_secrets.SystemRandom().shuffle(choices)
     return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
                                mode="v6_quiz_pilot", reply=reply,
                                suggestions=([{ "v6_feedback": feedback,

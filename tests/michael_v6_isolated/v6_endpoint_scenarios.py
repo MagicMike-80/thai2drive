@@ -38,7 +38,7 @@ def synthetic_question():
     }
 
 
-def run_suite(tc, policy, mongo_client_class=None):
+def run_suite(tc, policy, mongo_client_class=None, *, live_completion=None, observations=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
     import jwt
@@ -82,7 +82,7 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.headers = {"Authorization": "Bearer " + self.bearer}
             self.env = patch.dict(os.environ, {"MICHAEL_V6_SIGNING_KEY": "synthetic-only-key-never-used-in-production",
                 "MICHAEL_V6_PROGRESS_KEY": "synthetic-progress-key-never-production", "MICHAEL_V6_ENABLED": "1",
-                "MICHAEL_V6_PREMIUM_PILOT": "1"}, clear=True)
+                "MICHAEL_V6_PREMIUM_PILOT": "1"}, clear=live_completion is None)
             self.env.start()
             self.server_patch = patch.dict(sys.modules, {"server": self.server})
             self.server_patch.start()
@@ -317,13 +317,29 @@ def run_suite(tc, policy, mongo_client_class=None):
             policy.APPROVED_GUIDANCE.clear()
             policy.APPROVED_CONTENT_DIGESTS.clear()
             policy.load_stop_sign_approval()
+            bank = await self.questions.find({}).to_list(10)
+            pilot = self.server.db[policy.PILOT_COLLECTION]
             for _ in range(2):
-                self.assertEqual(await policy.register_stop_sign(self.questions, tc._reply_matches_language_script),
+                self.assertEqual(await policy.register_stop_sign(self.server.db, tc._reply_matches_language_script),
                                  policy.STOP_SIGN_ID)
-            self.assertEqual(await self.questions.count_documents({"id": policy.STOP_SIGN_ID}), 1)
-            q = await self.questions.find_one({"id": policy.STOP_SIGN_ID})
+            self.assertEqual(await self.questions.find({}).to_list(10), bank)
+            self.assertEqual(await pilot.count_documents({}), 1)
+            q = await pilot.find_one({"id": policy.STOP_SIGN_ID})
+            self.assertIs(q["pilot_open"], False)
             g = policy.APPROVED_GUIDANCE[policy.STOP_SIGN_ID]
-            with patch.dict(os.environ, {"MICHAEL_V6_REGISTERED_ENABLED":"1", "MICHAEL_V6_GUEST_ENABLED":"1"}):
+            async def ready(headers):
+                r = await self.client.post("/api/teacher/v6/text/start", headers=headers, json={"language":"no"})
+                return r.json()["ready"]
+            with patch.dict(os.environ, {"MICHAEL_V6_REGISTERED_ENABLED":"1", "MICHAEL_V6_GUEST_ENABLED":"1",
+                                         "MICHAEL_V6_PILOT_USER_ID":"synthetic-user"}):
+                self.assertFalse(await ready(self.headers))
+                await pilot.update_one({"_id":policy.STOP_SIGN_ID}, {"$set":{"pilot_open":True}})
+                others = {"Authorization":"Bearer " + self.other_bearer}
+                self.assertFalse(await ready(others))
+                await self.users.update_one({"id":"other-user"}, {"$set":{"is_premium":False}})
+                self.assertFalse(await ready(others))
+                with patch.dict(os.environ, {"MICHAEL_V6_PILOT_USER_ID":""}):
+                    self.assertFalse(await ready(self.headers))
                 for tier in ("premium", "registered", "guest"):
                     await self.users.update_one({"id":"synthetic-user"}, {"$set":{"is_premium":tier == "premium"}})
                     headers = self.headers
@@ -335,11 +351,14 @@ def run_suite(tc, policy, mongo_client_class=None):
                         with self.subTest(tier=tier, lang=lang):
                             delivery = (await self.client.post("/api/teacher/v6/text/start",
                                         json={"language":lang}, headers=headers)).json()
+                            if tier == "guest":
+                                self.assertFalse(delivery["ready"])
+                                continue
                             self.assertTrue(delivery["ready"])
                             self.assertEqual(delivery["question_id"], policy.STOP_SIGN_ID)
                             self.assertEqual(delivery["question"], q["question"][lang])
                             opts = {o["id"]:o["text"][lang] for o in q["options"]}
-                            self.assertCountEqual(delivery["choices"], opts.values())
+                            self.assertCountEqual([s[3:] for s in delivery["choices"]], opts.values())
                             async def send(intent, answer=None, event=None):
                                 body = {"language":lang,"mode":"v6_quiz_pilot","message":answer or "?",
                                         "session_id":delivery["session_id"],"v6_question_id":delivery["question_id"],
@@ -358,18 +377,45 @@ def run_suite(tc, policy, mongo_client_class=None):
                             retry = uuid.uuid4().hex
                             self.assertEqual(await send("answer",opts["C"],retry), ("incorrect",hints["C"]["alternative"]))
                             self.assertEqual(await send("answer",opts["C"],retry), ("incorrect",hints["C"]["alternative"]))
-                            self.assertEqual(await send("answer",opts["B"]), ("correct",g["confirmation"][lang]))
+                            shown = next(s[0] for s in delivery["choices"] if s[3:] == opts["B"])
+                            self.assertEqual(await send("answer",shown), ("correct",g["confirmation"][lang] + "\n" + policy.UNDERSTANDING_CHECK[lang]))
+                            natural = {"no":"jeg tror ", "en":"I think ", "th":"ผมคิดว่าข้อ "}[lang] + shown
+                            self.assertEqual((await send("answer", natural))[0], "correct")
+                            with patch.dict(os.environ, {"MICHAEL_V6_PILOT_USER_ID":"other-user"}):
+                                self.assertEqual((await send("answer", shown))[0], "unavailable")
+                            other_lang = "en" if lang == "no" else "no"
+                            self.assertIsNone(policy.delivery_session_id(delivery["delivery_token"], other_lang))
+                            await pilot.update_one({"_id":policy.STOP_SIGN_ID}, {"$set":{"pilot_open":False}})
+                            self.assertEqual((await send("answer",shown))[0], "unavailable")
+                            await pilot.update_one({"_id":policy.STOP_SIGN_ID}, {"$set":{"pilot_open":True}})
                             print(f"Stop sign passed for {lang} ({tier})", file=sys.stderr, flush=True)
+            await pilot.update_one({"_id":policy.STOP_SIGN_ID}, {"$set":{"correctOptionId":"C"}})
+            with self.assertRaises(ValueError):
+                await policy.register_stop_sign(self.server.db, tc._reply_matches_language_script)
+            self.assertEqual((await pilot.find_one({"_id":policy.STOP_SIGN_ID}))["correctOptionId"], "C")
+            self.assertEqual(await self.questions.find({}).to_list(10), bank)
 
         async def test_claude_dialogues_through_chat(self):
             policy.APPROVED_GUIDANCE.clear()
             policy.APPROVED_CONTENT_DIGESTS.clear()
             policy.load_stop_sign_approval()
-            await policy.register_stop_sign(self.questions, tc._reply_matches_language_script)
-            self.question = await self.questions.find_one({"id": policy.STOP_SIGN_ID})
+            os.environ["MICHAEL_V6_PILOT_USER_ID"] = "synthetic-user"
+            await policy.register_stop_sign(self.server.db, tc._reply_matches_language_script)
+            pilot = self.server.db[policy.PILOT_COLLECTION]
+            await pilot.update_one({"_id":policy.STOP_SIGN_ID}, {"$set":{"pilot_open":True}})
+            self.question = await pilot.find_one({"id": policy.STOP_SIGN_ID})
             guidance = policy.APPROVED_GUIDANCE[policy.STOP_SIGN_ID]
             cases = json.loads(Path(__file__).with_name("stop_sign_dialogues.json").read_text(encoding="utf-8"))
             self.assertEqual((len(cases), sum(len(c["turns"]) for c in cases)), (15, 62))
+            extras = {
+                "no": ("Hvor skal forhjulene stanse ved den merkede linjen?", "Jeg stopper helt.", "Jeg stanser rett før linjen, lar trafikken fra begge sider passere og kjører når det er trygt."),
+                "th": ("ต้องหยุดรถตรงไหนของเส้นหยุดครับ", "ผมจะหยุดรถให้สนิท", "ผมจอดนิ่งชิดหน้าเส้นหยุด รอให้รถที่มาจากทั้งซ้ายและขวาผ่าน แล้วค่อยขับต่อเมื่อปลอดภัย"),
+                "en": ("Where exactly at the marked line should my wheels stop?", "I'd bring the car to a full stop.", "I come to a standstill just before the line, let traffic from both sides pass and move off when safe."),
+            }
+            for lang, sentences in extras.items():
+                cases.append({"language":lang, "scenario":6, "turns":[
+                    {"text":text, "focus":focus, "grade":grade} for text, focus, grade in
+                    zip(sentences, ("line","partial_stop","sequence"), ("unknown","partial","correct"))]})
             for case in cases:
                 lang = case["language"]
                 delivery = (await self.client.post("/api/teacher/v6/text/start", headers=self.headers,
@@ -383,22 +429,42 @@ def run_suite(tc, policy, mongo_client_class=None):
                         answer = options[turn["option"]] if "option" in turn else turn.get("text")
                         intent = "explain" if turn.get("explain") else "answer"
                         async def classifier(messages):
-                            self.assertEqual(json.loads(messages[-1]["content"])["learner"], answer)
+                            if live_completion:
+                                return await live_completion(messages)
+                            payload = json.loads(messages[-1]["content"])
+                            if "student_answer" in payload:
+                                self.assertEqual(payload["student_answer"], answer)
+                                content = json.dumps({"verdict":turn["grade"],"evidence":answer})
+                            else:
+                                self.assertEqual(payload["learner"], answer)
+                                content = turn["focus"]
                             return types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(
-                                content=turn["focus"]))])
+                                content=content))])
                         with patch.object(tc, "_completion_with_fallback", side_effect=classifier) as model:
                             event_id = uuid.uuid4().hex
                             result = await self.call(lang, intent, answer, v6_event_id=event_id)
-                            self.assertEqual(result["suggestions"][0]["v6_feedback"], turn["grade"])
+                            grade = turn["grade"]
+                            if answer in ("B", "ข้อ B"):
+                                grade = "correct" if delivery["choices"][1][3:] == options["B"] else "incorrect"
+                            if observations is not None:
+                                observations.append(dict(scenario=case["scenario"],language=lang,turn=i+1,learner=answer,
+                                    expected=grade,actual=result["suggestions"][0]["v6_feedback"],reply=result["reply"]))
+                            self.assertEqual(result["suggestions"][0]["v6_feedback"], grade)
                             self.assertTrue(tc._reply_matches_language_script(result["reply"], lang))
                             if turn.get("focus") and policy.needs_stop_dialogue_model(answer):
-                                model.assert_awaited_once()
+                                self.assertGreaterEqual(model.await_count, 1)
                             else:
                                 model.assert_not_awaited()
                             if turn["grade"] == "unknown":
+                                call_count = model.await_count
                                 replay = await self.call(lang, intent, answer, v6_event_id=event_id)
                                 self.assertEqual(replay["reply"], result["reply"])
-                                self.assertLessEqual(model.await_count, 1)
+                                self.assertEqual(model.await_count, call_count)
+                            if turn["grade"] == "partial":
+                                self.assertEqual(result["reply"], guidance["prompts"][lang]["alternative"])
+                            if focus := turn.get("focus"):
+                                if focus == "line":
+                                    self.assertIn(options["B"].split(" " if lang == "th" else ",")[0], result["reply"])
                             focus = turn.get("focus")
                             if focus == "reason":
                                 self.assertIn(self.question["explanation"][lang], result["reply"])
@@ -424,6 +490,17 @@ def run_suite(tc, policy, mongo_client_class=None):
                     result = await self.call(lang, "answer", "???", v6_event_id=uuid.uuid4().hex)
                     self.assertEqual(result["suggestions"][0]["v6_feedback"], "unknown")
                     self.assertTrue(tc._reply_matches_language_script(result["reply"], lang))
+
+            if live_completion:
+                with patch.dict(os.environ, {"MICHAEL_V6_ENABLED":"0"}), patch.object(tc, "_chat_col", self.server.db.teacher_chats), patch.object(tc, "_completion_with_fallback", side_effect=live_completion) as model:
+                    result = await self.client.post("/api/teacher/chat", json={"language":"no", "mode":"normal_chat",
+                        "message":"Jeg synes det er vanskelig å forklare valgene mine når jeg øver. Hvordan kan jeg øve på det?"})
+                    self.assertEqual(result.status_code, 200)
+                    body = result.json()
+                    self.assertNotEqual(body["mode"], "v6_quiz_pilot")
+                    self.assertGreater(model.await_count, 0)
+                    self.assertTrue(tc._reply_matches_language_script(body["reply"], "no"))
+                    observations.append(dict(scenario="V5", language="no", expected="ordinary", actual="ordinary", reply=body["reply"]))
 
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
@@ -557,5 +634,6 @@ def run_suite(tc, policy, mongo_client_class=None):
             self.assertEqual(await self.server.db.access_usage.count_documents(selector), 1)
             self.assertEqual((await self.server.db.access_usage.find_one({"_id": inserted.inserted_id}))["daily_used"], 10)
 
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios)
+    suite = (unittest.TestSuite([EndpointScenarios("test_claude_dialogues_through_chat")]) if live_completion
+             else unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios))
     return unittest.TextTestRunner(verbosity=2).run(suite)

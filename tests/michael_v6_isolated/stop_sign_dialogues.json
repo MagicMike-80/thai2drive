@@ -65,8 +65,8 @@
     "turns": [
       {
         "text": "Jeg stopper bare hvis det kommer biler, ellers kjører jeg bare.",
-        "grade": "unknown",
-        "focus": "stopping"
+        "grade": "incorrect",
+        "focus": "claim_roll"
       },
       {
         "option": "A",
@@ -93,8 +93,8 @@
     "turns": [
       {
         "text": "ผมหยุดเฉพาะตอนมีรถมา ถ้าไม่มีก็ขับผ่านไปเลย",
-        "grade": "unknown",
-        "focus": "stopping"
+        "grade": "incorrect",
+        "focus": "claim_roll"
       },
       {
         "option": "A",
@@ -121,8 +121,8 @@
     "turns": [
       {
         "text": "I only stop if there are cars coming, otherwise I just go.",
-        "grade": "unknown",
-        "focus": "stopping"
+        "grade": "incorrect",
+        "focus": "claim_roll"
       },
       {
         "option": "A",
@@ -223,8 +223,8 @@
       },
       {
         "text": "Jeg bremser og ruller sakte over linjen.",
-        "grade": "unknown",
-        "focus": "stopping"
+        "grade": "incorrect",
+        "focus": "claim_roll"
       },
       {
         "option": "A",
@@ -247,8 +247,8 @@
       },
       {
         "text": "ผมชะลอแล้วค่อย ๆ ไหลผ่านเส้นไป",
-        "grade": "unknown",
-        "focus": "stopping"
+        "grade": "incorrect",
+        "focus": "claim_roll"
       },
       {
         "option": "A",
@@ -271,8 +271,8 @@
       },
       {
         "text": "I slow down and roll over the line.",
-        "grade": "unknown",
-        "focus": "stopping"
+        "grade": "incorrect",
+        "focus": "claim_roll"
       },
       {
         "option": "A",

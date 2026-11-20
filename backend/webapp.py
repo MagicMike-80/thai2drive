@@ -14764,7 +14764,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
     var data = await res.json();
     if (!stillCurrent()) return;
     var committedV6Feedback = data && data.mode === 'v6_quiz_pilot' && Array.isArray(data.suggestions) &&
-      data.suggestions[0] && ['correct', 'incorrect', 'unknown'].includes(data.suggestions[0].v6_feedback);
+      data.suggestions[0] && ['correct', 'incorrect', 'unknown', 'partial'].includes(data.suggestions[0].v6_feedback);
     if (committedV6Feedback && chatPayload.v6_event_id && _teacherV6Context && _teacherV6Context.pendingAnswer &&
         _teacherV6Context.sessionId === activeSessionId && _teacherV6Context.language === appLang &&
         _teacherV6Context.deliveryToken === chatPayload.v6_delivery_token &&
