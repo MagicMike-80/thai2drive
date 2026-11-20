@@ -577,6 +577,8 @@ def build_endpoint_case(tc, policy, mongo_client_class=None, *, live_completion=
                         replay = await self.call(lang, intent, learner, v6_event_id=event)
                         self.assertEqual(replay, response)
                         self.assertEqual(port.await_count, calls)
+                        changed = await self.call(lang, intent, learner+"!", v6_event_id=event)
+                        self.assertEqual(changed["suggestions"][0]["v6_feedback"],"unavailable")
                         denied = await self.call(lang, intent, learner, bearer=self.other_bearer, v6_event_id=event)
                         self.assertEqual(denied["suggestions"][0]["v6_feedback"], "unavailable")
                         self.assertEqual(port.await_count, calls)
@@ -610,7 +612,7 @@ def build_endpoint_case(tc, policy, mongo_client_class=None, *, live_completion=
                     with patch.object(tc,"_completion_with_fallback",side_effect=faulty_writer):
                         response = await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
                     self.assertEqual(response["suggestions"][0]["v6_reply_source"],"reviewed_fallback")
-                    self.assertTrue(rejected and all(v=="REJECT" for v in rejected))
+                    self.assertTrue(rejected and all(v.startswith("REJECT") for v in rejected))
                 renewed = (await self.client.post("/api/teacher/v6/text/start", headers=self.headers,
                                                   json={"language":lang})).json()
                 before = self.actor_binding
@@ -626,6 +628,16 @@ def build_endpoint_case(tc, policy, mongo_client_class=None, *, live_completion=
                 with patch.object(tc,"_completion_with_fallback",side_effect=new_session):
                     await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
                 self.assertEqual(seen, [[]])
+                async def ungrounded(messages):
+                    self.assertTrue(messages[0]["content"].startswith("V6 LESSON WRITER"))
+                    raw = {"no":"Ved linjen får du den beste oversikten.",
+                           "th":"ที่เส้นหยุดคุณจะมองเห็นรถได้ดีที่สุด",
+                           "en":"At the line you have the best view."}[lang]
+                    return types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(content=raw))])
+                with patch.object(tc,"_completion_with_fallback",side_effect=ungrounded) as port:
+                    rejected = await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
+                    self.assertEqual(port.await_count,2)
+                    self.assertEqual(rejected["suggestions"][0]["v6_reply_source"],"reviewed_fallback")
             if live_completion:
                 with patch.object(tc,"_chat_col",self.server.db.teacher_chats), patch.object(tc,"_completion_with_fallback",side_effect=live_completion) as port:
                     for tier in ("premium","free","guest"):

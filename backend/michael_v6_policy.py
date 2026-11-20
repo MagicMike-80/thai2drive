@@ -858,6 +858,7 @@ class MongoGuidanceStore:
 
     def __init__(self, collection):
         self.collection = collection
+        self.dialogue_ttl_ready = False
 
     async def delete_for_verified_principal(self, principal):
         """Delete this principal's V6 records; caller must verify identity and block writes.

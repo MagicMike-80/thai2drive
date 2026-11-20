@@ -5566,7 +5566,7 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
         if not event:
             return unavailable
         try:
-            transcript = dialogue.DialogueTurns(_v6_guidance_store.collection, scope)
+            transcript = dialogue.DialogueTurns(_v6_guidance_store, scope)
             reservation, turns = await transcript.reserve(event, req.v6_intent, learner)
             if not reservation:
                 return TeacherChatResponse(**turns)
@@ -5717,9 +5717,12 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
     if reservation:
         state = {"intent":req.v6_intent, "feedback":feedback, "topic":topic, "option":option_id,
                  "level":level, "guidance":reply}
-        context = dialogue.teaching_context(turns, req.language, question, learner, reply, state)
-        generated = await dialogue.formulate(context, question["correct_text"], _completion_with_fallback,
-                                             _reply_matches_language_script)
+        try:
+            context = dialogue.teaching_context(turns, req.language, question, learner, reply, state)
+            generated = await dialogue.formulate(context, question["correct_text"], _completion_with_fallback,
+                                                 _reply_matches_language_script)
+        except (ValueError, KeyError, TypeError):
+            generated = None
         meta["v6_reply_source"] = "model" if generated else "reviewed_fallback"
         reply = generated or reply
         if not _reply_matches_language_script(reply, req.language):
