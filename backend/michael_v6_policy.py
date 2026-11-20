@@ -12,12 +12,17 @@ import secrets
 import time
 import unicodedata
 from datetime import datetime, timezone
+from pathlib import Path
 
-# Empty until specific question content has documented expert approval. Entries
-# must map a question ID to the exact reviewed SHA-256 content digest.
+STOP_SIGN_ID = "1b98ff10-b1c5-4ef0-b603-65f531e620a4"
+STOP_SIGN_DIGEST = "15649e92b865e1105f8ede5f5cb0af12dfc4f15ad74bf010c4a2b47460e2fed0"
+SOURCE_STOP_SIGN_DIGEST = "b8cf89e2042c5deb7557078be09240ab5c60c46f35b49ec360f4dabf7e40d5ba"
+STOP_SIGN_GUIDANCE_DIGESTS = {
+    "no": "0fd141cf3501854279e2f9a0f62f783cd6ea66b6f5fcd2ed0e80d92f3be0f4bf",
+    "th": "8de587f96ef73b57dd192e47331f7c2112f746af0f7132e67e53fb582e7cbbd8",
+    "en": "5a21862a8c2727be964a25567989d806e14f6a7ffbee82aaffb07df46b8d78fc",
+}
 APPROVED_CONTENT_DIGESTS = {}
-# Each item requires separate human review of every localized hint, keyed to the
-# exact approved question digest. Empty means no reviewed option-specific hints.
 APPROVED_GUIDANCE = {}
 
 _NEUTRAL_PREFIXES = {
@@ -107,6 +112,8 @@ def _reviewed_guidance_item(question_id, question_digest, language):
             or APPROVED_CONTENT_DIGESTS.get(question_id) != question_digest):
         return None
     item = APPROVED_GUIDANCE.get(question_id)
+    if question_id == STOP_SIGN_ID and not _stop_sign_review_matches(item):
+        return None
     if not isinstance(item, dict) or item.get("question_digest") != question_digest:
         return None
     if (not isinstance(item.get("reviewer"), str) or not item["reviewer"].strip()
@@ -413,6 +420,73 @@ def _content_digest(question):
     return hashlib.sha256(raw).hexdigest()
 
 
+def _stop_sign_review_matches(item):
+    if not isinstance(item, dict) or set(item) != {
+        "question_digest", "reviewer", "reviewed_at", "reviewed_languages",
+        "approval_reference", "prompts", "options", "confirmation",
+    }:
+        return False
+    if (item["question_digest"] != STOP_SIGN_DIGEST or item["reviewer"] != "Michael"
+            or item["reviewed_languages"] != ["no", "th", "en"]
+            or not item["approval_reference"] or not item["reviewed_at"].startswith("2026-11-20")):
+        return False
+    for lang, expected in STOP_SIGN_GUIDANCE_DIGESTS.items():
+        part = {field: item[field].get(lang) for field in ("prompts", "options", "confirmation")
+                if isinstance(item[field], dict)}
+        raw = json.dumps(part, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        if hashlib.sha256(raw).hexdigest() != expected:
+            return False
+    return True
+
+
+def _read_stop_sign():
+    data = json.loads(Path(__file__).with_name("michael_v6_stop_sign.json").read_text(encoding="utf-8"))
+    q = data["question"]
+    if (q["id"] != STOP_SIGN_ID or q.get("active") is not True or _content_digest(q) != STOP_SIGN_DIGEST
+            or _content_digest(dict(q, id="test-only-v6-stop-sign-v1")) != SOURCE_STOP_SIGN_DIGEST
+            or not _stop_sign_review_matches(data["guidance"])):
+        raise ValueError("Stop sign differs from the reviewed version")
+    return q, data["guidance"]
+
+
+def load_stop_sign_approval():
+    """Load the release record locally. Never seed a database during import."""
+    question, guidance = _read_stop_sign()
+    APPROVED_CONTENT_DIGESTS[question["id"]] = STOP_SIGN_DIGEST
+    APPROVED_GUIDANCE[question["id"]] = guidance
+
+
+async def register_stop_sign(collection, language_check):
+    """Explicit, idempotent registration of the one reviewed V6 document."""
+    question, _ = _read_stop_sign()
+    for language in STOP_SIGN_GUIDANCE_DIGESTS:
+        content = validated_question_content(question, language)
+        if not content or not language_check(content["explanation"], language):
+            raise ValueError("Invalid localized stop sign")
+    if not reviewed_guidance_covers_question(STOP_SIGN_ID, STOP_SIGN_DIGEST, question, language_check):
+        raise ValueError("Incomplete stop sign approval")
+    selector = {"$or": [{"id": STOP_SIGN_ID}, {"_id": STOP_SIGN_ID}, {"question.no": question["question"]["no"]}]}
+    existing = await collection.find(selector).limit(2).to_list(2)
+    if not existing:
+        await collection.update_one({"_id": STOP_SIGN_ID}, {"$setOnInsert": question}, upsert=True)
+        existing = await collection.find(selector).limit(2).to_list(2)
+    if len(existing) != 1 or existing[0].get("active") is not True or _content_digest(existing[0]) != STOP_SIGN_DIGEST:
+        raise ValueError("Conflicting stop sign registration")
+    return STOP_SIGN_ID
+
+
+try:
+    load_stop_sign_approval()
+except (OSError, ValueError, KeyError, AttributeError, TypeError):
+    # Missing or stale package leaves the pilot unavailable.
+    pass
+
+
+def _approved_version(question_id, digest):
+    return (APPROVED_CONTENT_DIGESTS.get(question_id) == digest
+            and (question_id != STOP_SIGN_ID or _stop_sign_review_matches(APPROVED_GUIDANCE.get(question_id))))
+
+
 def _signing_key():
     # No JWT fallback: an absent or short dedicated key disables V6.
     value = os.environ.get("MICHAEL_V6_SIGNING_KEY", "")
@@ -451,11 +525,13 @@ def issue_delivery_token(question, *, now=None):
     if isinstance(question, dict) and (question.get("bildeUrl") or question.get("image_url")):
         return None
     digest = _content_digest(question)
-    if not digest or APPROVED_CONTENT_DIGESTS.get(question.get("id")) != digest:
+    if not digest or not _approved_version(question.get("id"), digest):
         return None
     timestamp = int(time.time() if now is None else now)
     payload = {"v": 1, "id": question["id"], "digest": digest,
                "nonce": secrets.token_urlsafe(16), "iat": timestamp, "exp": timestamp + 86400}
+    if question["id"] == STOP_SIGN_ID:
+        payload["guidance"] = STOP_SIGN_GUIDANCE_DIGESTS
     raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     signature = hmac.new(key, b"michael-v6-delivery-v1\0" + raw, hashlib.sha256).digest()
     return _b64encode(raw) + "." + _b64encode(signature)
@@ -483,9 +559,10 @@ def verify_delivery_token(token, question_id, question, *, now=None):
                 and payload["exp"] - payload["iat"] == 86400
                 and isinstance(payload.get("nonce"), str) and len(payload["nonce"]) >= 16
                 and payload.get("id") == question_id == question.get("id")
+                and (question_id != STOP_SIGN_ID or payload.get("guidance") == STOP_SIGN_GUIDANCE_DIGESTS)
                 and not (question.get("bildeUrl") or question.get("image_url"))
                 and digest is not None and payload.get("digest") == digest
-                and APPROVED_CONTENT_DIGESTS.get(question_id) == digest)
+                and _approved_version(question_id, digest))
     except (ValueError, TypeError, UnicodeError, AttributeError, OverflowError):
         return False
 
@@ -638,13 +715,27 @@ class MongoGuidanceStore:
         result = await self._advance(scope, event_id, verdict, answer=None)
         return result[0] if result else None
 
-    async def record_answer(self, scope, event_id, answer, verdict):
+    async def prompt_intent(self, scope, intent):
+        """Serve the initial general hint before a learner requests another explanation."""
+        marker = guidance_actor_marker(scope["principal"])
+        key = _progress_key()
+        if not marker or not key:
+            raise ValueError("Missing guidance scope")
+        raw = json.dumps([scope[k] for k in ("principal", "delivery_session", "question_id", "language")],
+                         ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        identity = hmac.new(key, b"v6-prompt\0" + raw, hashlib.sha256).hexdigest()
+        previous = await self.collection.find_one_and_update(
+            {"_id": identity}, {"$setOnInsert": {"actor_marker": marker}}, upsert=True,
+            projection={"_id": 1}, return_document=False)
+        return "alternative" if intent == "alternative" and previous else "hint"
+
+    async def record_answer(self, scope, event_id, answer, verdict, *, option_id=None):
         """Bind one event to an answer hash and return its originally stored verdict."""
         if not isinstance(answer, str) or not answer.strip() or len(answer) > 5000:
             return None
-        return await self._advance(scope, event_id, verdict, answer=answer)
+        return await self._advance(scope, event_id, verdict, answer=answer, option_id=option_id)
 
-    async def _advance(self, scope, event_id, verdict, *, answer):
+    async def _advance(self, scope, event_id, verdict, *, answer, option_id=None):
         key = _progress_key()
         fields = ("principal", "delivery_session", "language", "question_id")
         if (not key or not isinstance(scope, dict) or set(scope) != set(fields)
@@ -675,10 +766,19 @@ class MongoGuidanceStore:
         can_advance = {"$and": [{"$not": [already_seen]}, {"$lt": [{"$size": "$events"}, 128]}]}
         next_level = (0 if verdict == "correct" else
                       {"$min": [2, {"$add": ["$level", 1]}]} if verdict == "incorrect" else "$level")
+        misconception = {}
+        if scope["question_id"] == STOP_SIGN_ID and verdict in ("incorrect", "correct"):
+            if verdict == "incorrect":
+                if option_id not in ("A", "C"):
+                    return None
+                next_level = {"$cond": [{"$eq": ["$last_wrong_option", option_id]}, 2, 1]}
+            misconception["last_wrong_option"] = {"$cond": [
+                can_advance, option_id if verdict == "incorrect" else None, "$last_wrong_option"]}
         pipeline = [
             {"$set": {"level": {"$ifNull": ["$level", 0]}, "events": {"$ifNull": ["$events", []]},
                       "actor_marker": {"$ifNull": ["$actor_marker", {"$literal": actor_marker}]}}},
             {"$set": {
+                **misconception,
                 "level": {"$cond": [can_advance, next_level, "$level"]},
                 "events": {"$cond": [can_advance,
                                       {"$concatArrays": ["$events", [{"$mergeObjects": [

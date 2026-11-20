@@ -313,6 +313,54 @@ def run_suite(tc, policy, mongo_client_class=None):
                     self.assertEqual(duplicate["suggestions"][0]["v6_feedback"], "unavailable")
                     await self.questions.delete_one({"_id": inserted.inserted_id})
 
+        async def test_registered_stop_sign_access_and_teaching(self):
+            policy.APPROVED_GUIDANCE.clear()
+            policy.APPROVED_CONTENT_DIGESTS.clear()
+            policy.load_stop_sign_approval()
+            for _ in range(2):
+                self.assertEqual(await policy.register_stop_sign(self.questions, tc._reply_matches_language_script),
+                                 policy.STOP_SIGN_ID)
+            self.assertEqual(await self.questions.count_documents({"id": policy.STOP_SIGN_ID}), 1)
+            q = await self.questions.find_one({"id": policy.STOP_SIGN_ID})
+            g = policy.APPROVED_GUIDANCE[policy.STOP_SIGN_ID]
+            with patch.dict(os.environ, {"MICHAEL_V6_REGISTERED_ENABLED":"1", "MICHAEL_V6_GUEST_ENABLED":"1"}):
+                for tier in ("premium", "registered", "guest"):
+                    await self.users.update_one({"id":"synthetic-user"}, {"$set":{"is_premium":tier == "premium"}})
+                    headers = self.headers
+                    if tier == "guest":
+                        headers = {"X-T2D-Guest-Key":secrets.token_hex(32)}
+                        guest = await self.client.post("/api/access/guest-session", headers=headers)
+                        self.assertEqual(guest.status_code, 200)
+                    for lang in ("no", "th", "en"):
+                        with self.subTest(tier=tier, lang=lang):
+                            delivery = (await self.client.post("/api/teacher/v6/text/start",
+                                        json={"language":lang}, headers=headers)).json()
+                            self.assertTrue(delivery["ready"])
+                            self.assertEqual(delivery["question_id"], policy.STOP_SIGN_ID)
+                            self.assertEqual(delivery["question"], q["question"][lang])
+                            opts = {o["id"]:o["text"][lang] for o in q["options"]}
+                            self.assertCountEqual(delivery["choices"], opts.values())
+                            async def send(intent, answer=None, event=None):
+                                body = {"language":lang,"mode":"v6_quiz_pilot","message":answer or "?",
+                                        "session_id":delivery["session_id"],"v6_question_id":delivery["question_id"],
+                                        "v6_delivery_token":delivery["delivery_token"],"v6_actor_binding":delivery["actor_binding"],
+                                        "v6_intent":intent,"v6_event_id":event or uuid.uuid4().hex,"v6_answer_text":answer}
+                                result = await self.client.post("/api/teacher/chat", headers=headers, json=body)
+                                self.assertEqual(result.status_code, 200)
+                                data = result.json()
+                                return data["suggestions"][0]["v6_feedback"], data["reply"]
+                            self.assertEqual(await send("alternative"), ("guidance",g["prompts"][lang]["hint"]))
+                            self.assertEqual(await send("alternative"), ("guidance",g["prompts"][lang]["alternative"]))
+                            hints = g["options"][lang]
+                            self.assertEqual(await send("answer",opts["A"]), ("incorrect",hints["A"]["hint"]))
+                            self.assertEqual((await send("answer", "?"))[0], "unknown")
+                            self.assertEqual(await send("answer",opts["C"]), ("incorrect",hints["C"]["hint"]))
+                            retry = uuid.uuid4().hex
+                            self.assertEqual(await send("answer",opts["C"],retry), ("incorrect",hints["C"]["alternative"]))
+                            self.assertEqual(await send("answer",opts["C"],retry), ("incorrect",hints["C"]["alternative"]))
+                            self.assertEqual(await send("answer",opts["B"]), ("correct",g["confirmation"][lang]))
+                            print(f"Stop sign passed for {lang} ({tier})", file=sys.stderr, flush=True)
+
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
                 expired = jwt.encode({"sub": "synthetic-user", "exp": 1}, self.server.JWT_SECRET, algorithm="HS256")

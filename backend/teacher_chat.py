@@ -5547,8 +5547,16 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             reply += "\n" + question["explanation"].strip()
     elif req.v6_intent in ("start", "hint", "alternative"):
         feedback = "guidance"
+        intent = req.v6_intent
+        if req.v6_question_id == policy.STOP_SIGN_ID:
+            scope = {"principal": verified_user["id"], "delivery_session": session_id,
+                     "question_id": req.v6_question_id, "language": req.language}
+            try:
+                intent = await _v6_guidance_store.prompt_intent(scope, intent)
+            except Exception:
+                intent = "hint"
         prompt = policy.reviewed_prompt(req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id),
-                                        req.language, req.v6_intent)
+                                        req.language, intent)
         reply = prompt or text[req.v6_intent]
         show_choices = True
     else:
@@ -5581,7 +5589,10 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             scope = {"principal": user_id, "delivery_session": session_id,
                      "language": req.language, "question_id": req.v6_question_id}
             try:
-                stored = await store.record_answer(scope, event_id, answer, verdict)
+                if req.v6_question_id == policy.STOP_SIGN_ID:
+                    stored = await store.record_answer(scope, event_id, answer, verdict, option_id=option_id)
+                else:
+                    stored = await store.record_answer(scope, event_id, answer, verdict)
             except Exception:
                 stored = None
             if (not isinstance(stored, tuple) or len(stored) != 2

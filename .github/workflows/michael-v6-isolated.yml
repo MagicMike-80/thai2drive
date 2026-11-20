@@ -15,6 +15,7 @@ on:
       - backend/i18n_routing.py
       - backend/site_config.py
       - backend/michael_v6_policy.py
+      - backend/michael_v6_stop_sign.json
       - backend/tests/test_michael_v6*.py
       - backend/michael_v6_quota.py
       - backend/ai_learning.py
@@ -49,6 +50,7 @@ jobs:
             /backend/i18n_routing.py
             /backend/site_config.py
             /backend/michael_v6_policy.py
+            /backend/michael_v6_stop_sign.json
             /backend/tests/test_michael_v6*.py
             /backend/michael_v6_quota.py
             /backend/ai_learning.py
@@ -104,7 +106,7 @@ jobs:
           mkdir -p "$input"
           cp --parents \
             backend/server.py backend/teacher_chat.py backend/michael_v6_policy.py backend/ai_learning.py \
-            backend/michael_v6_quota.py \
+            backend/michael_v6_quota.py backend/michael_v6_stop_sign.json \
             backend/webapp.py backend/studybook_web.py backend/stopping_distance_web.py \
             backend/i18n_routing.py backend/site_config.py \
             backend/michael_greetings.py backend/media_catalog.py \

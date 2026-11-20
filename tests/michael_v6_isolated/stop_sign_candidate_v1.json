@@ -21,7 +21,7 @@
       },
       "en": {
         "A": {"hint": "You have spotted a gap. What does the stop sign require even when there is room?", "alternative": "Picture the wheels at the stop line. How is rolling slowly different from being completely still?"},
-        "C": {"hint": "You have noticed the vehicle on the right. What else do you need to check on your left?", "alternative": "Imagine you are the driver coming from the left. If you have to brake when another car pulls out, has that driver given way to you?"}
+        "C": {"hint": "You have noticed the vehicle on the right. What else do you need to check on your left?", "alternative": "Imagine the situation from the perspective of the driver approaching from the left. If that driver has to brake because you pull out, have you given way to that vehicle?"}
       }
     },
     "confirmation": {
