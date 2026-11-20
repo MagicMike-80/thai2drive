@@ -14713,8 +14713,8 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
       chatPayload.v6_delivery_token = _teacherV6Context.deliveryToken;
       if (_teacherV6Context.actorBinding) chatPayload.v6_actor_binding = _teacherV6Context.actorBinding;
       chatPayload.v6_intent = v6Intent || _v6ClassifyIntent(msg);
-      if (chatPayload.v6_intent === 'answer') {
-        chatPayload.v6_answer_text = msg;
+      {
+        if (chatPayload.v6_intent === 'answer') chatPayload.v6_answer_text = msg;
         if (!globalThis.crypto || typeof globalThis.crypto.getRandomValues !== 'function' || !globalThis.crypto.subtle ||
             typeof _teacherV6Context.deliveryToken !== 'string' || !_teacherV6Context.deliveryToken)
           throw new Error('Secure event state unavailable');
@@ -14722,7 +14722,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
         var hashKey = await globalThis.crypto.subtle.importKey('raw',
           new TextEncoder().encode(_teacherV6Context.deliveryToken), {name:'HMAC', hash:'SHA-256'}, false, ['sign']);
         var eventHashBytes = new Uint8Array(await globalThis.crypto.subtle.sign('HMAC', hashKey,
-          new TextEncoder().encode(activeSessionId + ':' + msg)));
+          new TextEncoder().encode(activeSessionId + ':' + chatPayload.v6_intent + ':' + msg)));
         var eventHash = Array.from(eventHashBytes, function(b) { return b.toString(16).padStart(2, '0'); }).join('');
         if (!stillCurrent()) return;
         var savedV6 = sessionStorage.getItem(eventKey);
@@ -14764,7 +14764,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode, v6Intent) 
     var data = await res.json();
     if (!stillCurrent()) return;
     var committedV6Feedback = data && data.mode === 'v6_quiz_pilot' && Array.isArray(data.suggestions) &&
-      data.suggestions[0] && ['correct', 'incorrect', 'unknown', 'partial'].includes(data.suggestions[0].v6_feedback);
+      data.suggestions[0] && ['correct', 'incorrect', 'unknown', 'partial', 'guidance', 'explained'].includes(data.suggestions[0].v6_feedback);
     if (committedV6Feedback && chatPayload.v6_event_id && _teacherV6Context && _teacherV6Context.pendingAnswer &&
         _teacherV6Context.sessionId === activeSessionId && _teacherV6Context.language === appLang &&
         _teacherV6Context.deliveryToken === chatPayload.v6_delivery_token &&

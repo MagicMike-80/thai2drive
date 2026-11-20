@@ -5548,6 +5548,30 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
     }[req.language]
     show_choices = False
     feedback = "unavailable"
+    reservation = None
+    level = topic = option_id = None
+    natural = (authorized and stop and req.v6_intent and
+               os.environ.get("MICHAEL_V6_NATURAL_DIALOGUE_ENABLED") == "1")
+    if natural:
+        try:
+            import michael_v6_dialogue as dialogue
+        except ImportError:
+            from backend import michael_v6_dialogue as dialogue
+        scope = {"principal": verified_user["id"], "delivery_session": session_id,
+                 "question_id": req.v6_question_id, "language": req.language}
+        learner = (req.v6_answer_text if req.v6_intent == "answer" else None) or req.message
+        event = req.v6_event_id or (uuid.uuid4().hex if req.v6_intent != "answer" else None)
+        unavailable = TeacherChatResponse(session_id=session_id, conversation_id=session_id,
+            mode="v6_quiz_pilot", reply=text["unavailable"], suggestions=[{"v6_feedback":"unavailable","question":""}])
+        if not event:
+            return unavailable
+        try:
+            transcript = dialogue.DialogueTurns(_v6_guidance_store.collection, scope)
+            reservation, turns = await transcript.reserve(event, req.v6_intent, learner)
+            if not reservation:
+                return TeacherChatResponse(**turns)
+        except Exception:
+            return unavailable
     if (not authorized or not question or not question["question_text"].strip() or not req.v6_intent
             or not callable(getattr(globals().get("_v6_guidance_store"), "record_answer", None))):
         reply = text["unavailable"]
@@ -5648,6 +5672,8 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             if (not isinstance(stored, tuple) or len(stored) != 2
                     or type(stored[0]) is not int or not 0 <= stored[0] <= 2
                     or stored[1] not in ("correct", "incorrect", "unknown")):
+                if reservation:
+                    await transcript.release(reservation)
                 return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
                     mode="v6_quiz_pilot", reply=text["unavailable"],
                     suggestions=[{"v6_feedback": "unavailable", "question": ""}])
@@ -5687,10 +5713,26 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
                 question["question"], req.language, req.v6_actor_binding)]
         else:
             _v6_secrets.SystemRandom().shuffle(choices)
-    return TeacherChatResponse(session_id=session_id, conversation_id=session_id,
-                               mode="v6_quiz_pilot", reply=reply,
-                               suggestions=([{ "v6_feedback": feedback,
-                                               "question": question["question_text"] if show_choices else ""}, *choices]))
+    meta = {"v6_feedback": feedback, "question": question["question_text"] if show_choices else ""}
+    if reservation:
+        state = {"intent":req.v6_intent, "feedback":feedback, "topic":topic, "option":option_id,
+                 "level":level, "guidance":reply}
+        context = dialogue.teaching_context(turns, req.language, question, learner, reply, state)
+        generated = await dialogue.formulate(context, question["correct_text"], _completion_with_fallback,
+                                             _reply_matches_language_script)
+        meta["v6_reply_source"] = "model" if generated else "reviewed_fallback"
+        reply = generated or reply
+        if not _reply_matches_language_script(reply, req.language):
+            reply = text["unavailable"]
+            meta["v6_reply_source"] = "unavailable"
+    response = TeacherChatResponse(session_id=session_id, conversation_id=session_id, mode="v6_quiz_pilot",
+                                   reply=reply, suggestions=[meta, *choices])
+    if reservation:
+        try:
+            await transcript.finish(reservation, {"learner":learner, "state":state, "response":response.model_dump()})
+        except Exception:
+            return unavailable
+    return response
 
 
 def _history_messages(history: list[dict]) -> list[dict]:

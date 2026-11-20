@@ -38,7 +38,7 @@ def synthetic_question():
     }
 
 
-def run_suite(tc, policy, mongo_client_class=None, *, live_completion=None, observations=None):
+def build_endpoint_case(tc, policy, mongo_client_class=None, *, live_completion=None, observations=None):
     """Run synthetic endpoint tests after the separate isolation gate passes."""
     import httpx
     import jwt
@@ -502,6 +502,147 @@ def run_suite(tc, policy, mongo_client_class=None, *, live_completion=None, obse
                     self.assertTrue(tc._reply_matches_language_script(body["reply"], "no"))
                     observations.append(dict(scenario="V5", language="no", expected="ordinary", actual="ordinary", reply=body["reply"]))
 
+        async def test_natural_lesson_with_authorized_history(self):
+            os.environ.update(MICHAEL_V6_NATURAL_DIALOGUE_ENABLED="1", MICHAEL_V6_PILOT_USER_ID="synthetic-user")
+            policy.APPROVED_GUIDANCE.clear()
+            policy.APPROVED_CONTENT_DIGESTS.clear()
+            policy.load_stop_sign_approval()
+            await policy.register_stop_sign(self.server.db, tc._reply_matches_language_script)
+            pilot = self.server.db[policy.PILOT_COLLECTION]
+            await pilot.update_one({"_id":policy.STOP_SIGN_ID}, {"$set":{"pilot_open":True}})
+            self.question = await pilot.find_one({"id":policy.STOP_SIGN_ID})
+            samples = {
+                "no": ["Kan jeg få et hint om det jeg overså?", "Hvor nær streken skal jeg stanse?",
+                       "Da ombestemmer jeg meg. Jeg vil stanse helt, men er usikker på hvem som kjører først.",
+                       "Jeg gjettet egentlig. Hvorfor er det riktig?", "Kan du forklare det annerledes, sett fra bilen til venstre?"],
+                "th": ["ช่วยใบ้หน่อยครับว่าผมพลาดอะไรไป", "ต้องหยุดใกล้เส้นแค่ไหนครับ",
+                       "ผมเปลี่ยนใจแล้ว ผมจะหยุดให้สนิท แต่ยังไม่แน่ใจว่าใครไปก่อน",
+                       "จริง ๆ แล้วผมเดาครับ ทำไมถึงถูก", "ช่วยอธิบายอีกแบบจากมุมของรถที่มาทางซ้ายได้ไหมครับ"],
+                "en": ["Can I have a hint about what I missed?", "How close to the line do I stop?",
+                       "I've changed my mind. I'd stop completely, but I'm unsure who goes first.",
+                       "I actually guessed. Why is that right?", "Could you explain it another way, from the left driver's point of view?"],
+            }
+            for lang, words in samples.items():
+                start = (await self.client.post("/api/teacher/v6/text/start", headers=self.headers,
+                                                json={"language":lang})).json()
+                self.assertTrue(start["ready"])
+                self.token, self.actor_binding = start["delivery_token"], start["actor_binding"]
+                opts = {o["id"]:o["text"][lang] for o in self.question["options"]}
+                label = next(s[0] for s in start["choices"] if s[3:] == opts["B"])
+                turns = [("answer", opts["A"]), ("hint", words[0]), ("answer", words[1]), ("answer", words[2]),
+                         ("answer", label), ("answer", words[3]), ("alternative", words[4])]
+                expected_history = []
+                for i, (intent, learner) in enumerate(turns):
+                    supplied, drafts, checked = [], [], []
+                    async def model(messages):
+                        system = messages[0]["content"]
+                        data = json.loads(messages[-1]["content"])
+                        if system.startswith("V6 LESSON WRITER"):
+                            supplied.append(data)
+                            content = (policy.APPROVED_GUIDANCE[policy.STOP_SIGN_ID]["prompts"][lang]["hint"]
+                                       if not live_completion else None)
+                        elif system.startswith("V6 LESSON REVIEW"):
+                            checked.append(data["draft"])
+                            content = "PASS"
+                        else:
+                            content = {2:"line",3:"partial_stop",5:"reason"}.get(i,"uncertain")
+                        if live_completion:
+                            output = await live_completion(messages)
+                        else:
+                            output = types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(content=content))])
+                        if system.startswith("V6 LESSON WRITER"):
+                            drafts.append(output.choices[0].message.content.strip())
+                        return output
+                    event = uuid.uuid4().hex
+                    with patch.object(tc, "_completion_with_fallback", side_effect=model) as port:
+                        response = await self.call(lang, intent, learner, v6_event_id=event)
+                        meta = response["suggestions"][0]
+                        self.assertNotEqual(meta["v6_feedback"], "unavailable")
+                        self.assertIn(len(supplied), (1, 2))
+                        self.assertEqual([(t["learner"],t["teacher"]) for t in supplied[0]["history"]], expected_history)
+                        self.assertEqual(supplied[0]["language"], lang)
+                        self.assertTrue(tc._reply_matches_language_script(response["reply"], lang))
+                        if i in (0,4):
+                            self.assertEqual(meta["v6_feedback"], "correct" if i==4 else "incorrect")
+                        if i < 4:
+                            self.assertIsNone(supplied[0]["approved_explanation"])
+                        if meta["v6_reply_source"] == "model":
+                            self.assertEqual(response["reply"], checked[-1])
+                            self.assertIn(response["reply"], drafts)
+                        if observations is not None:
+                            observations.append(dict(language=lang, turn=i+1, learner=learner, reply=response["reply"],
+                                source=meta["v6_reply_source"], feedback=meta["v6_feedback"], history=len(expected_history)))
+                        expected_history.append((learner,response["reply"]))
+                        calls = port.await_count
+                        replay = await self.call(lang, intent, learner, v6_event_id=event)
+                        self.assertEqual(replay, response)
+                        self.assertEqual(port.await_count, calls)
+                        denied = await self.call(lang, intent, learner, bearer=self.other_bearer, v6_event_id=event)
+                        self.assertEqual(denied["suggestions"][0]["v6_feedback"], "unavailable")
+                        self.assertEqual(port.await_count, calls)
+                original = await pilot.find_one({"_id":policy.STOP_SIGN_ID})
+                self.assertEqual(original,self.question)
+                self.assertEqual(policy._content_digest(original),policy.STOP_SIGN_DIGEST)
+                for failure in ("invalid language", "unsupported rule", "timeout"):
+                    async def fail(messages):
+                        if failure=="timeout":
+                            raise TimeoutError
+                        raw = "REJECT" if messages[0]["content"].startswith("V6 LESSON REVIEW") else (
+                            "ภาษาไทย" if lang!="th" and failure=="invalid language" else
+                            "You must wait twenty minutes." if lang=="th" or failure=="invalid language" else
+                            {"no":"Stans bare hvis det kommer en buss.", "en":"Stop only if a bus comes."}[lang])
+                        return types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(content=raw))])
+                    with patch.object(tc,"_completion_with_fallback",side_effect=fail):
+                        response = await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
+                        self.assertEqual(response["suggestions"][0]["v6_reply_source"],"reviewed_fallback")
+                        self.assertTrue(tc._reply_matches_language_script(response["reply"],lang))
+                if live_completion:
+                    rejected = []
+                    async def faulty_writer(messages):
+                        if messages[0]["content"].startswith("V6 LESSON REVIEW"):
+                            actual = await live_completion(messages)
+                            rejected.append(actual.choices[0].message.content.strip())
+                            return actual
+                        wrong = {"no":"Du kan rulle forbi stopplinjen hvis veien er tom.",
+                                 "en":"You can roll past the stop line if the road is empty.",
+                                 "th":"ถ้าถนนว่างคุณสามารถขับผ่านเส้นหยุดได้โดยไม่ต้องหยุดรถ"}[lang]
+                        return types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(content=wrong))])
+                    with patch.object(tc,"_completion_with_fallback",side_effect=faulty_writer):
+                        response = await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
+                    self.assertEqual(response["suggestions"][0]["v6_reply_source"],"reviewed_fallback")
+                    self.assertTrue(rejected and all(v=="REJECT" for v in rejected))
+                renewed = (await self.client.post("/api/teacher/v6/text/start", headers=self.headers,
+                                                  json={"language":lang})).json()
+                before = self.actor_binding
+                self.actor_binding = renewed["actor_binding"]
+                denied = await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
+                self.assertEqual(denied["suggestions"][0]["v6_feedback"], "unavailable")
+                self.assertNotEqual(before, self.actor_binding)
+                self.token = renewed["delivery_token"]
+                seen = []
+                async def new_session(messages):
+                    seen.append(json.loads(messages[-1]["content"])["history"])
+                    raise TimeoutError
+                with patch.object(tc,"_completion_with_fallback",side_effect=new_session):
+                    await self.call(lang,"hint",words[0],v6_event_id=uuid.uuid4().hex)
+                self.assertEqual(seen, [[]])
+            if live_completion:
+                with patch.object(tc,"_chat_col",self.server.db.teacher_chats), patch.object(tc,"_completion_with_fallback",side_effect=live_completion) as port:
+                    for tier in ("premium","free","guest"):
+                        headers = {} if tier=="guest" else {"Authorization":"Bearer "+self.other_bearer}
+                        if tier=="free":
+                            await self.users.update_one({"id":"other-user"},{"$set":{"is_premium":False}})
+                        access = await self.client.post("/api/teacher/v6/text/start",headers=headers,json={"language":"no"})
+                        self.assertFalse(access.json()["ready"])
+                        before = port.await_count
+                        res = await self.client.post("/api/teacher/chat",headers=headers,json={"language":"no","mode":"normal_chat",
+                            "session_id":"synthetic-standard-"+tier,"message":"Hvordan kan jeg øve på å forklare valgene mine?"})
+                        self.assertEqual(res.status_code,200)
+                        self.assertGreater(port.await_count,before)
+                        self.assertNotEqual(res.json()["mode"],"v6_quiz_pilot")
+                        self.assertNotEqual(res.json()["reply"],tc._fallback_reply("no"))
+                        print("Ordinary chat passed and pilot denied for",tier,file=sys.stderr,flush=True)
+
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
                 expired = jwt.encode({"sub": "synthetic-user", "exp": 1}, self.server.JWT_SECRET, algorithm="HS256")
@@ -634,6 +775,13 @@ def run_suite(tc, policy, mongo_client_class=None, *, live_completion=None, obse
             self.assertEqual(await self.server.db.access_usage.count_documents(selector), 1)
             self.assertEqual((await self.server.db.access_usage.find_one({"_id": inserted.inserted_id}))["daily_used"], 10)
 
-    suite = (unittest.TestSuite([EndpointScenarios("test_claude_dialogues_through_chat")]) if live_completion
+    return EndpointScenarios
+
+
+def run_suite(tc, policy, mongo_client_class=None, *, live_completion=None, observations=None,
+              live_test="test_claude_dialogues_through_chat"):
+    EndpointScenarios = build_endpoint_case(tc, policy, mongo_client_class, live_completion=live_completion,
+                                             observations=observations)
+    suite = (unittest.TestSuite([EndpointScenarios(live_test)]) if live_completion
              else unittest.defaultTestLoader.loadTestsFromTestCase(EndpointScenarios))
     return unittest.TextTestRunner(verbosity=2).run(suite)

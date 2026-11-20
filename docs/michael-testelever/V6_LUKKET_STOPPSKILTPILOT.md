@@ -11,3 +11,11 @@ Disse trinnene krever Michaels separate produksjonsgodkjenning. Ordinær spørsm
 **Steng straks** med samme betingede oppdatering fra `true` til `false`. Dette kontrolleres på hver nye start og hver ny chatmelding, også i eksisterende økter. Allerede viste svar og en forespørsel som allerede har passert kontrollen kan ikke trekkes tilbake. Bekreft at en tidligere utstedt økt nå er utilgjengelig, og at vanlig chat svarer. Sett deretter `MICHAEL_V6_ENABLED=0` for varig deaktivering. Behold pilotdokumentet og økthistorikken.
 
 Faggrunnlaget for krysset med oppmerket stopplinje er skiltforskriften, skilt 204. Elevens valg og regeltekst knyttes til Michaels godkjente NO/TH/EN-versjon. [Skiltforskriften](https://lovdata.no/forskrift/2005-10-07-1219)
+
+## Naturlig lærerreplikk i den lukkede økten
+
+`MICHAEL_V6_NATURAL_DIALOGUE_ENABLED=1` lar modellen formulere replikken etter at de vanlige pilotportene og serverens vurdering er kontrollert. Produksjonsaktivering krever egen godkjenning. Innstillingen alene åpner ingen konto. Full stenging bruker `pilot_open=false` som beskrevet over.
+
+Den verifiserte eleven, leveringen, oppgaven og språket avgrenser samtalen. De siste tolv turene kan sendes ordrett til modellleverandøren, sammen med veiledning fra opptil tolv eldre turer. Lagringen omfatter elevens tekst, vist lærerreplikk og pedagogisk tilstand. Samtaleposten har en MongoDB-TTL på 24 timer fra opprettelse, med sletting ved MongoDBs neste TTL-kjøring. Den ordinære elevchatten bruker sitt eget historikkforløp. Driftskontrollen må bekrefte TTL-indeks og tilgang til pilotsamlingen før produksjonsbruk.
+
+Serveren avgrenser det faglige steget. Utdragene kommer fra den hashgodkjente forklaringen. Et eget modellkall vurderer utkastets dekning i kilden og om det kan vises på dette steget. Avviste utkast, ugyldig språk og tidsavbrudd gir kontrollert veiledning. Fagkontrollen bruker samme modellleverandør og må fortsatt kontrolleres gjennom Michaels praktiske pilot.
