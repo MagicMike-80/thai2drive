@@ -4,6 +4,7 @@ These tests use only an in-memory database. They never connect to Atlas.
 """
 
 import copy
+import hashlib
 import inspect
 import sys
 from pathlib import Path
@@ -11,7 +12,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.testclient import TestClient
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
@@ -163,3 +164,58 @@ def test_normal_login_is_unchanged(isolated_app, monkeypatch):
 
     assert response.status_code == 200
     assert response.json()["user"]["id"] == "student-1"
+
+
+def test_admin_password_change_invalidates_admin_token_and_new_login_works(
+    isolated_app, monkeypatch
+):
+    app, db = isolated_app
+    old_password = "test-only-old-value"
+    new_password = "test-only-new-value"
+    old_hash = server.pwd_context.hash(old_password)
+    db.admin_users.rows.append({"email": "owner@example.test"})
+    db.users.rows.append({
+        "id": "owner-1",
+        "email": "owner@example.test",
+        "password_hash": old_hash,
+        "is_admin": True,
+        "is_premium": True,
+    })
+    monkeypatch.setattr(server, "_migrate_guest_learning_to_user", AsyncMock())
+
+    @app.get("/__test/admin")
+    async def admin_probe(_payload: dict = Depends(server.require_admin)):
+        return {"ok": True}
+
+    client = TestClient(app)
+    old_admin_token = server.create_token(
+        "owner-1",
+        "owner@example.test",
+        admin_password_fingerprint=hashlib.sha256(old_hash.encode("utf-8")).hexdigest(),
+    )
+    legacy_admin_token = server.create_token("owner-1", "owner@example.test")
+    assert client.get(
+        "/__test/admin", headers={"Authorization": f"Bearer {legacy_admin_token}"}
+    ).status_code == 401
+    assert client.get(
+        "/__test/admin", headers={"Authorization": f"Bearer {old_admin_token}"}
+    ).status_code == 200
+
+    db.users.rows[0]["password_hash"] = server.pwd_context.hash(new_password)
+    assert client.get(
+        "/__test/admin", headers={"Authorization": f"Bearer {old_admin_token}"}
+    ).status_code == 401
+    assert client.post(
+        "/api/auth/login",
+        json={"email": "owner@example.test", "password": old_password},
+    ).status_code == 401
+
+    new_login = client.post(
+        "/api/auth/login",
+        json={"email": "owner@example.test", "password": new_password},
+    )
+    assert new_login.status_code == 200
+    assert client.get(
+        "/__test/admin",
+        headers={"Authorization": f"Bearer {new_login.json()['token']}"},
+    ).status_code == 200
