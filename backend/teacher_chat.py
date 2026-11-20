@@ -5545,6 +5545,16 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
         reply = text["answer"] + question["correct_text"]
         if question["explanation"].strip():
             reply += "\n" + question["explanation"].strip()
+        if req.v6_question_id == policy.STOP_SIGN_ID:
+            scope = {"principal": verified_user["id"], "delivery_session": session_id,
+                     "question_id": req.v6_question_id, "language": req.language}
+            try:
+                history, _ = await _v6_guidance_store.answer_context(scope)
+            except Exception:
+                history = []
+            if not any(e["verdict"] in ("correct", "incorrect") for e in history):
+                feedback, show_choices = "guidance", True
+                reply = policy.APPROVED_GUIDANCE[policy.STOP_SIGN_ID]["prompts"][req.language]["hint"]
     elif req.v6_intent in ("start", "hint", "alternative"):
         feedback = "guidance"
         intent = req.v6_intent
@@ -5584,13 +5594,30 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
             if option_id:
                 verdict = "correct" if option_id == question["question"]["correctOptionId"] else "incorrect"
             semantic_judge = globals().get("_v6_semantic_judge")
-            if verdict == "unknown" and callable(semantic_judge):
+            if verdict == "unknown" and req.v6_question_id != policy.STOP_SIGN_ID and callable(semantic_judge):
                 verdict = await policy.propose_semantic_assessment(question, req.language, answer, semantic_judge)
             scope = {"principal": user_id, "delivery_session": session_id,
                      "language": req.language, "question_id": req.v6_question_id}
             try:
                 if req.v6_question_id == policy.STOP_SIGN_ID:
-                    stored = await store.record_answer(scope, event_id, answer, verdict, option_id=option_id)
+                    topic = None
+                    if verdict == "unknown":
+                        history, event = await store.answer_context(scope, event_id)
+                        topic = event.get("topic", "uncertain")
+                        if not event and len(history) < 128 and 1 < len(answer.strip()) <= 1500:
+                            last = next((e["verdict"] for e in reversed(history) if e["verdict"] != "unknown"), None)
+                            messages = policy.stop_dialogue_messages(question, req.language, answer, last)
+                            try:
+                                result = await asyncio.wait_for(_completion_with_fallback(messages), timeout=12)
+                                label = result.choices[0].message.content.strip().lower()
+                                if label in policy.STOP_TOPICS:
+                                    topic = label
+                            except Exception:
+                                pass
+                    stored = await store.record_answer(scope, event_id, answer, verdict, option_id=option_id, topic=topic)
+                    if stored and stored[1] == "unknown":
+                        history, event = await store.answer_context(scope, event_id)
+                        topic = event.get("topic", "uncertain")
                 else:
                     stored = await store.record_answer(scope, event_id, answer, verdict)
             except Exception:
@@ -5605,7 +5632,9 @@ async def _v6_quiz_pilot(req: TeacherChatRequest, session_id: str, http_request=
         action = policy.next_action(verdict, verified_hint_level=level)
         feedback = verdict
         reply = text[{"confirm": "correct", "hint": "wrong", "alternative": "alternative", "clarify": "unknown"}[action]]
-        if verdict == "incorrect":
+        if verdict == "unknown" and req.v6_question_id == policy.STOP_SIGN_ID:
+            reply = policy.stop_dialogue_reply(question, req.language, topic, history)
+        elif verdict == "incorrect":
             reviewed = policy.reviewed_option_guidance(
                 req.v6_question_id, policy.APPROVED_CONTENT_DIGESTS.get(req.v6_question_id),
                 req.language, option_id, level,

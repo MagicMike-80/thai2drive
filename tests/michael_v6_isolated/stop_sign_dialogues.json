@@ -1,0 +1,370 @@
+[
+  {
+    "scenario": 1,
+    "language": "no",
+    "turns": [
+      {
+        "option": "B",
+        "grade": "correct"
+      },
+      {
+        "text": "Hvorfor er det riktig? Jeg bare gjettet.",
+        "grade": "unknown",
+        "focus": "reason"
+      },
+      {
+        "text": "Hva er forskjellen på stopp og vikeplikt?",
+        "grade": "unknown",
+        "focus": "comparison"
+      }
+    ]
+  },
+  {
+    "scenario": 1,
+    "language": "th",
+    "turns": [
+      {
+        "option": "B",
+        "grade": "correct"
+      },
+      {
+        "text": "ผมไม่รู้ว่าทำไมข้อนี้ถูก ผมแค่เดา",
+        "grade": "unknown",
+        "focus": "reason"
+      },
+      {
+        "text": "ป้ายหยุดกับป้ายให้ทางต่างกันยังไง",
+        "grade": "unknown",
+        "focus": "comparison"
+      }
+    ]
+  },
+  {
+    "scenario": 1,
+    "language": "en",
+    "turns": [
+      {
+        "option": "B",
+        "grade": "correct"
+      },
+      {
+        "text": "Why is that right? I just guessed.",
+        "grade": "unknown",
+        "focus": "reason"
+      },
+      {
+        "text": "What is the difference between stop and give way?",
+        "grade": "unknown",
+        "focus": "comparison"
+      }
+    ]
+  },
+  {
+    "scenario": 2,
+    "language": "no",
+    "turns": [
+      {
+        "text": "Jeg stopper bare hvis det kommer biler, ellers kjører jeg bare.",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "text": "Er ikke stoppskilt det samme som vikeplikt?",
+        "grade": "unknown",
+        "focus": "comparison"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "option": "B",
+        "grade": "correct"
+      }
+    ]
+  },
+  {
+    "scenario": 2,
+    "language": "th",
+    "turns": [
+      {
+        "text": "ผมหยุดเฉพาะตอนมีรถมา ถ้าไม่มีก็ขับผ่านไปเลย",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "text": "ป้ายหยุดก็เหมือนป้ายให้ทางไม่ใช่เหรอ",
+        "grade": "unknown",
+        "focus": "comparison"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "option": "B",
+        "grade": "correct"
+      }
+    ]
+  },
+  {
+    "scenario": 2,
+    "language": "en",
+    "turns": [
+      {
+        "text": "I only stop if there are cars coming, otherwise I just go.",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "text": "Isn't a stop sign the same as give way?",
+        "grade": "unknown",
+        "focus": "comparison"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "option": "B",
+        "grade": "correct"
+      }
+    ]
+  },
+  {
+    "scenario": 3,
+    "language": "no",
+    "turns": [
+      {
+        "option": "C",
+        "grade": "incorrect"
+      },
+      {
+        "text": "Men jeg har jo vikeplikt for høyre, det er høyreregelen.",
+        "grade": "unknown",
+        "focus": "yielding"
+      },
+      {
+        "option": "C",
+        "grade": "incorrect"
+      },
+      {
+        "option": "B",
+        "grade": "correct"
+      }
+    ]
+  },
+  {
+    "scenario": 3,
+    "language": "th",
+    "turns": [
+      {
+        "option": "C",
+        "grade": "incorrect"
+      },
+      {
+        "text": "แต่ที่นอร์เวย์ต้องให้ทางรถทางขวาไม่ใช่เหรอ",
+        "grade": "unknown",
+        "focus": "yielding"
+      },
+      {
+        "option": "C",
+        "grade": "incorrect"
+      },
+      {
+        "option": "B",
+        "grade": "correct"
+      }
+    ]
+  },
+  {
+    "scenario": 3,
+    "language": "en",
+    "turns": [
+      {
+        "option": "C",
+        "grade": "incorrect"
+      },
+      {
+        "text": "But in Norway you give way to traffic from the right, don't you?",
+        "grade": "unknown",
+        "focus": "yielding"
+      },
+      {
+        "option": "C",
+        "grade": "incorrect"
+      },
+      {
+        "option": "B",
+        "grade": "correct"
+      }
+    ]
+  },
+  {
+    "scenario": 4,
+    "language": "no",
+    "turns": [
+      {
+        "text": "Det er jo ingen biler, hvorfor må jeg stoppe?",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "text": "Jeg bremser og ruller sakte over linjen.",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "explain": true,
+        "grade": "explained"
+      }
+    ]
+  },
+  {
+    "scenario": 4,
+    "language": "th",
+    "turns": [
+      {
+        "text": "ก็ไม่มีรถสักคัน ทำไมต้องหยุดด้วย",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "text": "ผมชะลอแล้วค่อย ๆ ไหลผ่านเส้นไป",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "explain": true,
+        "grade": "explained"
+      }
+    ]
+  },
+  {
+    "scenario": 4,
+    "language": "en",
+    "turns": [
+      {
+        "text": "There are no cars, so why would I stop?",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "text": "I slow down and roll over the line.",
+        "grade": "unknown",
+        "focus": "stopping"
+      },
+      {
+        "option": "A",
+        "grade": "incorrect"
+      },
+      {
+        "explain": true,
+        "grade": "explained"
+      }
+    ]
+  },
+  {
+    "scenario": 5,
+    "language": "no",
+    "turns": [
+      {
+        "text": "Kanskje B? Eller C, jeg vet ikke.",
+        "grade": "unknown",
+        "focus": "uncertain"
+      },
+      {
+        "text": "B, nei vent, C.",
+        "grade": "unknown",
+        "focus": "uncertain"
+      },
+      {
+        "text": "Jeg tror det er Jeg stanser for kjøretøyet fra høyre, men kjører slik at kjøretøyet fra venstre må bremse for meg.",
+        "grade": "incorrect"
+      },
+      {
+        "text": "Jeg stanser helt foran og inntil stopplinjen, viker for kjøretøyene på den kryssende veien og kjører videre når det er trygt",
+        "grade": "correct"
+      },
+      {
+        "text": "B",
+        "grade": "unknown",
+        "focus": "uncertain"
+      }
+    ]
+  },
+  {
+    "scenario": 5,
+    "language": "th",
+    "turns": [
+      {
+        "text": "อาจจะข้อ B หรือเปล่า หรือ C ไม่แน่ใจ",
+        "grade": "unknown",
+        "focus": "uncertain"
+      },
+      {
+        "text": "B เอ๊ะ ไม่ใช่ C",
+        "grade": "unknown",
+        "focus": "uncertain"
+      },
+      {
+        "text": "ผมคิดว่า หยุดให้รถที่มาจากทางขวา แต่ขับออกไปจนรถที่มาจากทางซ้ายต้องเบรกให้ฉัน",
+        "grade": "incorrect"
+      },
+      {
+        "text": "ข้อ B",
+        "grade": "unknown",
+        "focus": "uncertain"
+      }
+    ]
+  },
+  {
+    "scenario": 5,
+    "language": "en",
+    "turns": [
+      {
+        "text": "Maybe B? Or C, I'm not sure.",
+        "grade": "unknown",
+        "focus": "uncertain"
+      },
+      {
+        "text": "B, no wait, C.",
+        "grade": "unknown",
+        "focus": "uncertain"
+      },
+      {
+        "text": "I think it is I stop for the vehicle from the right but drive out so that the vehicle from the left has to brake for me.",
+        "grade": "incorrect"
+      },
+      {
+        "text": "I stop completely immediately before and close to the stop line, give way to vehicles on the crossing road and continue when it is safe",
+        "grade": "correct"
+      },
+      {
+        "text": "B",
+        "grade": "unknown",
+        "focus": "uncertain"
+      }
+    ]
+  }
+]

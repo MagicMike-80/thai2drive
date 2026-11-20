@@ -26,6 +26,7 @@ ALLOWED_INPUT_FILES = {
     "tests/michael_v6_isolated/bootstrap.py", "tests/michael_v6_isolated/fake_services.py",
     "tests/michael_v6_isolated/v6_endpoint_scenarios.py",
     "tests/michael_v6_isolated/stop_sign_candidate_v1.json",
+    "tests/michael_v6_isolated/stop_sign_dialogues.json",
 }
 ALLOWED_MOUNTS = {
     "/", "/proc", "/dev", "/dev/pts", "/sys", "/sys/fs/cgroup", "/dev/mqueue",

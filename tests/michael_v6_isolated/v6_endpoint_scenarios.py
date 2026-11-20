@@ -361,6 +361,65 @@ def run_suite(tc, policy, mongo_client_class=None):
                             self.assertEqual(await send("answer",opts["B"]), ("correct",g["confirmation"][lang]))
                             print(f"Stop sign passed for {lang} ({tier})", file=sys.stderr, flush=True)
 
+        async def test_claude_dialogues_through_chat(self):
+            policy.APPROVED_GUIDANCE.clear()
+            policy.APPROVED_CONTENT_DIGESTS.clear()
+            policy.load_stop_sign_approval()
+            await policy.register_stop_sign(self.questions, tc._reply_matches_language_script)
+            self.question = await self.questions.find_one({"id": policy.STOP_SIGN_ID})
+            guidance = policy.APPROVED_GUIDANCE[policy.STOP_SIGN_ID]
+            cases = json.loads(Path(__file__).with_name("stop_sign_dialogues.json").read_text(encoding="utf-8"))
+            self.assertEqual((len(cases), sum(len(c["turns"]) for c in cases)), (15, 62))
+            for case in cases:
+                lang = case["language"]
+                delivery = (await self.client.post("/api/teacher/v6/text/start", headers=self.headers,
+                            json={"language":lang})).json()
+                self.token, self.actor_binding = delivery["delivery_token"], delivery["actor_binding"]
+                options = {o["id"]: o["text"][lang] for o in self.question["options"]}
+                before = await self.call(lang, "explain")
+                self.assertEqual(before["reply"], guidance["prompts"][lang]["hint"])
+                for i, turn in enumerate(case["turns"]):
+                    with self.subTest(language=lang, scenario=case["scenario"], turn=i):
+                        answer = options[turn["option"]] if "option" in turn else turn.get("text")
+                        intent = "explain" if turn.get("explain") else "answer"
+                        async def classifier(messages):
+                            self.assertEqual(json.loads(messages[-1]["content"])["learner"], answer)
+                            return types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(
+                                content=turn["focus"]))])
+                        with patch.object(tc, "_completion_with_fallback", side_effect=classifier) as model:
+                            event_id = uuid.uuid4().hex
+                            result = await self.call(lang, intent, answer, v6_event_id=event_id)
+                            self.assertEqual(result["suggestions"][0]["v6_feedback"], turn["grade"])
+                            self.assertTrue(tc._reply_matches_language_script(result["reply"], lang))
+                            if turn.get("focus") and len(answer) > 1:
+                                model.assert_awaited_once()
+                            else:
+                                model.assert_not_awaited()
+                            if turn["grade"] == "unknown":
+                                replay = await self.call(lang, intent, answer, v6_event_id=event_id)
+                                self.assertEqual(replay["reply"], result["reply"])
+                                self.assertLessEqual(model.await_count, 1)
+                            focus = turn.get("focus")
+                            if focus == "reason":
+                                self.assertIn(self.question["explanation"][lang], result["reply"])
+                            if focus == "stopping":
+                                level = "alternative" if i == 1 else "hint"
+                                self.assertEqual(result["reply"], guidance["options"][lang]["A"][level])
+                            if focus == "yielding":
+                                self.assertEqual(result["reply"], guidance["options"][lang]["C"]["alternative"])
+                            if focus == "comparison":
+                                self.assertIn(guidance["prompts"][lang]["alternative"], result["reply"])
+                            if focus == "uncertain" and i == 1:
+                                self.assertNotEqual(result["reply"], previous)
+                            previous = result["reply"]
+                async def invalid(messages):
+                    return types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(
+                        content="Invented traffic rule"))])
+                with patch.object(tc, "_completion_with_fallback", side_effect=invalid):
+                    result = await self.call(lang, "answer", "???", v6_event_id=uuid.uuid4().hex)
+                    self.assertEqual(result["suggestions"][0]["v6_feedback"], "unknown")
+                    self.assertNotIn("Invented", result["reply"])
+
         async def test_unverified_or_different_user_is_denied(self):
             for lang in ("no", "th", "en"):
                 expired = jwt.encode({"sub": "synthetic-user", "exp": 1}, self.server.JWT_SECRET, algorithm="HS256")
