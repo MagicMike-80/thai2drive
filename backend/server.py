@@ -4855,17 +4855,28 @@ async def admin_list_questions(
         {"_id": 0, "bildeUrl": 0, "bildeUrl_original_backup": 0}
     ).sort("created_at", -1).skip(skip).limit(limit)
     items = await cursor.to_list(limit)
-    # Add lightweight has_image flag using a parallel count query
+    # Card previews use the stored image path directly when it is an internal
+    # asset route. Those routes stay reachable for <img> tags in maintenance
+    # mode, unlike the token-in-query thumbnail route. Read-only: no writes.
     ids = [q["id"] for q in items if "id" in q]
     img_ids = set()
+    previews = {}
     if ids:
         async for r in db.questions.find(
             {"id": {"$in": ids}, "bildeUrl": {"$exists": True, "$nin": [None, ""]}},
             {"_id": 0, "id": 1}
         ):
             img_ids.add(r["id"])
+        asset_path = (r"^/api/(?:media/files/[0-9a-fA-F]{24}|(?:sign-images|public_assets)/"
+                      r"(?:[\w -]+/)*[\w .()-]+\.(?:png|jpe?g|gif|webp|svg))$")
+        async for r in db.questions.find(
+            {"id": {"$in": ids}, "bildeUrl": {"$regex": asset_path, "$options": "i"}},
+            {"_id": 0, "id": 1, "bildeUrl": 1}
+        ):
+            previews[r["id"]] = r["bildeUrl"]
     for q in items:
         q["has_image"] = q.get("id") in img_ids
+        q["preview_url"] = previews.get(q.get("id"))
     return {"total": total, "skip": skip, "limit": limit, "items": items}
 
 
