@@ -34,7 +34,10 @@ API_KEY = os.environ.get("OPENROUTER_API_KEY", "").strip()
 
 # Kandidater (ANTI sine forslag + dagens raskeste/billigste tilsvarende).
 # Modell-ID-er som ikke finnes lenger gir bare en feilrad i rapporten.
+# deepseek/deepseek-chat = produksjonsmodellen Michael faktisk kjører på i dag (teacher_chat.py),
+# lagt til for å sammenligne den mot kvalitetsalternativene under samme prompt.
 MODELS = [
+    "deepseek/deepseek-chat",
     "anthropic/claude-3.5-sonnet",
     "anthropic/claude-haiku-4.5",
     "openai/gpt-4o",
@@ -102,7 +105,10 @@ def call_model(model: str, system_prompt: str, user_msg: str) -> dict:
 def main():
     if not API_KEY:
         sys.exit("Sett OPENROUTER_API_KEY først.")
-    system_prompt = _build_system_prompt("th")
+    # _build_system_prompt er async (henter valgfri elev-profil via device_id) — awaites her
+    # siden resten av dette scriptet er synkront.
+    import asyncio
+    system_prompt = asyncio.run(_build_system_prompt("th"))
     rows = []
     for model in MODELS:
         for qid, q in QUESTIONS_TH:
