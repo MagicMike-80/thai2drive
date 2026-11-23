@@ -7563,10 +7563,23 @@ _ELEVENLABS_VOICE_ENV = {
 }
 
 # Modell-ID er env-styrbar. eleven_v3 er den eneste modellen på kontoen som har
-# "th" i språklisten (verifisert mot /v1/models) og er derfor påkrevd for thai;
-# den dekker norsk og engelsk like godt. Modellen inngår i cache-nøkkelen, så et
-# modellbytte gir nye filer i stedet for gammel, feiluttalt lyd.
+# "th" i språklisten (verifisert mot /v1/models) og er derfor påkrevd for thai.
+# Michael (produkteier, selv fra Oslo) hørte i praksis at v3 la en tydelig
+# bergensk-klingende aksent over den klonede norske stemmen — "den dekker norsk
+# like godt"-antakelsen under var altså feil. Norsk og engelsk bruker derfor
+# eleven_multilingual_v2 i stedet; kun thai krever v3. Modellen inngår i
+# cache-nøkkelen, så et modellbytte gir nye filer i stedet for gammel lyd.
 _DEFAULT_ELEVENLABS_MODEL_ID = "eleven_v3"
+_DEFAULT_ELEVENLABS_MODEL_IDS = {
+    "th-TH": "eleven_v3",
+    "nb-NO": "eleven_turbo_v2_5",
+    "en-US": "eleven_multilingual_v2",
+}
+_ELEVENLABS_MODEL_ENV = {
+    "th-TH": ("ELEVENLABS_TH_MODEL_ID",),
+    "nb-NO": ("ELEVENLABS_NO_MODEL_ID",),
+    "en-US": ("ELEVENLABS_EN_MODEL_ID",),
+}
 _ELEVENLABS_LANGUAGE_CODES = {"th-TH": "th", "nb-NO": "no", "en-US": "en"}
 _ELEVENLABS_VOICE_SETTINGS = {
     "th-TH": {"stability": 0.5, "similarity_boost": 0.75, "style": 1.0},
@@ -7590,9 +7603,21 @@ def _elevenlabs_voice_id(lang: str) -> str:
     )
 
 
-def _elevenlabs_model_id() -> str:
-    """ElevenLabs-modell — env-overstyrbar uten kodeendring."""
-    return (os.environ.get("ELEVENLABS_MODEL_ID") or "").strip() or _DEFAULT_ELEVENLABS_MODEL_ID
+def _elevenlabs_model_id(lang: str = "th-TH") -> str:
+    """ElevenLabs-modell — env-overstyrbar uten kodeendring, språkspesifikk default.
+
+    ELEVENLABS_MODEL_ID overstyrer fortsatt alle språk samtidig (bakoverkompatibelt).
+    De nye, språkspesifikke env-variablene (f.eks. ELEVENLABS_NO_MODEL_ID) vinner over
+    den globale overstyringen når satt, slik mønsteret allerede er for voice_id.
+    """
+    for env_name in _ELEVENLABS_MODEL_ENV.get(lang, ()):
+        model_id = (os.environ.get(env_name) or "").strip()
+        if model_id:
+            return model_id
+    return (
+        (os.environ.get("ELEVENLABS_MODEL_ID") or "").strip()
+        or _DEFAULT_ELEVENLABS_MODEL_IDS.get(lang, _DEFAULT_ELEVENLABS_MODEL_ID)
+    )
 
 
 def _tts_provider_key(provider: str, lang: str) -> str:
@@ -7814,7 +7839,7 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     )
     # ── Alle språk → Michaels språkspesifikke ElevenLabs-klonestemme ─────
     voice_id = _elevenlabs_voice_id(lang)
-    model_id = _elevenlabs_model_id()
+    model_id = _elevenlabs_model_id(lang)
     voice_settings = _ELEVENLABS_VOICE_SETTINGS[lang]
     # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
     # thai-uttale, får vi nye filer i stedet for gammel, feiluttalt cache.
@@ -7965,7 +7990,6 @@ async def tts_status():
     """
     has_eleven = bool(os.environ.get("ELEVENLABS_API_KEY"))
     has_google = bool(os.environ.get("GOOGLE_API_KEY"))
-    model_id = _elevenlabs_model_id()
 
     def route(lang: str) -> dict:
         google_health = _tts_provider_status("google", lang)
@@ -7973,9 +7997,10 @@ async def tts_status():
         google_ready = has_google and not google_health["circuit_open"]
         eleven_ready = has_eleven and not eleven_health["circuit_open"]
         voice_id = _elevenlabs_voice_id(lang)
+        model_id = _elevenlabs_model_id(lang)
         return {
-            "intended": f"elevenlabs:{voice_id}",
-            "actual": f"elevenlabs:{voice_id}" if eleven_ready
+            "intended": f"elevenlabs:{voice_id}:{model_id}",
+            "actual": f"elevenlabs:{voice_id}:{model_id}" if eleven_ready
                       else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if google_ready else "cache-or-none"),
             "fallback_provider": "google" if google_ready else None,
             "ok": eleven_ready or google_ready,
@@ -7989,7 +8014,10 @@ async def tts_status():
             lang: _elevenlabs_voice_id(lang)
             for lang in ("th-TH", "nb-NO", "en-US")
         },
-        "elevenlabs_model_id": model_id,
+        "elevenlabs_model_ids": {
+            lang: _elevenlabs_model_id(lang)
+            for lang in ("th-TH", "nb-NO", "en-US")
+        },
         "circuit_breaker": {
             "failure_limit": _TTS_BREAKER_FAILURE_LIMIT,
             "cooldown_seconds": _TTS_BREAKER_COOLDOWN_SECONDS,
