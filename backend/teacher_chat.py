@@ -4352,8 +4352,159 @@ def _ground_sign124_colour(reply: str, sign_ids: list[str], lang: str) -> str:
     return reply
 
 
+_EXAM_FAILURE_PATTERN = re.compile(
+    r"(?:strøk|røk)\s+på\s+(?:teori|prøv|eksamen|førerprøv)"
+    # «jeg strøk» alone, but not «jeg strøk over teksten» or «jeg strøk katten»
+    r"|\bjeg\s+(?:har\s+)?strøk\b(?!\s+(?:over|ut|bort|med|forbi|langs|av|katten|hunden|"
+    r"på\s+(?!teori|prøv|eksamen|førerprøv)))"
+    r"|\bstrøk\s+(?:i\s+dag|igjen)\b"
+    # «ikke bestått enda» means the test is still ahead, not a failure
+    r"|\b(?:besto|bestod)\s+ikke\b(?!\s+(?:enda|ennå|ennu))"
+    r"|\bikke\s+bestått\b(?!\s+(?:enda|ennå|ennu))"
+    r"|failed(?:\s+my|\s+the)?\s+(?:theory|exam|test)"
+    r"|\bi\s+(?:just\s+)?failed\b(?!\s+to\b)"
+    r"|\b(?:didn't|didnt|did\s+not)\s+pass\b(?!\s+(?:the\s+|a\s+)?(?:car|bus|truck|cyclist|vehicle|lorry))"
+    # Thai needs exam context: a bare ไม่ผ่าน also means «not pass» a red light or a bridge
+    r"|สอบตก|สอบ(?:ทฤษฎี|ใบขับขี่)?ไม่ผ่าน|ไม่ผ่าน(?:การ)?สอบ|ไม่ผ่านทฤษฎี",
+    re.I,
+)
+
+
 def _requests_exam_failure_review(question: str) -> bool:
-    return bool(re.search(r"strøk\s+på\s+(?:teori|prøv)|failed(?:\s+my|\s+the)?\s+(?:theory|exam|test)|สอบตก", question, re.I))
+    return bool(_EXAM_FAILURE_PATTERN.search(question or ""))
+
+
+def _exam_failure_diagnosis_step(user_msg: str, prior: list[dict], *, interrupted: bool = False) -> int:
+    """Return the diagnosis step (1-3) after a reported failed exam, or 0 when inactive.
+
+    Step 1 is the turn where the learner reports the failure; the next two learner
+    turns continue the same diagnosis. Older reports no longer steer the chat.
+    An interrupting turn (direct lookup or frustration) pauses steps 2-3.
+    """
+    if _requests_exam_failure_review(user_msg):
+        return 1
+    if interrupted:
+        return 0
+    earlier_user_turns = [
+        turn.get("content") or "" for turn in reversed(prior) if turn.get("role") == "user"
+    ][:2]
+    for turns_back, content in enumerate(earlier_user_turns, start=1):
+        if _requests_exam_failure_review(content):
+            return turns_back + 1
+    return 0
+
+
+def _oslo_calendar_lines(days: int = 21) -> tuple[str, str]:
+    """Server date in Europe/Oslo plus precomputed weekdays, so the model never guesses them."""
+    try:
+        from zoneinfo import ZoneInfo
+        today = datetime.now(ZoneInfo("Europe/Oslo")).date()
+    except Exception:
+        today = (datetime.now(timezone.utc) + timedelta(hours=1)).date()
+    calendar = ", ".join(
+        f"{day.isoformat()} {day.strftime('%A')}"
+        for day in (today + timedelta(days=offset) for offset in range(days))
+    )
+    return f"{today.isoformat()} {today.strftime('%A')}", calendar
+
+
+def _exam_failure_diagnosis_instruction(step: int, lang: str, first_name: str = "", explain_level: int = 0) -> str:
+    """Final prompt override for the three-step diagnosis after «jeg strøk».
+
+    Thai explain_level 1 is pure Thai (no Norwegian terms), 2 keeps terms in
+    parentheses, and 3 answers in Norwegian. Thai examples are Michael's own
+    lines (docs/michael-testelever/MICHAEL_STEMME_THAI_EKSEMPLER_2026-11-25.md).
+    """
+    if not step:
+        return ""
+    if lang == "th" and explain_level == 3:
+        lang = "no"
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
+    terms_allowed = not (lang == "th" and explain_level == 1)
+    today, calendar = _oslo_calendar_lines()
+    # bør is a strong recommendation (the safe, correct choice), never optional; må/skal is a legal requirement.
+    if lang != "th":
+        word_pair = ("bør = a strong recommendation: the safe and correct choice, but not a legal requirement; "
+                     "må/skal = a legal requirement")
+        bor_rule = "Never say 'bør' is optional or that it does not matter whether you do it. Never use a legal requirement (speed limit, stop sign, red light) as the example for 'bør'; a good example is keeping a longer following distance on a slippery road."
+    elif terms_allowed:
+        word_pair = ("ควร (bør) = a strong recommendation: the safe and correct choice, but not a legal requirement, "
+                     "e.g. ไม่ควร; ต้อง (skal/må) = a legal requirement, e.g. ต้องทำ")
+        bor_rule = "Never say 'bør' (ควร) is optional or ทำหรือไม่ทำก็ได้. Never use a legal requirement (speed limit, stop sign, red light) as the example for 'bør'; a good example is keeping a longer following distance on a slippery road."
+    else:
+        word_pair = ("ควร = คำแนะนำที่ควรทำ (ไม่ใช่ทำหรือไม่ทำก็ได้), the safe and correct choice but not a legal "
+                     "requirement, e.g. ไม่ควร; ต้อง = a legal requirement, e.g. ต้องทำ "
+                     "(Thai words only, never the Norwegian words)")
+        bor_rule = "Never say ควร is optional or ทำหรือไม่ทำก็ได้. Never use a legal requirement (speed limit, stop sign, red light) as the example for 'bør'; a good example is keeping a longer following distance on a slippery road."
+    step_rule = {
+        1: "CURRENT STEP 1: React briefly and kindly, then ask ONLY how many mistakes the learner had and which "
+           "topics they failed (for example on the result sheet from Statens vegvesen). Do this even if the learner "
+           "asks for a plan; the plan comes after the diagnosis.",
+        2: "CURRENT STEP 2: If the learner has given the number of mistakes and topics, give one short, genuine "
+           "encouragement (for example that it was almost good and they are capable), then ask ONE open question: "
+           "what did the learner personally find hardest? Do not force a choice between time pressure and wording. "
+           "Mention the recommendation/requirement words only if the learner brings them up. No long rule review and "
+           "no full quiz. If step 1 is still unanswered, ask it again.",
+        3: "CURRENT STEP 3: If the learner has said what was hardest, explain it briefly word for word when it is about "
+           f"the wording ({word_pair}). {bor_rule} Then give Michael's practice philosophy in your own words (nothing is hard or "
+           "easy; we practise until we can do it) and ONE concrete exercise. No multi-week plan. Set a date only if "
+           "the learner has a booked test or wants to set one. If an earlier step is still unanswered, ask that instead.",
+    }.get(step, "")
+    if lang == "th":
+        # Michael's decision 2026-11-25: Thai address is only พี่, never the learner's name.
+        voice = (
+            "\nTHAI ADDRESS (Michael's rule): Address the learner only as พี่ with ครับ. Never use the learner's "
+            "name in Thai (not alone, not with คุณ or พี่). Never use หนู."
+            "\nEXAMPLES OF MICHAEL'S OWN VOICE (adapt, never copy verbatim every time):\n"
+            "- Learner failed: «ไม่เป็นไรครับพี่ มาดูกันว่าผิดตรงไหน»\n"
+            "- Learner failed (shorter): «ไม่เป็นไรนะ มาดูกันว่าผิดตรงไหน»\n"
+            "- After mistakes and topics: «ไม่เป็นไรหรอกครับพี่ เดี๋ยวครั้งหน้าก็ผ่านเองนะ»\n"
+            "- Open question (พี่): «แล้วพี่คิดว่าอะไรคือยากสำหรับพี่ครับ»\n"
+            "- Practice philosophy: «เอาจริงๆนะครับ ไม่มีอะไรยากหรือว่าง่าย เราต้องฝึกให้เป็น "
+            "ถ้าไม่เป็นแล้วก็ต้องฝึกให้มันเป็น เดี๋ยวก็เป็นเองครับ»\n"
+            "- Wants to give up (third person, adapted): «ครูไมเคิลตอนแรกเป็นช่างตัดผมนะครับ แต่ตอนนี้เป็นครูสอนขับรถ "
+            "คิดดูสิครับว่าใช้เวลากี่ชั่วโมงกี่วันกี่ปี ครูไมเคิลก็ยังไม่เลิกเลย»"
+        )
+        if explain_level == 2:
+            voice += (
+                "\nMANDATORY NORWEGIAN TERMS: In every Thai sentence that mentions one of these concepts, write the "
+                "Norwegian term in parentheses right after the Thai word: ควร (bør), ต้อง (skal/må), "
+                "การให้ทาง (vikeplikt), ป้ายจราจร (skilt), ทางแยก (kryss). "
+                "Never write 'คำที่แปลว่า' or a quoted Thai word instead of the Norwegian term."
+            )
+    else:
+        voice = (
+            "\nMICHAEL'S VOICE: warm, short and down to earth. A brief genuine encouragement first, then one plain "
+            "question. Practice philosophy: nothing is hard or easy; we practise until we can do it, and then it comes."
+        )
+    return (
+        "\n\n━━━ EXAM FAILURE DIAGNOSIS — FINAL OVERRIDE ━━━\n"
+        "The learner reported failing the theory test. Run a calm diagnosis, one question at a time:\n"
+        "1. Number of mistakes and which topics. 2. What the learner found hardest (open question). "
+        "3. A short explanation, Michael's practice philosophy and one concrete exercise.\n"
+        f"{step_rule}\n"
+        "FORMAT: 2-4 short sentences in one paragraph, at most one question. Short, genuine encouragement is welcome "
+        "(for example 'ไม่เป็นไร', 'nesten bra, du er flink', 'neste gang består du'). Empty phrases are forbidden: "
+        "'Så flott spørsmål', 'Lykke til', 'Det er helt forståelig'.\n"
+        "TONE: Sound like Michael, an experienced driving teacher in the passenger seat, not a form. "
+        "Never announce the procedure or the next step ('now I will ask about the cause', 'ต่อไปขอถาม…'). "
+        "Do not repeat the learner's data back; react in a few natural words to what they said, then ask the one question. "
+        "No glossary lines or term lists. Never name any Thai authority (กรมการขนส่ง, สำนักงานขนส่ง, กรมทางหลวง); "
+        "in Thai say only ใบผลสอบ, otherwise 'the result sheet' or Statens vegvesen.\n"
+        f"WORD MEANING: {bor_rule}\n"
+        "GIVING UP: If the learner wants to give up during the diagnosis, briefly tell Michael's story in the THIRD "
+        "person: Michael was a hairdresser before he became a driving teacher, and he never gave up. You are Michael's "
+        "AI assistant, so never tell it as 'I'. Then continue with the current step.\n"
+        f"DATES: Today's server date (Europe/Oslo) is {today}. Verified weekdays: {calendar}. "
+        "Never invent a weekday or date; use only these pairs, or ask the learner for their booked test date. "
+        "Never state a waiting period or quarantine before a new test.\n"
+        "UNVERIFIED — NEVER STATE AS FACT: failure rates such as '43 %', 'Håndbok V851', '2 ukers karantene', "
+        "the number of test questions or the allowed number of mistakes. Michael's 16 years as a driving teacher in Oslo is documented."
+        f"{voice}\n"
+        f"Use only {language}"
+        + (" (Norwegian traffic terms in parentheses are allowed).\n" if terms_allowed else ", with no Norwegian words.\n") +
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
 
 
 def _recent_sign_recall_context(question: str, sign_ids: list[str]) -> str:
@@ -5379,6 +5530,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         guided_chat = True
         v4_stage = "1"
     is_frustrated = _is_frustrated(user_msg)
+    exam_diagnosis_step = 0
     direct_answer = (is_frustrated or (is_direct_lookup and not _is_hint_request(user_msg))) and not is_quiz_help and not is_vision and req.mode == "normal_chat"
     if direct_answer:
         v4_stage = "5"
@@ -5760,6 +5912,14 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "second question, or full answer. This overrides ordinary request-completeness formatting. "
                 "Use only the selected app language."
             )
+        if not is_vision and not is_quiz_help:
+            exam_diagnosis_step = _exam_failure_diagnosis_step(
+                user_msg, prior, interrupted=is_direct_lookup or is_frustrated,
+            )
+            system_prompt += _exam_failure_diagnosis_instruction(
+                exam_diagnosis_step, lang,
+                (student_memory or {}).get("first_name") or "", explain_level,
+            )
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         if is_vision:
@@ -5915,7 +6075,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text, messages, reply_lang, allow_parenthetical_latin=(explain_level == 2)
         )
     if explain_level == 2:
-        reply_text = _ensure_level2_norwegian_term(reply_text, user_msg)
+        reply_text = _ensure_level2_norwegian_term(
+            reply_text, user_msg, allow_glossary_line=not exam_diagnosis_step,
+        )
 
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.
@@ -6005,8 +6167,12 @@ def _contains_thai_script(text: str) -> bool:
     return bool(re.search(r"[\u0e00-\u0e7f]", text or ""))
 
 
-def _ensure_level2_norwegian_term(reply: str, user_msg: str) -> str:
-    """Attach an approved Norwegian term to an existing Thai concept if omitted."""
+def _ensure_level2_norwegian_term(reply: str, user_msg: str, *, allow_glossary_line: bool = True) -> str:
+    """Attach an approved Norwegian term to an existing Thai concept if omitted.
+
+    allow_glossary_line=False (exam failure diagnosis) keeps the inline term but
+    never appends a separate glossary line.
+    """
     terms = (
         ("เว้นระยะห่าง", "følgeavstand"),
         ("ระยะห่าง", "følgeavstand"),
@@ -6021,11 +6187,12 @@ def _ensure_level2_norwegian_term(reply: str, user_msg: str) -> str:
     for thai, norwegian in terms:
         if thai in reply:
             return reply.replace(thai, f"{thai} ({norwegian})", 1)
+    if not allow_glossary_line:
+        return reply
     for thai, norwegian in terms:
         if thai in user_msg:
             return f"{reply.rstrip()}\n\nคำศัพท์นอร์เวย์: {thai} ({norwegian})"
     return reply
-
 
 def _reply_matches_language_script(text: str, lang: str, allow_parenthetical_latin: bool = False) -> bool:
     if lang == "th":
