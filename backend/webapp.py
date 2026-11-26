@@ -15209,12 +15209,13 @@ if ('serviceWorker' in navigator) {
 
 def _webapp_html(default_lang: str = "th") -> str:
     from stopping_distance_web import install as install_stopping_distance
+    from trafikklab_web import install as install_trafikklab
     from studybook_web import install as install_studybook
     from i18n_routing import (
         normalize_lang, HTML_LANG, seo_meta, app_hreflang_tags, app_canonical_for,
     )
     lang = normalize_lang(default_lang)
-    html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
+    html = install_studybook(install_trafikklab(install_stopping_distance(WEBAPP_HTML))).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
     html = html.replace("var appLang = '__APP_LANG__';", f"var appLang = '{lang}';", 1)
 
     html = html.replace('class="sp-lang-tab active"', 'class="sp-lang-tab"')
