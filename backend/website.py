@@ -500,17 +500,17 @@ def _nav(lang_links=True):
     return f"""
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/api/website" class="brand">
+    <a href="/website" class="brand">
       <img src="{ICON_URL}" alt="{BRAND}"/>
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
     <ul>
-      <li><a href="/api/website#features">Funksjoner</a></li>
-      <li><a href="/api/website#pricing">Priser</a></li>
-      <li><a href="/api/guide">📖 Guide</a></li>
-      <li><a href="/api/bok">📚 Læringsbok</a></li>
-      <li><a href="/api/support">Support</a></li>
-      <li><a href="/api/privacy">Personvern</a></li>
+      <li><a href="/website#features">Funksjoner</a></li>
+      <li><a href="/website#pricing">Priser</a></li>
+      <li><a href="/guide">📖 Guide</a></li>
+      <li><a href="/bok">📚 Læringsbok</a></li>
+      <li><a href="/support">Support</a></li>
+      <li><a href="/privacy">Personvern</a></li>
     </ul>
   </div>
 </nav>
@@ -524,11 +524,11 @@ def _footer():
     <div class="footer-inner">
       <p>© 2025 {BRAND}. Alle rettigheter reservert.</p>
       <div class="footer-links">
-        <a href="/api/website">Hjem</a>
-        <a href="/api/bok">Læringsbok</a>
-        <a href="/api/privacy">Personvernregler</a>
-        <a href="/api/terms">Vilkår</a>
-        <a href="/api/support">Kontakt</a>
+        <a href="/website">Hjem</a>
+        <a href="/bok">Læringsbok</a>
+        <a href="/privacy">Personvernregler</a>
+        <a href="/terms">Vilkår</a>
+        <a href="/support">Kontakt</a>
       </div>
     </div>
   </div>
@@ -623,7 +623,10 @@ def guide_page(request: Request):
 
 # ─────────────────────────── PRIVACY POLICY ───────────────────────────
 @website_router.get("/privacy", response_class=HTMLResponse)
-def privacy():
+def privacy(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     body = f"""
 <div class="legal">
   <h1>Personvernregler</h1>
@@ -711,7 +714,10 @@ def privacy():
 
 # ─────────────────────────── TERMS OF SERVICE ───────────────────────────
 @website_router.get("/terms", response_class=HTMLResponse)
-def terms():
+def terms(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     body = f"""
 <div class="legal">
   <h1>Brukervilkår</h1>
@@ -782,7 +788,10 @@ def terms():
 
 # ─────────────────────────── SUPPORT / CONTACT ───────────────────────────
 @website_router.get("/support", response_class=HTMLResponse)
-def support():
+def support(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     body = f"""
 <div class="legal">
   <h1>Support &amp; kontakt</h1>
@@ -823,7 +832,7 @@ def support():
   <p>
     {BRAND}<br/>
     E-post: <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a><br/>
-    Nettsted: <a href="/api/website">{public_site_url().replace('https://', '').replace('http://', '')}</a>
+    Nettsted: <a href="/website">{public_site_url().replace('https://', '').replace('http://', '')}</a>
   </p>
 </div>
 """
@@ -836,7 +845,10 @@ def support():
 
 # ─────────────────────────── LÆRINGSBOK (members only) ───────────────────────────
 @website_router.get("/bok", response_class=HTMLResponse)
-def laeringsbok():
+def laeringsbok(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     from maintenance_control import standalone_guard_script
     body = standalone_guard_script('no', book=True) + """
 <div id="bok-app">
@@ -865,7 +877,7 @@ def laeringsbok():
       <div style="font-size:48px;margin-bottom:16px">🔒</div>
       <h2 style="color:#fff;font-size:24px;font-weight:800;margin-bottom:12px">Kun for Premium-brukere</h2>
       <p style="color:#94A3B8;margin-bottom:24px">Læringsbok er inkludert i alle Premium-planer. Oppgrader i appen for å få tilgang.</p>
-      <a href="/api/website#pricing" style="background:#FF9933;color:#0F172A;padding:14px 28px;border-radius:10px;font-weight:800;font-size:15px">Se priser</a>
+      <a href="/website#pricing" style="background:#FF9933;color:#0F172A;padding:14px 28px;border-radius:10px;font-weight:800;font-size:15px">Se priser</a>
       <br/><br/>
       <button id="bok-logout-np" style="background:none;border:none;color:#64748B;font-size:13px;cursor:pointer;text-decoration:underline">Logg ut</button>
     </div>
@@ -1153,8 +1165,11 @@ def laeringsbok():
 
 # ─────────────────────────── SEO: sitemap + robots ───────────────────────────
 @website_router.get("/sitemap.xml")
-def sitemap_xml():
+def sitemap_xml(request: Request):
     """XML sitemap using the current public site URL (env-configurable)."""
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     from i18n_routing import LANGS
 
     # Legacy, single-language pages (unchanged this round).
@@ -1218,8 +1233,11 @@ def sitemap_xml():
 
 
 @website_router.get("/robots.txt")
-def robots_txt():
+def robots_txt(request: Request):
     """robots.txt pointing at the configured sitemap URL."""
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     sitemap = canonical_url("/sitemap.xml")
     body = (
         "User-agent: *\n"
