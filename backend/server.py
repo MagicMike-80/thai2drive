@@ -2288,9 +2288,9 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
     mode = _checkout_mode_for_price(data.plan_id, price)
     success_url = _safe_return_url(
         data.success_url,
-        "/api/web?checkout=success&session_id={CHECKOUT_SESSION_ID}",
+        "/app?checkout=success&session_id={CHECKOUT_SESSION_ID}",
     )
-    cancel_url = _safe_return_url(data.cancel_url, "/api/web?checkout=cancel")
+    cancel_url = _safe_return_url(data.cancel_url, "/app?checkout=cancel")
     metadata = {
         "user_id": user["id"],
         "email": user.get("email", ""),

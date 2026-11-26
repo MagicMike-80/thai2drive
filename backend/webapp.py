@@ -15360,8 +15360,10 @@ async def app_en_prefix(request: Request):
 
 @webapp_router.api_route("/app", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_root(request: Request):
-    """Clean entry point — defaults to Thai (same SPA as /th/app)."""
-    return _serve_app(request, "th")
+    """Clean entry point — resolves language same way as / and /guide
+    (cookie -> Accept-Language -> Thai fallback), same SPA as /{lang}/app."""
+    from i18n_routing import detect_lang
+    return _serve_app(request, detect_lang(request))
 
 
 @webapp_router.api_route("/app/no", methods=["GET", "HEAD"], response_class=HTMLResponse)
@@ -15545,8 +15547,12 @@ function showStatus(type, msg) {
 </body>
 </html>"""
 
-@webapp_router.get("/web/voice-tester", response_class=HTMLResponse)
-async def voice_tester():
+@webapp_router.api_route("/web/voice-tester", methods=["GET", "HEAD"], response_class=HTMLResponse)
+async def voice_tester(request: Request):
+    from i18n_routing import api_prefix_redirect
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     return HTMLResponse(content=VOICE_TESTER_HTML)
 
 
