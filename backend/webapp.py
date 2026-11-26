@@ -5051,7 +5051,7 @@ a { color:inherit; text-decoration:none; }
 
       <div class="home-main-actions">
         <button class="home-main-choice" onclick="showTab('teacher')">
-          <img class="home-main-choice-icon michael-photo" src="/api/assets/michael-avatar.png" alt="Michael">
+          <img class="home-main-choice-icon michael-photo" src="/api/assets/home-carousel/michael-ai-256.png" alt="Michael">
           <span class="home-main-choice-copy">
             <span class="home-main-choice-title" data-key="home_ask_michael">Spør Michael AI</span>
             <span class="home-main-choice-sub" data-key="teacher_sub">Still et spørsmål om trafikk</span>
@@ -5115,7 +5115,7 @@ a { color:inherit; text-decoration:none; }
 
       <!-- Michael bio card -->
       <div class="home-michael-bio" id="homeMichaelBio" style="display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,153,51,.18);border-radius:16px;padding:14px 16px;margin:12px 0;">
-        <img src="/api/assets/michael-avatar.png" alt="Michael" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.5);">
+        <img src="/api/assets/home-carousel/michael-ai-256.png" alt="Michael" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.5);">
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:.95rem;color:#F8FAFC;margin-bottom:4px;">Michael</div>
           <div id="michaelBioHome" data-key="michael_bio" style="font-size:.82rem;color:rgba(248,250,252,.7);line-height:1.55;"></div>
@@ -5683,7 +5683,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="bn-label" data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael-avatar.png" alt="Michael"></span><span class="bn-label" data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/home-carousel/michael-ai-256.png" alt="Michael"></span><span class="bn-label" data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnLibrary" onclick="showTab('library')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span class="bn-label" data-key="lib_videos">Videoer</span>
@@ -6641,7 +6641,7 @@ function applyUILang() {
   var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span><span class="bn-label">' + t('signs') + '</span>';
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span><span class="bn-label">' + t('bookmarks') + '</span>';
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span><span class="bn-label">' + t('settings') + '</span>';
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael-avatar.png" alt="Michael"></span><span class="bn-label">' + t('teacher') + '</span>';
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/home-carousel/michael-ai-256.png" alt="Michael"></span><span class="bn-label">' + t('teacher') + '</span>';
   var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + NAV_SVG.library + '</span><span class="bn-label">' + t('lib_videos') + '</span>';
   var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span><span class="bn-label">' + t('sb_nav') + '</span>';
   // Update teacher UI if visible
@@ -6721,9 +6721,9 @@ function applyUILang() {
     catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
-  document.querySelectorAll('.home-cta:not(.home-cta-exam)').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
+  document.querySelectorAll('.home-cta:not(.home-cta-exam) [data-key="home_primary_action"]').forEach(function(label){ label.textContent = t('home_primary_action'); });
   var examBtn = document.getElementById('startExamBtn');
-  if (examBtn) examBtn.innerHTML = '<span data-key="home_exam_action">' + t('home_exam_action') + '</span>';
+  if (examBtn) { var examLabel = examBtn.querySelector('[data-key="home_exam_action"]'); if (examLabel) examLabel.textContent = t('home_exam_action'); }
   // Oppdater horisontal scrollmeny-labels
   document.querySelectorAll('.hsm-label[data-hsm-key]').forEach(function(el) {
     var key = el.getAttribute('data-hsm-key');
@@ -15208,6 +15208,7 @@ if ('serviceWorker' in navigator) {
 
 
 def _webapp_html(default_lang: str = "th") -> str:
+    from home_carousels_web import install as install_home_carousels
     from stopping_distance_web import install as install_stopping_distance
     from trafikklab_web import install as install_trafikklab
     from studybook_web import install as install_studybook
@@ -15215,7 +15216,7 @@ def _webapp_html(default_lang: str = "th") -> str:
         normalize_lang, HTML_LANG, seo_meta, app_hreflang_tags, app_canonical_for,
     )
     lang = normalize_lang(default_lang)
-    html = install_studybook(install_trafikklab(install_stopping_distance(WEBAPP_HTML))).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
+    html = install_home_carousels(install_studybook(install_trafikklab(install_stopping_distance(WEBAPP_HTML)))).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
     html = html.replace("var appLang = '__APP_LANG__';", f"var appLang = '{lang}';", 1)
 
     html = html.replace('class="sp-lang-tab active"', 'class="sp-lang-tab"')
