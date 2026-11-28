@@ -59,6 +59,25 @@ home.select(0); swipe(0,-80); assert.equal(home.center,1);
 const count=opened.length; home.buttons[1].click(); assert.equal(opened.length,count,'swipe synthesized click suppressed');
 swipe(90,2); assert.equal(home.center,1,'cross-axis gestures ignored');
 swipe(0,80,true); assert.equal(home.center,1,'cancelled gestures ignored');
+const realNow=w.Date.now;
+let wheelTime=10000;
+w.Date.now=()=>wheelTime;
+function wheel(state,dx,dy,extra={}) {
+  const event=new w.WheelEvent('wheel',{deltaX:dx,deltaY:dy,bubbles:true,cancelable:true,...extra});
+  state.host.querySelector('.wheel-viewport').dispatchEvent(event);
+  return event.defaultPrevented;
+}
+home.select(9);
+assert.equal(wheel(home,0,80),true); assert.equal(home.center,0,'mouse wheel wraps to first card');
+wheel(home,0,80); assert.equal(home.center,0,'momentum does not skip cards');
+wheelTime+=400;
+wheel(home,0,-80); assert.equal(home.center,9,'reverse wheel wraps to last card');
+wheelTime+=400;
+assert.equal(wheel(home,0,80,{ctrlKey:true}),false,'pinch zoom stays native');
+assert.equal(home.center,9);
+assert.equal(wheel(home,80,1),false,'cross-axis scrolling is not captured');
+nav.select(8); wheel(nav,80,0); assert.equal(nav.center,0,'horizontal trackpad wraps nav');
+w.Date.now=realNow;
 for(const lang of ['no','th','en']) {
   w.appLang=lang; w.applyUILang();
   for(const el of home.host.querySelectorAll('[data-key]')) {

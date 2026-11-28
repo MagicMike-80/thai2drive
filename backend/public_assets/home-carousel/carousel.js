@@ -49,7 +49,8 @@ function makeCarousel(host, buttons, vertical) {
     arrow.type = 'button';
     arrow.className = 'wheel-arrow wheel-arrow-' + (step < 0 ? 'prev' : 'next');
     arrow.dataset.labelKey = step < 0 ? 'fc_previous' : 'fc_next';
-    arrow.textContent = vertical ? (step < 0 ? '↑' : '↓') : (step < 0 ? '‹' : '›');
+    var d = vertical ? (step < 0 ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6') : (step < 0 ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7');
+    arrow.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d + '"/></svg>';
     arrow.addEventListener('click', function() { state.move(step); });
     host.appendChild(arrow);
   });
@@ -73,6 +74,25 @@ function makeCarousel(host, buttons, vertical) {
     }
   });
   var gesture = null;
+  // Mouse wheels and trackpads rotate the same cards as arrows and swipes.
+  // Keep pinch-to-zoom native, and damp momentum to one card per deliberate step.
+  var wheelTotal = 0, wheelLast = 0, wheelLockUntil = 0;
+  viewport.addEventListener('wheel', function(event) {
+    if (event.ctrlKey) return;
+    var delta = vertical ? event.deltaY :
+      (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY);
+    if (!delta || (vertical && Math.abs(event.deltaX) > Math.abs(delta))) return;
+    event.preventDefault();
+    var now = Date.now();
+    if (now < wheelLockUntil) return;
+    if (now - wheelLast > 180 || Math.sign(delta) !== Math.sign(wheelTotal)) wheelTotal = 0;
+    wheelLast = now;
+    wheelTotal += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 200 : 1);
+    if (Math.abs(wheelTotal) < 32) return;
+    state.move(wheelTotal > 0 ? 1 : -1);
+    wheelTotal = 0;
+    wheelLockUntil = now + 360;
+  }, {passive:false});
   viewport.addEventListener('pointerdown', function(event) {
     if (!event.isPrimary || event.button !== 0) return;
     gesture = {id:event.pointerId,x:event.clientX,y:event.clientY};
@@ -119,6 +139,8 @@ function initHomeCarousels() {
   var buttons = [choices[0],lab,quiz,exam,stopping,choices[1],choices[2],choices[3],choices[4],choices[5]];
   // Leave the original usable layout intact if a future shell changes its contract.
   if (buttons.some(function(button){return !button;}) || choices.length !== 6) return;
+  quiz.querySelector('[data-key="home_primary_action"]').dataset.key = 'hc_daily';
+  exam.querySelector('[data-key="home_exam_action"]').dataset.key = 'hc_exam';
   var files = [null,'trafikklab.webp','daglig-test.webp','ovingsprove.webp','stopplengde.webp',
     'videokurs.webp','mine-feil-skilt.webp','trafikkbegreper.webp','flipp-flopp.webp','sikkerhetskontroll.webp'];
   buttons.forEach(function(button,index) {

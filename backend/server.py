@@ -7421,7 +7421,7 @@ async def manual_cleanup_screenshots(_: dict = Depends(require_admin)):
     raise HTTPException(status_code=410, detail="Automatic image cleanup is disabled")
 
 
-@app.on_event("startup")
+# Not registered at startup: deployments must not mutate quiz content or images.
 async def startup_strip_bad_screenshot_images():
     """Strip external screenshot images from questions in MongoDB so the question is kept, but the image is deleted."""
     try:
@@ -7455,7 +7455,7 @@ async def startup_strip_bad_screenshot_images():
         logging.getLogger("image_cleanup").error("Failed to strip screenshot images: %s", exc)
 
 
-@app.on_event("startup")
+# Not registered at startup: deployments must not mutate quiz content or images.
 async def startup_purge_private_images():
     """Immediately wipe any sit_, T2D_, or unverified non-sign images from MongoDB."""
     try:
@@ -7471,7 +7471,7 @@ async def startup_purge_private_images():
     except Exception as exc:
         logging.getLogger("purge").error("Failed purge: %s", exc)
 
-@app.on_event("startup")
+# Not registered at startup: deployments must not mutate quiz content or images.
 async def startup_seed_master_quiz_catalog():
     """Seed / update the 239 Master Quiz questions on startup. Fail-soft."""
     try:

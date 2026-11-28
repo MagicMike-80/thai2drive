@@ -5071,7 +5071,7 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" id="mistakesHomeCount"></span>
           </span>
         </button>
-        <button class="home-main-choice" type="button" onclick="openSituationFlashcard()" data-label-key="home_situation_card">
+        <button class="home-main-choice" type="button" onclick="openTrafficTermsFlashcard()" data-label-key="home_situation_card">
           <span class="home-main-choice-icon" aria-hidden="true">🚗</span>
           <span class="home-main-choice-copy">
             <span class="home-main-choice-title" data-key="home_situation_card">Øv på trafikksituasjoner</span>
@@ -6061,6 +6061,8 @@ var UI = {
   pickcat:     {th:'📚 เลือกหมวดหมู่',  no:'📚 Velg kategori', en:'📚 Pick category'},
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
   home_choose_action:{th:'เลือกสิ่งที่คุณต้องการฝึก', no:'Velg hva du vil gjøre', en:'Choose what you want to do'},
+  hc_daily:{th:'เริ่มควิซ / แบบทดสอบประจำวัน', no:'Start quiz / daglig test', en:'Start quiz / daily test'},
+  hc_exam:{th:'ข้อสอบจำลอง (45 ข้อ – 90 นาที)', no:'Øvingsprøve (45 spm – 90 min)', en:'Practice exam (45 Qs – 90 min)'},
   home_primary_action:{th:'▶ เริ่มควิซ / แบบทดสอบประจำวัน', no:'▶ Start quiz / daglig test', en:'▶ Start quiz / daily test'},
   home_exam_action:{th:'📝 เริ่มข้อสอบฝึกหัด Thai2Drive (45 ข้อ – 90 นาที)', no:'📝 Start Thai2Drives øvingsprøve (45 spørsmål – 90 min)', en:'📝 Start Thai2Drive practice test (45 questions – 90 min)'},
   home_exam_sub:   {th:'แบบฝึกหัดตามรูปแบบการสอบในนอร์เวย์ • ผิดได้ไม่เกิน 7 ข้อ', no:'Øvingsformat inspirert av den norske teoriprøven • Maks 7 feil', en:'Practice format based on the Norwegian theory test • Max 7 mistakes'},
@@ -7526,6 +7528,7 @@ function renderSituationFlashcard() {
   prevButton.disabled = _flashcardIndex <= 0;
   nextButton.disabled = _flashcardIndex >= _flashcardTerms.length - 1;
 }
+function openTrafficTermsFlashcard() { return openSituationFlashcard(); }
 async function openSituationFlashcard() {
   var overlay = document.getElementById('flashcardDemo');
   if (!overlay) return;
