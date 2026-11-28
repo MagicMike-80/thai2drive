@@ -142,6 +142,9 @@
 @media(min-width:700px) { #app.home-carousel-mode #screenHome { overflow-y:auto; } }
 
 /* Review corrections: preserve full flags and prototype navigation proportions. */
+/* Closed drawers must stay hidden while responsive transforms change axis. */
+.sign-panel:not(.open),.hist-panel:not(.open) { visibility:hidden; pointer-events:none; }
+.sign-panel.open,.hist-panel.open { visibility:visible; }
 #app.home-carousel-mode #screenHome { padding-bottom:104px; }
 .feature-wheel .wheel-card:not(.wheel-center) [data-key="home_ask_michael"] { font-size:clamp(17px,6cqw,27px)!important; max-width:8em; }
 .feature-wheel .wheel-card[data-wheel-offset="-2"] [data-key="hc_exam"],.feature-wheel .wheel-card[data-wheel-offset="2"] [data-key="hc_exam"],.feature-wheel .wheel-card[data-wheel-offset="-2"] [data-key="hc_daily"],.feature-wheel .wheel-card[data-wheel-offset="2"] [data-key="hc_daily"] { display:block; font-size:12.5px!important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
