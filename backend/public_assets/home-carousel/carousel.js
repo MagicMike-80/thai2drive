@@ -178,10 +178,21 @@ function initHomeCarousels() {
   document.getElementById('bottomNavMorePanel').hidden = true;
 }
 
-function syncCarouselNavigation() {
+function syncCarouselNavigation(screenId) {
   if (!navigationWheel) return false;
+  var screenButtons = {
+    screenHome:'bnHome', screenCats:'bnCats', screenHistory:'bnHistory',
+    screenTeacher:'bnTeacher', screenLibrary:'bnLibrary', screenSigns:'bnSigns',
+    screenStudybook:'bnStudybook', screenBookmarks:'bnBookmarks', screenSettings:'bnSettings'
+  };
+  var openedButton = screenButtons[screenId];
+  if (openedButton) {
+    navigationWheel.buttons.forEach(function(button) {
+      button.classList.toggle('active', button.id === openedButton);
+    });
+  }
   var selected = navigationWheel.buttons.findIndex(function(button) { return button.classList.contains('active'); });
-  if (selected >= 0 && selected !== navigationWheel.lastActive) navigationWheel.select(selected);
+  if (selected >= 0 && (openedButton || selected !== navigationWheel.lastActive)) navigationWheel.select(selected);
   navigationWheel.lastActive = selected;
   navigationWheel.buttons.forEach(function(button,index) {
     button.setAttribute('aria-current',index === selected ? 'page' : 'false');

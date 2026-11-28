@@ -18,4 +18,5 @@ def install(html: str) -> str:
                         'function bindBottomNavNavigation() {\n  if (syncCarouselNavigation()) return;', 1)
     return html.replace("app.classList.toggle('quiz-mode', id === 'screenQuiz');",
                         "app.classList.toggle('home-carousel-mode', id === 'screenHome');\n"
+                        "  syncCarouselNavigation(id);\n"
                         "  app.classList.toggle('quiz-mode', id === 'screenQuiz');", 1)

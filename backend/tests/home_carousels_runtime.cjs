@@ -98,6 +98,23 @@ nav.buttons.forEach(b=>b.classList.remove('active'));
 nav.buttons[4].classList.add('active'); w.syncCarouselNavigation();
 assert.equal(nav.center,4); assert.equal(nav.buttons[4].getAttribute('aria-current'),'page');
 nav.move(1); w.syncCarouselNavigation(); assert.equal(nav.center,5,'refresh does not undo browsing');
+// Real screen changes must follow the destination, including reopening the same page.
+for (const lang of ['no','th','en']) {
+  w.appLang=lang; w.applyUILang();
+  for (const [screen,id] of Object.entries({screenHome:'bnHome',screenCats:'bnCats',screenHistory:'bnHistory',screenTeacher:'bnTeacher',screenLibrary:'bnLibrary',screenSigns:'bnSigns',screenStudybook:'bnStudybook',screenBookmarks:'bnBookmarks',screenSettings:'bnSettings'})) {
+    nav.move(2);
+    w.showScreen(screen);
+    assert.equal(nav.buttons[nav.center].id,id,'screen destination is centered');
+    assert.ok(nav.buttons[nav.center].classList.contains('active'));
+    assert.equal(nav.buttons[nav.center].getAttribute('aria-current'),'page');
+    nav.move(1);
+    w.showScreen(screen);
+    assert.equal(nav.buttons[nav.center].id,id,'reopening same screen recenters');
+  }
+}
+w.stopAllSpeech=()=>{}; w.loadTeacher=()=>{}; w.switchTeacherSession=()=>{};
+nav.move(2); w.showTab('teacher');
+assert.equal(nav.buttons[nav.center].id,'bnTeacher','home carousel teacher action follows actual showTab path');
 const ids=Array.from(w.document.querySelectorAll('[id]'),el=>el.id);
 for(const id of ['startExamBtn','targetPracticeToggle','mistakesHomeCount','targetPracticeMenu','stoppingHomeBtn','trafikklabHomeBtn']) {
   assert.equal(ids.filter(x=>x===id).length,1,'preserve unique original ID '+id);
